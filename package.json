@@ -1,0 +1,24 @@
+{
+  "name": "inventory",
+  "repository": "git remote add origin https://github.com/klikkn/inventory.git",
+  "version": "0.0.1",
+  "main": "main.js",
+  "author": "klikkn",
+  "description": "app for inventory tracking",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "rm -rf dist && electron-builder -mw"
+  },
+  "build": {
+    "appId": "inventory",
+    "dmg": {},
+    "win": {
+      "target": "portable"
+    }
+  },
+  "devDependencies": {
+    "electron": "^4.0.7",
+    "electron-builder": "^20.38.5"
+  }
+}
