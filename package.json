@@ -1,0 +1,48 @@
+{
+  "name": "inventory",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "author": "klikkn",
+  "description": "inventory",
+  "main": "./electron/index.js",
+  "homepage": "./",
+  "scripts": {
+    "react-start": "BROWSER=none react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "start": "NODE_ENV=development electron .",
+    "start-prod": "electron .",
+    "dist": "rm -rf dist && electron-builder -mw"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^4.0.8",
+    "electron-builder": "^20.38.5",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-scripts": "2.1.8"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "build": {
+    "extends": null,
+    "appId": "inventory",
+    "files": [
+      "build/**/*",
+      "electron/index.js",
+      "package.json"
+    ],
+    "dmg": {},
+    "win": {
+      "target": "portable"
+    }
+  }
+}
