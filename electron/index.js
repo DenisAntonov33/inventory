@@ -1,6 +1,9 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
+const { initApi } = require("./api");
+const { initDatabase } = require("./db");
+
 let mainWindow;
 
 function createWindow() {
@@ -14,15 +17,14 @@ function createWindow() {
 
   const isDev = process.env.NODE_ENV === "development";
 
-  console.log("isdev", isDev);
-
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  if (isDev) mainWindow.webContents.openDevTools();
+  // if (isDev) mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on("closed", function() {
     mainWindow = null;
@@ -30,7 +32,10 @@ function createWindow() {
 }
 
 app.on("ready", () => {
-  createWindow();
+  initDatabase(function() {
+    initApi();
+    createWindow();
+  });
 });
 
 app.on("window-all-closed", function() {

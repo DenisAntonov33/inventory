@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { Link } from "react-router-dom";
+
+import "./index.css";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+          <h1>Home page</h1>
         </header>
+        <Link to="/login">Login</Link>
+        <Link to="/signup">Signup</Link>
       </div>
     );
   }
