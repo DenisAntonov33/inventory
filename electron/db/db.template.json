@@ -1,0 +1,70 @@
+{
+  "users": [
+    {
+      "id": "number",
+      "email": "string",
+      "password": "string",
+      "data": {
+        "bodyParams": [
+          {
+            "id": "number",
+            "name": "string",
+            "values": [
+              {
+                "id": "number",
+                "value": "string"
+              }
+            ]
+          }
+        ],
+        "employees": [
+          {
+            "id": "number",
+            "name": "string",
+            "positions": ["ref#bodyParams[{id}]"],
+            "params": [
+              {
+                "bodyParamId": "ref#bodyParams[{id}]",
+                "bodyParamsValueId": "ref#bodyParams[{values:[{id}]}]"
+              }
+            ],
+            "history": [
+              {
+                "historyId": "ref#history[{id}]"
+              }
+            ]
+          }
+        ],
+        "items": [
+          {
+            "id": "number",
+            "name": "string",
+            "bodyParamId": "ref#bodyParams[{id}]",
+            "replacementPeriod": "number"
+          }
+        ],
+        "positions": [
+          {
+            "id": "number",
+            "name": "string",
+            "items": [
+              {
+                "itemId": "ref#items[{id}]"
+              }
+            ]
+          }
+        ],
+        "history": [
+          {
+            "id": "number",
+            "employeeId": "ref#employees[{id}]",
+            "positions": ["ref#bodyParams[{id}]"],
+            "item": "ref#items[{id}]",
+            "itemParam": "ref#bodyParams[{values:[{id}]}]",
+            "date": "Date"
+          }
+        ]
+      }
+    }
+  ]
+}

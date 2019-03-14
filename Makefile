@@ -11,3 +11,6 @@ clean-db:
 
 dist:
 	yarn react-build && yarn electron-dist
+
+test:
+	yarn electron-test-w

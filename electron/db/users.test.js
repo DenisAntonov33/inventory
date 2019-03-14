@@ -1,46 +1,146 @@
-const { initTestDatabase } = require("./index");
+const { getInstance, initTestDatabase } = require("./index");
 const { users } = require("./users");
 
 describe("User", () => {
+  let db = null;
+
   beforeAll(() => {
     initTestDatabase();
+    db = getInstance();
+    db.getCollection("users").clear();
   });
 
-  test("User should be defined", () => {
+  test("Users should be defined", () => {
     expect(users).toBeDefined();
   });
 
-  test("User methods should be defined", () => {
+  test("Users methods should be defined", () => {
     expect(users.create).toBeDefined();
-    expect(users.read).toBeDefined();
-    expect(users.update).toBeDefined();
-    expect(users.delete).toBeDefined();
+    expect(users.readById).toBeDefined();
+    expect(users.readByUsername).toBeDefined();
+    expect(users.updateById).toBeDefined();
+    expect(users.deleteById).toBeDefined();
   });
 
-  test("User added success", () => {
-    const user = {
-      username: "user999",
-      password: "999"
+  describe("User create/read", () => {
+    const userData = {
+      username: "user",
+      password: "psw"
     };
 
-    users.create(user);
-    const gettedUser = users.read({ username: user.username });
+    const user1Data = {
+      username: "user1",
+      password: "psw"
+    };
 
-    expect(gettedUser.username).toEqual(user.username);
-    expect(gettedUser.password).toEqual(user.password);
+    beforeAll(() => {
+      db.getCollection("users").clear();
+    });
+
+    test("User created success", () => {
+      const { username } = users.create(userData);
+      expect(username).toEqual(userData.username);
+    });
+
+    test("User with same usernames failure", () => {
+      try {
+        users.create(user1Data);
+        users.create(user1Data);
+      } catch (err) {
+        expect(err.message).toBe("Duplicate key for property username: user1");
+      }
+    });
   });
 
-  test("User with same usernames failure", () => {
-    try {
-      const user = {
-        username: "username",
-        password: "999"
-      };
+  describe("User read", () => {
+    let user = null;
+    const userData = {
+      username: "user",
+      password: "psw"
+    };
 
-      users.create(user);
-      users.create(user);
-    } catch (err) {
-      expect(err.message).toBe("Duplicate key for property username: username");
-    }
+    beforeAll(() => {
+      db.getCollection("users").clear();
+      user = users.create(userData);
+    });
+
+    test("User added success", () => {
+      const { id } = user;
+      const gettedUser = users.readById(id);
+
+      expect(user.username).toEqual(gettedUser.username);
+      expect(user.password).toEqual(gettedUser.password);
+    });
+  });
+
+  describe("User read by username", () => {
+    let user = null;
+    const userData = {
+      username: "user",
+      password: "psw"
+    };
+
+    beforeAll(() => {
+      db.getCollection("users").clear();
+      user = users.create(userData);
+    });
+
+    test("User added success", () => {
+      const { username } = user;
+      const gettedUser = users.readByUsername(username);
+
+      expect(user.username).toEqual(gettedUser.username);
+      expect(user.password).toEqual(gettedUser.password);
+    });
+  });
+
+  describe("User update", () => {
+    let user = null;
+
+    const userData = {
+      username: "user",
+      password: "psw"
+    };
+
+    beforeAll(() => {
+      db.getCollection("users").clear();
+      user = users.create(userData);
+    });
+
+    test("User update password success", () => {
+      const updatedUser = users.updateById(user.id, { password: "psw1" });
+      expect(userData.password).not.toBe(updatedUser.password);
+    });
+
+    test("Non-exist user update password failure", () => {
+      try {
+        users.updateById("999", { password: "psw1" });
+      } catch (err) {
+        expect(err.message).toBe("User is not found");
+      }
+    });
+  });
+
+  describe("User delete", () => {
+    let user = null;
+    const userData = {
+      username: "user",
+      password: "psw"
+    };
+
+    beforeAll(() => {
+      db.getCollection("users").clear();
+      user = users.create(userData);
+    });
+
+    test("User delete success", () => {
+      try {
+        const { id } = user;
+        users.deleteById(id);
+        users.readById(id);
+      } catch (err) {
+        expect(err.message).toBe("User not found");
+      }
+    });
   });
 });

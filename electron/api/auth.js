@@ -28,7 +28,7 @@ exports.signup = function(event, arg) {
 exports.login = function(event, arg) {
   const { username, password } = arg;
 
-  const user = users.read({ username });
+  const user = users.readByUsername(username);
 
   if (!user) {
     event.returnValue = res.error(500, "User not found");

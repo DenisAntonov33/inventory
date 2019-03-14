@@ -3,7 +3,9 @@ const loki = require("lokijs");
 const fs = require("fs");
 
 let db = null;
-const collections = [{ name: "users", params: { unique: "username" } }];
+const collections = [
+  { name: "users", params: { unique: ["id", "username"], autoupdate: true } }
+];
 
 function createCollection(collection, db) {
   const { name, params } = collection;

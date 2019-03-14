@@ -1,107 +1,89 @@
-const { initTestDatabase } = require("../db");
+const { getInstance, initTestDatabase } = require("../db/index");
 const { login, signup } = require("./auth");
 
 describe("Auth", () => {
+  let db = null;
+
   beforeAll(() => {
     initTestDatabase();
+    db = getInstance();
+  });
 
-    const args = {
-      username: "user-test",
+  describe("Signup", () => {
+    const userData = {
+      username: "user",
       password: "test",
       password1: "test"
     };
 
-    signup({}, args);
-  });
+    beforeAll(() => {
+      db.getCollection("users").clear();
+    });
 
-  describe("Signup", () => {
     test("User signup success", () => {
-      const args = {
-        username: "user999",
-        password: "999",
-        password1: "999"
-      };
-
       const {
         returnValue: { status, data }
-      } = signup({}, args);
+      } = signup({}, userData);
 
       expect(status).toBe(200);
       expect(data).toBeDefined();
     });
 
     test("User signup same password fail", () => {
-      const args = {
-        username: "user999",
-        password: "999",
-        password1: "9991"
-      };
-
       const {
         returnValue: { status, message }
-      } = signup({}, args);
+      } = signup({}, { ...userData, password1: "1" });
 
       expect(status).toBe(500);
       expect(message).toBe("Password should be the same");
     });
 
     test("User signup same username", () => {
-      const args = {
-        username: "user-test",
-        password: "999",
-        password1: "999"
-      };
-
       const {
         returnValue: { status, message }
-      } = signup({}, args);
+      } = signup({}, userData);
 
       expect(status).toBe(500);
-      expect(message).toBe("Duplicate key for property username: user-test");
+      expect(message).toBe("Duplicate key for property username: user");
     });
   });
 
   describe("Login", () => {
-    test("User login success", () => {
-      const args = {
-        username: "user-test",
-        password: "test"
-      };
+    const userData = {
+      username: "user",
+      password: "psw",
+      password1: "psw"
+    };
 
+    beforeAll(() => {
+      db.getCollection("users").clear();
+      signup({}, userData);
+    });
+
+    test("User login success", () => {
       const {
         returnValue: { status, data }
-      } = login({}, args);
+      } = login({}, userData);
 
       expect(status).toBe(200);
       expect(data).toBeDefined();
     });
 
     test("User login uncorrect password failure", () => {
-      const args = {
-        username: "user-test",
-        password: "test1"
-      };
-
       const {
         returnValue: { status, message }
-      } = login({}, args);
+      } = login({}, { ...userData, password: 1 });
 
       expect(status).toBe(500);
       expect(message).toBe("Invalid password");
     });
 
     test("User login user not found failure", () => {
-      const args = {
-        username: "user-test1",
-        password: "test"
-      };
-
-      const {
-        returnValue: { status, message }
-      } = login({}, args);
-
-      expect(status).toBe(500);
-      expect(message).toBe("User not found");
+      try {
+        login({}, { ...userData, username: "1" });
+      } catch (err) {
+        expect(err.message).toBe("User not found");
+      }
     });
   });
 });
