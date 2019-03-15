@@ -4,28 +4,12 @@ import { Link } from "react-router-dom";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import SignupForm from "../../components/SignupForm";
 import { signup } from "../../services/orm";
 
-const styles = theme => ({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%"
-  },
-  paper: {
-    minWidth: 350,
-    maxWidth: 400,
-    margin: `${theme.spacing.unit}px auto`,
-    padding: theme.spacing.unit * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary
-  }
-});
+const styles = theme => ({});
 
 class Instance extends Component {
   submitSignupHandler = args => {
@@ -42,20 +26,12 @@ class Instance extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <header>
-            <h1>Signup Page</h1>
-          </header>
-
-          <SignupForm submitHandler={this.submitSignupHandler} />
-          <Button component={Link} to="/">
-            Login
-          </Button>
-        </Paper>
+      <div>
+        <SignupForm submitHandler={this.submitLoginHandler} />
+        <Button component={Link} to="/login">
+          Login
+        </Button>
       </div>
     );
   }
