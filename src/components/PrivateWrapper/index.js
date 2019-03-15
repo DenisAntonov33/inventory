@@ -19,7 +19,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
 const drawerWidth = 240;
@@ -92,6 +91,13 @@ const styles = theme => ({
 });
 
 class Instance extends React.Component {
+  toolbarLinks = [
+    { text: "Employees", link: "/employees", icon: MailIcon },
+    { text: "History", link: "/history", icon: MailIcon },
+    { text: "Positions", link: "/positions", icon: MailIcon },
+    { text: "Items", link: "/items", icon: MailIcon },
+    { text: "Body params", link: "/bodyparams", icon: MailIcon }
+  ];
   state = {
     open: false
   };
@@ -165,12 +171,10 @@ class Instance extends React.Component {
           </div>
           <Divider />
           <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+            {this.toolbarLinks.map((e, index) => (
+              <ListItem button key={e.text}>
+                <ListItemIcon>{<e.icon />}</ListItemIcon>
+                <ListItemText primary={e.text} />
               </ListItem>
             ))}
           </List>
