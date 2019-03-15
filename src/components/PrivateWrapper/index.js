@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { Link } from "react-router-dom";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 
@@ -14,12 +15,18 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
+
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import HomeIcon from "@material-ui/icons/Home";
+import GroupIcon from "@material-ui/icons/Group";
+import HistoryIcon from "@material-ui/icons/History";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import PanToolIcon from "@material-ui/icons/PanTool";
 
 const drawerWidth = 240;
 
@@ -92,11 +99,12 @@ const styles = theme => ({
 
 class Instance extends React.Component {
   toolbarLinks = [
-    { text: "Employees", link: "/employees", icon: MailIcon },
-    { text: "History", link: "/history", icon: MailIcon },
-    { text: "Positions", link: "/positions", icon: MailIcon },
-    { text: "Items", link: "/items", icon: MailIcon },
-    { text: "Body params", link: "/bodyparams", icon: MailIcon }
+    { text: "Dashboard", link: "/", icon: HomeIcon },
+    { text: "Employees", link: "/employees", icon: GroupIcon },
+    { text: "History", link: "/history", icon: HistoryIcon },
+    { text: "Positions", link: "/positions", icon: ListAltIcon },
+    { text: "Items", link: "/items", icon: ShoppingCartIcon },
+    { text: "Body params", link: "/bodyparams", icon: PanToolIcon }
   ];
   state = {
     open: false
@@ -172,13 +180,14 @@ class Instance extends React.Component {
           <Divider />
           <List>
             {this.toolbarLinks.map((e, index) => (
-              <ListItem button key={e.text}>
-                <ListItemIcon>{<e.icon />}</ListItemIcon>
-                <ListItemText primary={e.text} />
-              </ListItem>
+              <Link key={e.text} to={e.link}>
+                <ListItem button>
+                  <ListItemIcon>{<e.icon />}</ListItemIcon>
+                  <ListItemText primary={e.text} />
+                </ListItem>
+              </Link>
             ))}
           </List>
-          <Divider />
         </Drawer>
         <main className={classes.content}>{content}</main>
       </div>

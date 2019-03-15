@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import { HashRouter, Route, Redirect } from "react-router-dom";
+import { HashRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import "./index.css";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
+import PublicWrapper from "../../components/PublicWrapper";
+import PrivateWrapper from "../../components/PrivateWrapper";
 import LoginPage from "../LoginPage";
 import SignupPage from "../SignupPage";
 import DashboardPage from "../DashboardPage";
-import PublicWrapper from "../../components/PublicWrapper";
-import PrivateWrapper from "../../components/PrivateWrapper";
+import BodyParamsPage from "../BodyParamsPage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -46,8 +47,9 @@ class App extends Component {
   render() {
     return (
       <HashRouter>
-        <div className="h100p">
+        <Switch>
           <PrivateRoute exact path="/" component={DashboardPage} />
+          <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
           <PublicRoute
             exact
             path="/login"
@@ -60,7 +62,8 @@ class App extends Component {
             title="Signup page"
             component={SignupPage}
           />
-        </div>
+          <Route to="*" component={() => <Redirect to="/" />} />
+        </Switch>
       </HashRouter>
     );
   }
