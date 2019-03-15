@@ -1,0 +1,12 @@
+.form__input {
+    margin: 0 auto;
+    width: 200px;
+  }
+  
+.form__error {
+  height: 15px;
+  padding: 0 16px;
+  font-size: .8rem;
+  color: red;
+  text-align: left;
+}
