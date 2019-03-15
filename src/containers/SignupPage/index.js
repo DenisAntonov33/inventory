@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
-import SignupForm from "../../components/SignupForm";
+import SignupForm from "./form";
 import { signup } from "../../services/orm";
 
 class Instance extends Component {

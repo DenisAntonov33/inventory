@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
-import FormikInput from "../FormikInput";
+import FormikInput from "../../components/FormikInput";
 
 import Button from "@material-ui/core/Button";
 
@@ -11,7 +11,7 @@ export const Instance = props => {
   return (
     <div>
       <Formik
-        initialValues={{ name: "" }}
+        initialValues={{ username: "", password: "" }}
         validate={values => {
           let errors = {};
           if (!values.username) {
@@ -29,15 +29,16 @@ export const Instance = props => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="form form--row">
-            <FormikInput type="text" name="name" label="Name" />
+          <Form className="form form--column">
+            <FormikInput type="text" name="username" label="Username" />
+            <FormikInput type="password" name="password" label="Password" />
             <Button
               type="submit"
               disabled={isSubmitting}
               variant="contained"
               color="primary"
             >
-              Add
+              Submit
             </Button>
           </Form>
         )}

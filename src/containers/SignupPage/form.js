@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
-import FormikInput from "../FormikInput";
+import FormikInput from "../../components/FormikInput";
 
 import Button from "@material-ui/core/Button";
 
