@@ -12,7 +12,7 @@
             "values": [
               {
                 "id": "number",
-                "value": "string"
+                "name": "string"
               }
             ]
           }
@@ -21,7 +21,7 @@
           {
             "id": "number",
             "name": "string",
-            "positions": ["ref#bodyParams[{id}]"],
+            "positions": ["ref#positions[{id}]"],
             "params": [
               {
                 "bodyParamId": "ref#bodyParams[{id}]",

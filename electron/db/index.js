@@ -4,7 +4,8 @@ const fs = require("fs");
 
 let db = null;
 const collections = [
-  { name: "users", params: { unique: ["id", "username"], autoupdate: true } }
+  { name: "users", params: { unique: ["id", "username"], autoupdate: true } },
+  { name: "bodyParams", params: { unique: ["id"], autoupdate: true } }
 ];
 
 function createCollection(collection, db) {
