@@ -1,18 +1,16 @@
-.form {}
+.form {
+    &--row {
+        display: flex;
+        align-items: center;
 
-.form--centered {
+        .form__input {
+            margin-right: 16px;
+        }
+    }
 
-}
-
-.form--centered .form__input{
-  
-}
-
-.form--row {
-  display: flex;
-  align-items: center;
-}
-
-.form--row .form__input{
-  margin: 0 16px;
+    &__error {
+        color: red;
+        font-size: 0.8rem;
+        height: 15px;
+    }
 }

@@ -6,7 +6,7 @@ const FormikInput = props => {
   const { name, label, type } = props;
 
   return (
-    <div className={`form__input`}>
+    <div className="form__input">
       <Field name={name}>
         {({ field, form }) => (
           <div>

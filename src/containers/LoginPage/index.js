@@ -25,9 +25,11 @@ class Instance extends Component {
     return (
       <div>
         <LoginForm submitHandler={this.submitLoginHandler} />
-        <Button component={Link} to="/signup">
-          Signup
-        </Button>
+        <div className="footer">
+          <Button component={Link} to="/signup">
+            Signup
+          </Button>
+        </div>
       </div>
     );
   }

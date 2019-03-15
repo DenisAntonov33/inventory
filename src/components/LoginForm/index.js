@@ -29,7 +29,7 @@ export const Instance = props => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className="form form--column">
             <FormikInput type="text" name="username" label="Username" />
             <FormikInput type="password" name="password" label="Password" />
             <Button
