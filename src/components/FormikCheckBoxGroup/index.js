@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { FieldArray, ErrorMessage } from "formik";
-import { withStyles } from "@material-ui/core/styles";
 
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
@@ -10,21 +8,15 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-const styles = theme => ({
-  formControl: {
-    margin: theme.spacing.unit * 3
-  }
-});
-
 const FormikCheckboxGropup = props => {
-  const { classes, label, nameProperty, name, items, values } = props;
+  const { label, nameProperty, name, items, values } = props;
 
   return (
     <div>
       <FieldArray
         name={name}
         render={arrayHelpers => (
-          <FormControl component="fieldset" className={classes.formControl}>
+          <FormControl component="fieldset">
             <FormLabel component="legend">{label}</FormLabel>
             <FormGroup>
               {items
@@ -59,8 +51,4 @@ const FormikCheckboxGropup = props => {
   );
 };
 
-FormikCheckboxGropup.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(FormikCheckboxGropup);
+export default FormikCheckboxGropup;

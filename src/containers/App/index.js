@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { HashRouter, Route, Redirect, Switch } from "react-router-dom";
 
-import "./index.css";
-
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import PublicWrapper from "../../components/PublicWrapper";
 import PrivateWrapper from "../../components/PrivateWrapper";

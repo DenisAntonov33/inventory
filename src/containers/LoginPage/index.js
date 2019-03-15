@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import LoginForm from "../../components/LoginForm";
 import { login } from "../../services/orm";
-
-const styles = theme => ({});
 
 class Instance extends Component {
   submitLoginHandler = args => {
@@ -37,8 +33,4 @@ class Instance extends Component {
   }
 }
 
-Instance.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Instance);
+export default Instance;

@@ -1,20 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 
 import FormikInput from "../FormikInput";
 
-import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  }
-});
-
 export const Instance = props => {
-  const { classes, submitHandler } = props;
+  const { submitHandler } = props;
 
   return (
     <div>
@@ -50,13 +42,7 @@ export const Instance = props => {
               name="password1"
               label="Repeat password"
             />
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
+            <Button type="submit" disabled={isSubmitting} variant="contained">
               Submit
             </Button>
           </Form>
@@ -66,8 +52,4 @@ export const Instance = props => {
   );
 };
 
-Instance.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Instance);
+export default Instance;

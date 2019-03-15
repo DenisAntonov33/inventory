@@ -1,26 +1,20 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
-import { withStyles } from "@material-ui/core/styles";
-
-const styles = theme => ({});
+import BodyParamForm from "../../components/BodyParamForm";
 
 class Instance extends Component {
-  render() {
-    const { classes } = this.props;
+  submitHandler = values => {};
 
+  render() {
     return (
       <div>
         <header>
           <h1>Body params page</h1>
         </header>
+        <BodyParamForm submitHandler={this.submitHandler} />
       </div>
     );
   }
 }
 
-Instance.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Instance);
+export default Instance;

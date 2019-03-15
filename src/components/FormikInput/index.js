@@ -1,12 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Field } from "formik";
-import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-
-import "./index.css";
-
-const styles = theme => ({});
 
 const FormikInput = props => {
   const { name, label, type } = props;
@@ -36,8 +30,4 @@ const FormikInput = props => {
   );
 };
 
-FormikInput.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(FormikInput);
+export default FormikInput;
