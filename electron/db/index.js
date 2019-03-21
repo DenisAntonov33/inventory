@@ -1,63 +1,106 @@
 const { app } = require("electron");
-const loki = require("lokijs");
 const fs = require("fs");
+const RxDB = require("rxdb");
+RxDB.plugin(require("pouchdb-adapter-memory"));
 
-let db = null;
-const collections = [
-  { name: "users", params: { unique: ["id", "username"], autoupdate: true } },
-  { name: "bodyParams", params: { unique: ["id"], autoupdate: true } }
-];
+const {
+  BodyValueCollection,
+  BodyParamCollection,
+  EntityCollection,
+  PositionCollection,
+  EmployeeCollection,
+  HistoryCollection,
+  UserCollection,
+} = require("./collections");
 
-function createCollection(collection, db) {
-  const { name, params } = collection;
-  const entries = db.getCollection(name);
-  if (entries === null) db.addCollection(name, { ...params });
-}
+let _getDatabase;
 
-function initCollections(db) {
-  collections.forEach(e => createCollection(e, db));
-}
+let userDataFolder;
+let folderPath;
+let filePath;
 
-exports.getInstance = function() {
-  if (!db) throw new Error("DB is not defined");
-  return db;
-};
+const isTest = process.env.NODE_ENV === "test";
+console.log("isTest", isTest);
 
-exports.initDatabase = function(callback) {
-  const userDataFolder = app.getPath("userData");
+if (!isTest) {
+  userDataFolder = app.getPath("userData");
   console.log(userDataFolder);
-  const folderPath = `${userDataFolder}/database`;
-  const filePath = `${userDataFolder}/database/data.json`;
 
+  folderPath = `${userDataFolder}/database`;
+  filePath = `${userDataFolder}/database/data.json`;
+}
+
+async function getDatabase(name, adapter) {
   try {
+    if (!_getDatabase) _getDatabase = await createDatabase(name, adapter);
+    return _getDatabase;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+async function saveDatabase() {
+  if (isTest) return;
+  try {
+    const jsonDB = await _getDatabase.dump();
+    fs.writeFileSync(filePath, JSON.stringify(jsonDB, null, 2), "utf-8");
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+async function createDatabase(name, adapter) {
+  try {
+    const db = await RxDB.create({
+      name,
+      adapter,
+    });
+
+    console.log("creating DB");
+
+    await db.collection(BodyValueCollection);
+    await db.collection(BodyParamCollection);
+    await db.collection(EntityCollection);
+    await db.collection(PositionCollection);
+    await db.collection(EmployeeCollection);
+    await db.collection(HistoryCollection);
+
+    const userCollection = await db.collection(UserCollection);
+    userCollection.preInsert(async plainData => {
+      try {
+        const { name } = plainData;
+
+        const user = await userCollection
+          .findOne()
+          .where("name")
+          .eq(name)
+          .exec();
+
+        if (user) throw new Error("Duplicate key for property username");
+      } catch (err) {
+        throw new Error(err);
+      }
+    });
+
+    if (isTest) return db;
+
     const isFolderExist = fs.existsSync(folderPath);
     console.log("isFolderExist", isFolderExist);
     if (!isFolderExist) fs.mkdirSync(folderPath);
 
     const isFileExist = fs.existsSync(filePath);
     console.log("isFileExist", isFileExist);
-    if (!isFileExist) fs.writeFileSync(filePath, "", "utf-8");
+
+    if (!isFileExist) return db;
+
+    const rawdata = fs.readFileSync(filePath);
+    db.importDump(JSON.parse(rawdata));
+
+    return db;
   } catch (err) {
-    console.log(err);
     throw new Error(err);
   }
+}
 
-  db = new loki(filePath, {
-    autoload: true,
-    autoloadCallback: databaseInitialize,
-    autosave: true,
-    autosaveInterval: 4000
-  });
-
-  function databaseInitialize() {
-    console.log("DB is Inited");
-    initCollections(db);
-    callback();
-  }
-};
-
-exports.initTestDatabase = function(callback) {
-  console.log("testDatabase initialized");
-  db = new loki();
-  initCollections(db);
-};
+exports.getDatabase = getDatabase;
+exports.saveDatabase = saveDatabase;

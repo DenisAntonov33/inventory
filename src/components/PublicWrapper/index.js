@@ -9,7 +9,7 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100%"
+    height: "100%",
   },
   paper: {
     minWidth: 350,
@@ -17,8 +17,8 @@ const styles = theme => ({
     margin: `${theme.spacing.unit}px auto`,
     padding: theme.spacing.unit * 2,
     textAlign: "center",
-    color: theme.palette.text.secondary
-  }
+    color: theme.palette.text.secondary,
+  },
 });
 
 class Instance extends Component {
@@ -40,7 +40,7 @@ class Instance extends Component {
 }
 
 Instance.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Instance);

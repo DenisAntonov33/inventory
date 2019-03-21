@@ -5,37 +5,20 @@
       "email": "string",
       "password": "string",
       "data": {
+        "bodyValues": [
+          {
+            "id": "number",
+            "name": "string"
+          }
+        ],
         "bodyParams": [
           {
             "id": "number",
             "name": "string",
-            "values": [
-              {
-                "id": "number",
-                "name": "string"
-              }
-            ]
+            "values": ["ref#bodyValues[{id}]"]
           }
         ],
-        "employees": [
-          {
-            "id": "number",
-            "name": "string",
-            "positions": ["ref#positions[{id}]"],
-            "params": [
-              {
-                "bodyParamId": "ref#bodyParams[{id}]",
-                "bodyParamsValueId": "ref#bodyParams[{values:[{id}]}]"
-              }
-            ],
-            "history": [
-              {
-                "historyId": "ref#history[{id}]"
-              }
-            ]
-          }
-        ],
-        "items": [
+        "entities": [
           {
             "id": "number",
             "name": "string",
@@ -47,19 +30,29 @@
           {
             "id": "number",
             "name": "string",
-            "items": [
+            "entities": ["ref#entities[{id}]"]
+          }
+        ],
+        "employees": [
+          {
+            "id": "number",
+            "name": "string",
+            "positions": ["ref#employees[{id}]"],
+            "params": [
               {
-                "itemId": "ref#items[{id}]"
+                "bodyParamId": "ref#bodyParams[{id}]",
+                "bodyParamsValueId": "ref#bodyParams[{values:[{id}]}]"
               }
-            ]
+            ],
+            "history": ["ref#history[{id}]"]
           }
         ],
         "history": [
           {
             "id": "number",
-            "employeeId": "ref#employees[{id}]",
+            "employee": "ref#employees[{id}]",
             "positions": ["ref#bodyParams[{id}]"],
-            "item": "ref#items[{id}]",
+            "entity": "ref#entities[{id}]",
             "itemParam": "ref#bodyParams[{values:[{id}]}]",
             "date": "Date"
           }

@@ -1,21 +1,31 @@
 const { res } = require("../services/response");
 const { tokenService } = require("../services/token");
+const { getId } = require("../services/id");
 const { passwordService } = require("../services/password");
-const { users } = require("../db/users");
+const { getDatabase, saveDatabase } = require("../db");
+const { UserCollection } = require("../db/collections");
 
-exports.signup = function(event, arg) {
-  const { username, password, password1 } = arg;
-
-  if (password !== password1) {
-    event.returnValue = res.error(500, "Password should be the same");
-    return event;
-  }
-
-  const hash = passwordService.generateHash(password);
-
+exports.signup = async function(event, arg) {
   try {
-    const user = users.create({ username, password: hash });
-    const token = tokenService.sign({ id: user.id });
+    const { name, password, password1 } = arg;
+
+    if (!name) throw new Error("Name is required");
+    if (!password) throw new Error("Password is required");
+    if (password !== password1) throw new Error("Password should be the same");
+
+    const hash = passwordService.generateHash(password);
+    const db = await getDatabase();
+    const userCollection = db[UserCollection.name];
+
+    const user = await userCollection.insert({
+      id: getId(),
+      name,
+      password: hash,
+    });
+
+    await saveDatabase();
+
+    const token = tokenService.sign({ id: user.get("id") });
 
     event.returnValue = res.success({ token });
     return event;
@@ -25,27 +35,31 @@ exports.signup = function(event, arg) {
   }
 };
 
-exports.login = function(event, arg) {
-  const { username, password } = arg;
+exports.login = async function(event, arg) {
+  try {
+    const { name, password } = arg;
 
-  const user = users.readByUsername(username);
+    const db = await getDatabase();
+    const userCollection = db[UserCollection.name];
+    const user = await userCollection
+      .findOne()
+      .where("name")
+      .eq(name)
+      .exec();
 
-  if (!user) {
-    event.returnValue = res.error(500, "User not found");
+    if (!user) throw new Error("User not found");
+
+    const isPasswordValid = passwordService.isPasswordValid(
+      password,
+      user.password
+    );
+    if (!isPasswordValid) throw new Error("Invalid password");
+
+    const token = tokenService.sign({ id: user.id });
+    event.returnValue = res.success({ token });
+    return event;
+  } catch (err) {
+    event.returnValue = res.error(500, err.message);
     return event;
   }
-
-  const isPasswordValid = passwordService.isPasswordValid(
-    password,
-    user.password
-  );
-
-  if (!isPasswordValid) {
-    event.returnValue = res.error(500, "Invalid password");
-    return event;
-  }
-
-  const token = tokenService.sign({ id: user.id });
-  event.returnValue = res.success({ token });
-  return event;
 };

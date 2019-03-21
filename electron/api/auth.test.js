@@ -1,89 +1,110 @@
-const { getInstance, initTestDatabase } = require("../db/index");
+const { getDatabase } = require("../db/index");
 const { login, signup } = require("./auth");
 
 describe("Auth", () => {
-  let db = null;
-
-  beforeAll(() => {
-    initTestDatabase();
-    db = getInstance();
+  beforeAll(async () => {
+    try {
+      const dbSuffix = new Date().getTime();
+      await getDatabase(`test${dbSuffix}`, "memory");
+    } catch (err) {
+      console.log(err);
+    }
   });
 
-  describe("Signup", () => {
-    const userData = {
-      username: "user",
-      password: "test",
-      password1: "test"
-    };
+  describe.only("Signup", () => {
+    test("User signup success", async () => {
+      expect.assertions(2);
 
-    beforeAll(() => {
-      db.getCollection("users").clear();
-    });
+      const userData = {
+        name: `user${new Date().getTime()}`,
+        password: "test",
+        password1: "test",
+      };
 
-    test("User signup success", () => {
       const {
-        returnValue: { status, data }
-      } = signup({}, userData);
+        returnValue: { status, data },
+      } = await signup({}, userData);
 
       expect(status).toBe(200);
       expect(data).toBeDefined();
     });
 
-    test("User signup same password fail", () => {
+    test("User signup same password fail", async () => {
+      expect.assertions(2);
+      const userData = {
+        name: `user${new Date().getTime()}`,
+        password: "test",
+        password1: "test",
+      };
       const {
-        returnValue: { status, message }
-      } = signup({}, { ...userData, password1: "1" });
-
+        returnValue: { status, message },
+      } = await signup({}, { ...userData, password1: "1" });
       expect(status).toBe(500);
       expect(message).toBe("Password should be the same");
     });
 
-    test("User signup same username", () => {
+    test("User signup same username failure", async () => {
+      expect.assertions(2);
+      const userData = {
+        name: `user${new Date().getTime()}`,
+        password: "test",
+        password1: "test",
+      };
+      await signup({}, userData);
       const {
-        returnValue: { status, message }
-      } = signup({}, userData);
-
+        returnValue: { status, message },
+      } = await signup({}, userData);
       expect(status).toBe(500);
-      expect(message).toBe("Duplicate key for property username: user");
+      expect(message).toBe("Error: Duplicate key for property username");
     });
   });
 
-  describe("Login", () => {
+  describe.skip("Login", () => {
     const userData = {
-      username: "user",
+      name: `user${new Date().getTime()}`,
       password: "psw",
-      password1: "psw"
+      password1: "psw",
     };
 
-    beforeAll(() => {
-      db.getCollection("users").clear();
-      signup({}, userData);
+    beforeAll(async () => {
+      try {
+        await signup({}, userData);
+      } catch (err) {
+        console.log(err);
+      }
     });
 
-    test("User login success", () => {
+    test("User login success", async () => {
+      expect.assertions(2);
+
       const {
-        returnValue: { status, data }
-      } = login({}, userData);
+        returnValue: { status, data },
+      } = await login({}, userData);
 
       expect(status).toBe(200);
       expect(data).toBeDefined();
     });
 
-    test("User login uncorrect password failure", () => {
+    test("User login uncorrect password failure", async () => {
+      expect.assertions(2);
+
       const {
-        returnValue: { status, message }
-      } = login({}, { ...userData, password: 1 });
+        returnValue: { status, message },
+      } = await login({}, { ...userData, password: 1 });
 
       expect(status).toBe(500);
       expect(message).toBe("Invalid password");
     });
 
-    test("User login user not found failure", () => {
-      try {
-        login({}, { ...userData, username: "1" });
-      } catch (err) {
-        expect(err.message).toBe("User not found");
-      }
+    test("User login user not found failure", async () => {
+      expect.assertions(2);
+
+      const {
+        returnValue: { status, message },
+      } = await login({}, { ...userData, name: "1" });
+
+      expect(status).toBe(500);
+      expect(message).toBe("User not found");
     });
   });
 });

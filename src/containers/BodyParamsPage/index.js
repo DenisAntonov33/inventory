@@ -3,7 +3,9 @@ import React, { Component } from "react";
 import Form from "./form";
 
 class Instance extends Component {
-  submitHandler = values => {};
+  submitHandler = values => {
+    console.log(values);
+  };
 
   render() {
     return (

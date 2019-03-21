@@ -3,7 +3,7 @@ import { HashRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import PublicWrapper from "../../components/PublicWrapper";
-import PrivateWrapper from "../../components/PrivateWrapper";
+import PrivateWrapper from "../PrivateWrapper";
 import LoginPage from "../LoginPage";
 import SignupPage from "../SignupPage";
 import DashboardPage from "../DashboardPage";
@@ -32,7 +32,7 @@ function PrivateRoute({ component: Component, ...rest }) {
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: props.location }
+              state: { from: props.location },
             }}
           />
         )

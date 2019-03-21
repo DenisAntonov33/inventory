@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
 const { initApi } = require("./api");
-const { initDatabase } = require("./db");
+const { getDatabase } = require("./db");
 
 let mainWindow;
 
@@ -11,8 +11,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   const isDev = process.env.NODE_ENV === "development";
@@ -23,19 +23,21 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  // if (isDev) mainWindow.webContents.openDevTools();
-  mainWindow.webContents.openDevTools();
+  if (isDev) mainWindow.webContents.openDevTools();
 
   mainWindow.on("closed", function() {
     mainWindow = null;
   });
 }
 
-app.on("ready", () => {
-  initDatabase(function() {
+app.on("ready", async () => {
+  try {
+    await getDatabase("inventory_db", "memory");
     initApi();
     createWindow();
-  });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.on("window-all-closed", function() {

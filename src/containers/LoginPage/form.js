@@ -11,11 +11,11 @@ export const Instance = props => {
   return (
     <div>
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ name: "", password: "" }}
         validate={values => {
           let errors = {};
-          if (!values.username) {
-            errors.username = "Required";
+          if (!values.name) {
+            errors.name = "Required";
           }
           return errors;
         }}
@@ -30,7 +30,7 @@ export const Instance = props => {
       >
         {({ isSubmitting }) => (
           <Form className="form form--column">
-            <FormikInput type="text" name="username" label="Username" />
+            <FormikInput type="text" name="name" label="Name" />
             <FormikInput type="password" name="password" label="Password" />
             <Button
               type="submit"

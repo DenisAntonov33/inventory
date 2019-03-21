@@ -32,69 +32,69 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 36
+    marginRight: 36,
   },
   hide: {
-    display: "none"
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   drawerOpen: {
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerClose: {
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
     width: theme.spacing.unit * 7 + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing.unit * 9 + 1
-    }
+      width: theme.spacing.unit * 9 + 1,
+    },
   },
   toolbar: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
     padding: "0 8px",
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
-    paddingTop: 64
+    paddingTop: 64,
   },
   logoutButton: {
     marginLeft: "auto",
-    marginRight: 12
-  }
+    marginRight: 12,
+  },
 });
 
 class Instance extends React.Component {
@@ -104,11 +104,14 @@ class Instance extends React.Component {
     { text: "History", link: "/history", icon: HistoryIcon },
     { text: "Positions", link: "/positions", icon: ListAltIcon },
     { text: "Items", link: "/items", icon: ShoppingCartIcon },
-    { text: "Body params", link: "/bodyparams", icon: PanToolIcon }
+    { text: "Body params", link: "/bodyparams", icon: PanToolIcon },
   ];
+
   state = {
-    open: false
+    open: false,
   };
+
+  componentDidMount() {}
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -132,7 +135,7 @@ class Instance extends React.Component {
         <AppBar
           position="fixed"
           className={classNames(classes.appBar, {
-            [classes.appBarShift]: this.state.open
+            [classes.appBarShift]: this.state.open,
           })}
         >
           <Toolbar disableGutters={!this.state.open}>
@@ -141,7 +144,7 @@ class Instance extends React.Component {
               aria-label="Open drawer"
               onClick={this.handleDrawerOpen}
               className={classNames(classes.menuButton, {
-                [classes.hide]: this.state.open
+                [classes.hide]: this.state.open,
               })}
             >
               <MenuIcon />
@@ -162,13 +165,13 @@ class Instance extends React.Component {
           variant="permanent"
           className={classNames(classes.drawer, {
             [classes.drawerOpen]: this.state.open,
-            [classes.drawerClose]: !this.state.open
+            [classes.drawerClose]: !this.state.open,
           })}
           classes={{
             paper: classNames({
               [classes.drawerOpen]: this.state.open,
-              [classes.drawerClose]: !this.state.open
-            })
+              [classes.drawerClose]: !this.state.open,
+            }),
           }}
           open={this.state.open}
         >
@@ -179,7 +182,7 @@ class Instance extends React.Component {
           </div>
           <Divider />
           <List>
-            {this.toolbarLinks.map((e, index) => (
+            {this.toolbarLinks.map(e => (
               <Link key={e.text} to={e.link}>
                 <ListItem button>
                   <ListItemIcon>{<e.icon />}</ListItemIcon>
@@ -197,7 +200,7 @@ class Instance extends React.Component {
 
 Instance.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(Instance);

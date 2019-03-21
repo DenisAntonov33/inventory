@@ -10,5 +10,5 @@ exports.tokenService = {
   },
   verify: function(token) {
     return jwt.verify(token, secret);
-  }
+  },
 };

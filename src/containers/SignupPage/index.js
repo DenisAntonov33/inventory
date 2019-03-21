@@ -5,17 +5,18 @@ import Button from "@material-ui/core/Button";
 
 import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import SignupForm from "./form";
-import { signup } from "../../services/orm";
+import { signup } from "../../services/api";
 
 class Instance extends Component {
-  submitSignupHandler = args => {
+  submitHandler = args => {
     const data = signup(args);
+    console.log("signup", data);
 
     const { status } = data;
     if (status !== 200) return;
 
     const {
-      data: { token }
+      data: { token },
     } = data;
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
     this.props.history.push("/");
@@ -24,7 +25,7 @@ class Instance extends Component {
   render() {
     return (
       <div>
-        <SignupForm submitHandler={this.submitLoginHandler} />
+        <SignupForm submitHandler={this.submitHandler} />
         <div className="footer">
           <Button component={Link} to="/login">
             Login

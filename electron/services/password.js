@@ -9,5 +9,5 @@ exports.passwordService = {
   },
   isPasswordValid: function(password, hashedPassword) {
     return crypto.HmacSHA1(password, key).toString() === hashedPassword;
-  }
+  },
 };

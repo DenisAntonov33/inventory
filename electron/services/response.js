@@ -5,5 +5,5 @@ exports.res = {
 
   error: function(status, message) {
     return { status, message };
-  }
+  },
 };
