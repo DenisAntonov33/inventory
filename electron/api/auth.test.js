@@ -11,7 +11,7 @@ describe("Auth", () => {
     }
   });
 
-  describe.only("Signup", () => {
+  describe("Signup", () => {
     test("User signup success", async () => {
       expect.assertions(2);
 
@@ -59,7 +59,7 @@ describe("Auth", () => {
     });
   });
 
-  describe.skip("Login", () => {
+  describe("Login", () => {
     const userData = {
       name: `user${new Date().getTime()}`,
       password: "psw",

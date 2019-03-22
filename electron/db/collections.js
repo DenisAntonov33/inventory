@@ -62,7 +62,7 @@ exports.EntityCollection = {
         type: "string",
       },
     },
-    required: ["name"],
+    required: ["name", "replacementPeriod"],
   },
 };
 
