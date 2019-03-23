@@ -165,5 +165,27 @@ describe("BodyParam", () => {
 
       expect(status).toBe(200);
     });
+
+    test("Failure: empty id", async () => {
+      expect.assertions(2);
+
+      const {
+        returnValue: { status, message },
+      } = await bodyParams.deleteById({}, null);
+
+      expect(status).toBe(500);
+      expect(message).toBe("Id required");
+    });
+
+    test("Failure: incorrect id", async () => {
+      expect.assertions(2);
+
+      const {
+        returnValue: { status, message },
+      } = await bodyParams.deleteById({}, 111);
+
+      expect(status).toBe(500);
+      expect(message).toBe("Item not found");
+    });
   });
 });

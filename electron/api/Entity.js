@@ -44,6 +44,8 @@ class Entity {
 
   async readById(event, id) {
     try {
+      if (!id) throw new Error("Id required");
+
       const db = await getDatabase();
       const collection = db[this.collection.name];
       const item = await collection
@@ -51,6 +53,8 @@ class Entity {
         .where("id")
         .eq(id)
         .exec();
+
+      if (!item) throw new Error("Item not found");
 
       event.returnValue = res.success({ item });
       return event;
@@ -62,9 +66,13 @@ class Entity {
 
   async updateById(event, id, args) {
     try {
+      if (!id) throw new Error("Id required");
+
       const db = await getDatabase();
       const collection = db[this.collection.name];
       const item = await collection.findOne(id).exec();
+
+      if (!item) throw new Error("Item not found");
 
       await item.update({
         $set: { ...args },
@@ -82,6 +90,8 @@ class Entity {
 
   async deleteById(event, id) {
     try {
+      if (!id) throw new Error("Id required");
+
       const db = await getDatabase();
       const collection = db[this.collection.name];
       const item = await collection
@@ -89,6 +99,8 @@ class Entity {
         .where("id")
         .eq(id)
         .exec();
+
+      if (!item) throw new Error("Item not found");
 
       await item.remove();
 
