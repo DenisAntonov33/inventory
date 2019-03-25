@@ -1,6 +1,9 @@
 const { getDatabase } = require("../db/index");
 const { Entity } = require("./Entity.js");
-const { BodyParamCollection } = require("../db/collections");
+const {
+  BodyParamCollection,
+  BodyValueCollection,
+} = require("../db/collections");
 
 const bodyParams = new Entity(BodyParamCollection);
 
@@ -186,6 +189,60 @@ describe("BodyParam", () => {
 
       expect(status).toBe(500);
       expect(message).toBe("Item not found");
+    });
+  });
+
+  describe.only("Add values to param", () => {
+    let id = null;
+    const bodyParamData = { name: "param" };
+
+    let valueId1, valueId2;
+    const bodyValue1Data = { name: "value1" };
+    const bodyValue2Data = { name: "value2" };
+
+    beforeAll(async () => {
+      try {
+        const bodyValues = new Entity(BodyValueCollection);
+
+        const {
+          returnValue: {
+            data: { item },
+          },
+        } = await bodyParams.create({}, bodyParamData);
+        id = item.id;
+
+        const {
+          returnValue: {
+            data: { item: item1 },
+          },
+        } = await bodyValues.create({}, bodyValue1Data);
+        valueId1 = item1.id;
+
+        const {
+          returnValue: {
+            data: { item: item2 },
+          },
+        } = await bodyValues.create({}, bodyValue2Data);
+        valueId2 = item2.id;
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
+    test.only("Success", async () => {
+      expect.assertions(2);
+
+      const {
+        returnValue: {
+          status,
+          data: { item },
+        },
+      } = await bodyParams.updateById({}, id, {
+        values: [valueId1, valueId2],
+      });
+
+      expect(status).toBe(200);
+      expect(item.values.length).toBe(2);
     });
   });
 });
