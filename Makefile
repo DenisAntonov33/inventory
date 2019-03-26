@@ -14,3 +14,6 @@ dist:
 
 test:
 	yarn electron-test-w
+
+clear:
+	rm /Users/sergey/Library/Application Support/inventory/database/data.json

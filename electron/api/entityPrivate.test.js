@@ -38,7 +38,7 @@ describe("BodyParam", () => {
     });
   });
 
-  describe("ReadAll", () => {
+  describe("ReadMany", () => {
     const bodyParamData1 = { name: "param1" };
     const bodyParamData2 = { name: "param2" };
     const bodyParamData3 = { name: "param3" };
@@ -57,7 +57,7 @@ describe("BodyParam", () => {
 
     test("Success", async () => {
       expect.assertions(1);
-      const items = await bodyParams._readAll();
+      const items = await bodyParams._readMany({}, {});
       expect(items.length).toBe(5);
     });
   });

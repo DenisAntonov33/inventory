@@ -80,13 +80,13 @@ class Entity {
     }
   }
 
-  async readAll(event, token) {
+  async readMany(event, token, args) {
     try {
       const user = await this._authentification(token);
       const _user = user.toJSON();
-      const args = _user[this.collection.link];
+      const availableIds = _user[this.collection.link];
 
-      const items = await this._readAll(args);
+      const items = await this._readMany(availableIds, args);
       event.returnValue = res.success({ items });
       return event;
     } catch (err) {
@@ -141,12 +141,15 @@ class Entity {
     }
   }
 
-  async _readAll(args) {
+  async _readMany(availableIds, args) {
     try {
       const db = await getDatabase();
       const collection = db[this.collection.name];
 
-      const items = await collection.find(args).exec();
+      const items = await collection
+        .find(availableIds)
+        .find(args)
+        .exec();
       return items.map(e => e.toJSON());
     } catch (err) {
       throw new Error(err);
