@@ -16,7 +16,7 @@
     "electron-test": "jest -c=jest.electron.config.js",
     "electron-test-w": "jest -c=jest.electron.config.js --watch",
     "electron-lint": "npx eslint electron",
-    "test": "npm run electron-test && npm run react-test",
+    "test": "npm run electron-test",
     "lint": "npm run electron-lint && npm run react-lint"
   },
   "husky": {
@@ -52,7 +52,7 @@
     "prettier": "^1.16.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react-dom": "^16.8.5",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.8",

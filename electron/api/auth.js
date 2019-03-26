@@ -21,6 +21,14 @@ exports.signup = async function(event, arg) {
       id: getId(),
       name,
       password: hash,
+      data: {
+        bodyValues: [],
+        bodyParams: [],
+        entities: [],
+        positions: [],
+        employees: [],
+        history: [],
+      },
     });
 
     await saveDatabase();
@@ -57,6 +65,29 @@ exports.login = async function(event, arg) {
 
     const token = tokenService.sign({ id: user.id });
     event.returnValue = res.success({ token });
+    return event;
+  } catch (err) {
+    event.returnValue = res.error(500, err.message);
+    return event;
+  }
+};
+
+exports.me = async function(event, token) {
+  try {
+    if (!token) throw new Error("Token is required");
+    const { id } = tokenService.verify(token);
+
+    const db = await getDatabase();
+    const userCollection = db[UserCollection.name];
+    const user = await userCollection
+      .findOne()
+      .where("id")
+      .eq(id)
+      .exec();
+
+    if (!user) throw new Error("User not found");
+
+    event.returnValue = res.success({ user: user.toJSON() });
     return event;
   } catch (err) {
     event.returnValue = res.error(500, err.message);

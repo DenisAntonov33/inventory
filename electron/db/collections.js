@@ -1,5 +1,6 @@
 exports.BodyValueCollection = {
   name: "body_value",
+  link: "bodyValues",
   schema: {
     version: 0,
     type: "object",
@@ -18,6 +19,7 @@ exports.BodyValueCollection = {
 
 exports.BodyParamCollection = {
   name: "body_param",
+  link: "bodyParams",
   schema: {
     version: 0,
     type: "object",
@@ -43,6 +45,7 @@ exports.BodyParamCollection = {
 
 exports.EntityCollection = {
   name: "entity",
+  link: "entities",
   schema: {
     version: 0,
     type: "object",
@@ -68,13 +71,17 @@ exports.EntityCollection = {
 
 exports.PositionCollection = {
   name: "position",
+  link: "positions",
   schema: {
     version: 0,
     type: "object",
     properties: {
-      name: {
+      id: {
         type: "string",
         primary: true,
+      },
+      name: {
+        type: "string",
       },
       entities: {
         type: "array",
@@ -90,6 +97,7 @@ exports.PositionCollection = {
 
 exports.EmployeeCollection = {
   name: "employee",
+  link: "employees",
   schema: {
     version: 0,
     type: "object",
@@ -138,6 +146,7 @@ exports.EmployeeCollection = {
 
 exports.HistoryCollection = {
   name: "history",
+  link: "history",
   schema: {
     version: 0,
     type: "object",
@@ -146,30 +155,23 @@ exports.HistoryCollection = {
         type: "string",
         primary: true,
       },
-      name: {
-        type: "string",
-      },
+      date: "string",
       positions: {
         type: "array",
         items: {
-          ref: "position",
           type: "string",
         },
       },
       employee: {
         type: "string",
-        ref: "employee",
       },
       entity: {
         type: "string",
-        ref: "entity",
       },
       bodyValue: {
         type: "string",
-        ref: "body_value",
       },
     },
-    required: ["name"],
   },
 };
 

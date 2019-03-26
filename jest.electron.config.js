@@ -3,7 +3,7 @@ module.exports = {
     {
       runner: "@jest-runner/electron/main",
       testEnvironment: "node",
-      testMatch: ["./electron/**/*.(spec|test).js"]
-    }
-  ]
+      testMatch: ["./electron/**/*.(spec|test).js"],
+    },
+  ],
 };

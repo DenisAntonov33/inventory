@@ -1,13 +1,130 @@
 const { res } = require("../services/response");
 const { getDatabase, saveDatabase } = require("../db/index");
 const { getId } = require("../services/id");
+const { tokenService } = require("../services/token");
+const { UserCollection } = require("../db/collections");
 
 class Entity {
   constructor(collection) {
     this.collection = collection;
   }
 
-  async create(event, args) {
+  async _authentification(token) {
+    try {
+      if (!token) throw new Error("Token is required");
+      const { id } = tokenService.verify(token);
+
+      const db = await getDatabase();
+      const collection = db[UserCollection.name];
+
+      const user = await collection
+        .findOne()
+        .where("id")
+        .eq(id)
+        .exec();
+
+      if (!user) throw new Error("User not found");
+
+      return user;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async _authorization(user, resourceId) {
+    try {
+      const _user = user.toJSON();
+      const item = _user[this.collection.link].find(e => e.id === resourceId);
+      if (!item) throw new Error("Forbidden");
+
+      return item;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async create(event, token, args) {
+    try {
+      const user = await this._authentification(token);
+      const item = await this._create(args);
+
+      const changeFunction = oldData => {
+        oldData.data[this.collection.link] = [
+          ...oldData.data[this.collection.link],
+          item.id,
+        ];
+        return oldData;
+      };
+
+      await user.atomicUpdate(changeFunction);
+
+      event.returnValue = res.success({ item });
+      return event;
+    } catch (err) {
+      event.returnValue = res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async readById(event, token, id) {
+    try {
+      const user = await this._authentification(token);
+      await this._authorization(user, id);
+
+      const item = await this._readById(id);
+      event.returnValue = res.success({ item });
+      return event;
+    } catch (err) {
+      event.returnValue = res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async readAll(event, token) {
+    try {
+      const user = await this._authentification(token);
+      const _user = user.toJSON();
+      const args = _user[this.collection.link];
+
+      const items = await this._readAll(args);
+      event.returnValue = res.success({ items });
+      return event;
+    } catch (err) {
+      event.returnValue = res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async updateById(event, token, id, args) {
+    try {
+      const user = await this._authentification(token);
+      await this._authorization(user, id);
+
+      const item = await this._updateById(id, args);
+      event.returnValue = res.success({ item });
+      return event;
+    } catch (err) {
+      event.returnValue = res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async deleteById(event, token, id) {
+    try {
+      const user = await this._authentification(token);
+      await this._authorization(user, id);
+
+      await this._deleteById(id);
+
+      event.returnValue = res.success({});
+      return event;
+    } catch (err) {
+      event.returnValue = res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async _create(args) {
     try {
       const db = await getDatabase();
       const collection = db[this.collection.name];
@@ -18,31 +135,25 @@ class Entity {
       });
 
       await saveDatabase();
-
-      event.returnValue = res.success({ item: item.toJSON() });
-      return event;
+      return item.toJSON();
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
-      return event;
+      throw new Error(err);
     }
   }
 
-  async readAll(event) {
+  async _readAll(args) {
     try {
       const db = await getDatabase();
       const collection = db[this.collection.name];
 
-      const items = await collection.find().exec();
-
-      event.returnValue = res.success({ items: items.map(e => e.toJSON()) });
-      return event;
+      const items = await collection.find(args).exec();
+      return items.map(e => e.toJSON());
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
-      return event;
+      throw new Error(err);
     }
   }
 
-  async readById(event, id) {
+  async _readById(id) {
     try {
       if (!id) throw new Error("Id required");
 
@@ -55,16 +166,13 @@ class Entity {
         .exec();
 
       if (!item) throw new Error("Item not found");
-
-      event.returnValue = res.success({ item });
-      return event;
+      return item.toJSON();
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
-      return event;
+      throw new Error(err);
     }
   }
 
-  async updateById(event, id, args) {
+  async _updateById(id, args) {
     try {
       if (!id) throw new Error("Id required");
 
@@ -79,16 +187,13 @@ class Entity {
       });
 
       await saveDatabase();
-
-      event.returnValue = res.success({ item: item.toJSON() });
-      return event;
+      return item.toJSON();
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
-      return event;
+      throw new Error(err);
     }
   }
 
-  async deleteById(event, id) {
+  async _deleteById(id) {
     try {
       if (!id) throw new Error("Id required");
 
@@ -103,12 +208,9 @@ class Entity {
       if (!item) throw new Error("Item not found");
 
       await item.remove();
-
-      event.returnValue = res.success();
-      return event;
+      return true;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
-      return event;
+      throw new Error(err);
     }
   }
 }
