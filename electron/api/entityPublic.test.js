@@ -46,14 +46,14 @@ describe("Entity", () => {
         returnValue: {
           data: { item: _bodyValue1 },
         },
-      } = await bodyValues.create({}, token1, bodyValueData1);
+      } = await bodyValues.create({}, { token: token1, args: bodyValueData1 });
       bodyValue1 = _bodyValue1;
 
       const {
         returnValue: {
           data: { item: _bodyValue2 },
         },
-      } = await bodyValues.create({}, token1, bodyValueData2);
+      } = await bodyValues.create({}, { token: token1, args: bodyValueData2 });
       bodyValue2 = _bodyValue2;
 
       const bodyParamData1 = {
@@ -65,7 +65,7 @@ describe("Entity", () => {
         returnValue: {
           data: { item: _bodyParam1 },
         },
-      } = await bodyParams.create({}, token1, bodyParamData1);
+      } = await bodyParams.create({}, { token: token1, args: bodyParamData1 });
       bodyParam1 = _bodyParam1;
 
       const entityData1 = {
@@ -78,7 +78,7 @@ describe("Entity", () => {
         returnValue: {
           data: { item: _entity1 },
         },
-      } = await entities.create({}, token1, entityData1);
+      } = await entities.create({}, { token: token1, args: entityData1 });
       entity1 = _entity1;
 
       const positionData1 = { name: "position1", entities: [entity1.id] };
@@ -87,7 +87,7 @@ describe("Entity", () => {
         returnValue: {
           data: { item: _position1 },
         },
-      } = await positions.create({}, token1, positionData1);
+      } = await positions.create({}, { token: token1, args: positionData1 });
       position1 = _position1;
 
       const employeeData1 = {
@@ -101,7 +101,7 @@ describe("Entity", () => {
         returnValue: {
           data: { item: _employee1 },
         },
-      } = await employees.create({}, token1, employeeData1);
+      } = await employees.create({}, { token: token1, args: employeeData1 });
       employee1 = _employee1;
 
       const historyItemData1 = {
@@ -112,7 +112,7 @@ describe("Entity", () => {
         bodyValue: bodyValue1.name,
       };
 
-      await history.create({}, token1, historyItemData1);
+      await history.create({}, { token: token1, args: historyItemData1 });
     } catch (err) {
       console.log(err);
     }
@@ -126,7 +126,7 @@ describe("Entity", () => {
         status,
         data: { user },
       },
-    } = await me({}, token1);
+    } = await me({}, { token: token1 });
 
     expect(status).toBe(200);
     expect(user.data).toBeDefined();

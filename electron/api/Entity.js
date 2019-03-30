@@ -43,8 +43,9 @@ class Entity {
     }
   }
 
-  async create(event, token, args) {
+  async create(event, _args) {
     try {
+      const { token, args } = _args;
       const user = await this._authentification(token);
       const item = await this._create(args);
 
@@ -66,7 +67,8 @@ class Entity {
     }
   }
 
-  async readById(event, token, id) {
+  async readById(event, _args) {
+    const { token, id } = _args;
     try {
       const user = await this._authentification(token);
       await this._authorization(user, id);
@@ -80,8 +82,9 @@ class Entity {
     }
   }
 
-  async readMany(event, token, args) {
+  async readMany(event, _args) {
     try {
+      const { token, args } = _args;
       const user = await this._authentification(token);
       const _user = user.toJSON();
       const availableIds = _user[this.collection.link];
@@ -95,8 +98,9 @@ class Entity {
     }
   }
 
-  async updateById(event, token, id, args) {
+  async updateById(event, _args) {
     try {
+      const { token, id, args } = _args;
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
@@ -109,8 +113,9 @@ class Entity {
     }
   }
 
-  async deleteById(event, token, id) {
+  async deleteById(event, _args) {
     try {
+      const { token, args } = _args;
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
