@@ -1,5 +1,7 @@
 export class ReduxEntity {
-  constructor() {
+  constructor(collection) {
+    this.collection = collection;
+
     this.sagas = [];
   }
 }

@@ -105,6 +105,7 @@ class Instance extends React.Component {
     { text: "Positions", link: "/positions", icon: ListAltIcon },
     { text: "Items", link: "/items", icon: ShoppingCartIcon },
     { text: "Body params", link: "/bodyparams", icon: PanToolIcon },
+    { text: "Profile", link: "/profile", icon: PanToolIcon },
   ];
 
   state = {

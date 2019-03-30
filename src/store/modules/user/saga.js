@@ -39,7 +39,7 @@ function* signup({ payload: { name, password, password1 } }) {
 
 function* getUser() {
   try {
-    const user = yield call(meRequest);
+    const { user } = yield call(meRequest);
     yield put(ReadUserSuccess(user));
   } catch (err) {
     yield put(ReadUserFailure(err));

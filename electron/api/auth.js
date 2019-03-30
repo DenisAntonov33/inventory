@@ -72,8 +72,10 @@ exports.login = async function(event, arg) {
   }
 };
 
-exports.me = async function(event, token) {
+exports.me = async function(event, args) {
   try {
+    const { token } = args;
+
     if (!token) throw new Error("Token is required");
     const { id } = tokenService.verify(token);
 

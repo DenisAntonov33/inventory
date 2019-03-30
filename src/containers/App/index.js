@@ -5,11 +5,12 @@ import { Provider } from "react-redux";
 import { store } from "../../store";
 import { getToken } from "../../utils/localStorageService";
 import PublicWrapper from "../../components/PublicWrapper";
-import PrivateWrapper from "../PrivateWrapper";
+import PrivateWrapper from "../../components/PrivateWrapper";
 import LoginPage from "../LoginPage";
 import SignupPage from "../SignupPage";
 import DashboardPage from "../DashboardPage";
 import BodyParamsPage from "../BodyParamsPage";
+import ProfilePage from "../ProfilePage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -51,6 +52,7 @@ class App extends Component {
           <Switch>
             <PrivateRoute exact path="/" component={DashboardPage} />
             <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
+            <PrivateRoute exact path="/profile" component={ProfilePage} />
             <PublicRoute
               exact
               path="/login"

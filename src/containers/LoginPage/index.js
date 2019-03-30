@@ -9,6 +9,8 @@ import { LoginRequest } from "../../store/modules/user/actions";
 
 class Instance extends Component {
   submitHandler = ({ name, password }) => {
+    console.log(name, password);
+
     this.props.login(name, password);
   };
 
@@ -26,7 +28,7 @@ class Instance extends Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  login: ({ name, password }) => {
+  login: (name, password) => {
     dispatch(LoginRequest(name, password));
   },
 });
