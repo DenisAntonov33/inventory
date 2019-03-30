@@ -89,7 +89,14 @@ exports.me = async function(event, args) {
 
     if (!user) throw new Error("User not found");
 
-    event.returnValue = res.success({ user: user.toJSON() });
+    const jsonUser = user.toJSON();
+
+    const filteredUser = {
+      name: jsonUser.name,
+      data: jsonUser.data,
+    };
+
+    event.returnValue = res.success({ user: filteredUser });
     return event;
   } catch (err) {
     event.returnValue = res.error(500, err.message);

@@ -115,7 +115,7 @@ class Entity {
 
   async deleteById(event, _args) {
     try {
-      const { token, args } = _args;
+      const { token, id } = _args;
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
