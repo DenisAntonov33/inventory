@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 
-import { ACCESS_TOKEN_KEY } from "../../services/constants";
+import { removeToken } from "../../utils/localStorageService";
 
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -122,7 +122,7 @@ class Instance extends React.Component {
   };
 
   handleLogout = () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    removeToken();
     window.location.reload();
   };
 

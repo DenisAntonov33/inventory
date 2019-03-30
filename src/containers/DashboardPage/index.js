@@ -1,6 +1,14 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import { ReadUserRequest } from "../../store/modules/user/actions";
 
 class Instance extends Component {
+  componentDidMount() {
+    const { user, readUser } = this.props;
+    if (isEmpty(user)) readUser();
+  }
+
   render() {
     return (
       <div>
@@ -12,4 +20,13 @@ class Instance extends Component {
   }
 }
 
-export default Instance;
+const mapStateToProps = state => ({ user: state.user.data });
+
+const mapDispatchToProps = dispatch => ({
+  readUser: () => dispatch(ReadUserRequest()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Instance);

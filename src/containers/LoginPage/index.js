@@ -1,25 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import Button from "@material-ui/core/Button";
 
-import { ACCESS_TOKEN_KEY } from "../../services/constants";
 import LoginForm from "./form";
-import { login } from "../../services/api";
+import { LoginRequest } from "../../store/modules/user/actions";
 
 class Instance extends Component {
-  submitHandler = args => {
-    const data = login(args);
-    console.log("login", data);
-
-    const { status } = data;
-    if (status !== 200) return;
-
-    const {
-      data: { token },
-    } = data;
-    localStorage.setItem(ACCESS_TOKEN_KEY, token);
-    this.props.history.push("/");
+  submitHandler = ({ name, password }) => {
+    this.props.login(name, password);
   };
 
   render() {
@@ -35,5 +25,13 @@ class Instance extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => ({
+  login: ({ name, password }) => {
+    dispatch(LoginRequest(name, password));
+  },
+});
 
-export default Instance;
+export default connect(
+  null,
+  mapDispatchToProps
+)(Instance);

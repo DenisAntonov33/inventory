@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { HashRouter, Route, Redirect, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
 
-import { ACCESS_TOKEN_KEY } from "../../services/constants";
+import { store } from "../../store";
+import { getToken } from "../../utils/localStorageService";
 import PublicWrapper from "../../components/PublicWrapper";
 import PrivateWrapper from "../PrivateWrapper";
 import LoginPage from "../LoginPage";
@@ -21,7 +23,7 @@ function PublicRoute({ component: Component, ...rest }) {
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const token = getToken();
   return (
     <Route
       {...rest}
@@ -44,25 +46,27 @@ function PrivateRoute({ component: Component, ...rest }) {
 class App extends Component {
   render() {
     return (
-      <HashRouter>
-        <Switch>
-          <PrivateRoute exact path="/" component={DashboardPage} />
-          <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
-          <PublicRoute
-            exact
-            path="/login"
-            title="Login page"
-            component={LoginPage}
-          />
-          <PublicRoute
-            exact
-            path="/signup"
-            title="Signup page"
-            component={SignupPage}
-          />
-          <Route to="*" component={() => <Redirect to="/" />} />
-        </Switch>
-      </HashRouter>
+      <Provider store={store}>
+        <HashRouter>
+          <Switch>
+            <PrivateRoute exact path="/" component={DashboardPage} />
+            <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
+            <PublicRoute
+              exact
+              path="/login"
+              title="Login page"
+              component={LoginPage}
+            />
+            <PublicRoute
+              exact
+              path="/signup"
+              title="Signup page"
+              component={SignupPage}
+            />
+            <Route to="*" component={() => <Redirect to="/" />} />
+          </Switch>
+        </HashRouter>
+      </Provider>
     );
   }
 }
