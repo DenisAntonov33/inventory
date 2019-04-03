@@ -93,7 +93,6 @@ exports.me = async function(event, args) {
 
     const filteredUser = {
       name: jsonUser.name,
-      data: jsonUser.data,
     };
 
     event.returnValue = res.success({ user: filteredUser });

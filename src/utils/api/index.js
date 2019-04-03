@@ -1,5 +1,11 @@
 import { getToken } from "../localStorageService";
-const { ipcRenderer } = window.require("electron");
+import collections from "./collections";
+
+let ipcRenderer = { sendSync: query => ({ status: 200, data: query }) };
+
+if (process.env.NODE_ENV !== "test") {
+  ipcRenderer = window.require("electron").ipcRenderer;
+}
 
 const responseHandler = res => {
   try {
@@ -20,3 +26,26 @@ export const signupRequest = args =>
 
 export const meRequest = args =>
   responseHandler(ipcRenderer.sendSync("me", withToken(args)));
+
+export const entityQueries = Object.keys(collections).reduce((acc, key) => {
+  const collection = collections[key];
+  const link = collection.link;
+
+  const queries = [
+    "create",
+    "readById",
+    "readMany",
+    "updateById",
+    "deleteById",
+  ].reduce((_acc, curr) => {
+    const alias = `${link}_${curr}`;
+
+    _acc[curr] = args =>
+      responseHandler(ipcRenderer.sendSync(alias, withToken(args)));
+
+    return _acc;
+  }, {});
+
+  acc[link] = queries;
+  return acc;
+}, {});

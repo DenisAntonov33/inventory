@@ -4,33 +4,46 @@ import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
 
 import collections from "../utils/api/collections.json";
+import { entityQueries } from "../utils/api/index";
 
 import { saga as userSaga } from "./modules/user/saga";
 import { reducer as userReducer } from "./modules/user/reducer";
 
-import { ReduxEntity } from "../utils/redux-entity";
+import StoreEntity from "../utils/store-entity";
+import * as storeSchema from "../utils/store-schema";
 
-let sagas = [...userSaga];
+const entities = Object.keys(collections).reduce(
+  (acc, key) => {
+    const link = collections[key].link;
 
-const dataReducers = {};
-const listsReducers = {};
+    const entity = new StoreEntity(
+      link,
+      storeSchema[link],
+      entityQueries[link]
+    );
 
-Object.keys(collections).forEach(e => {
-  const collection = collections[e];
-  const entity = new ReduxEntity(collection);
+    acc.reducers[link] = entity.reducer;
+    acc.sagas = [...acc.sagas, ...entity.saga];
+    acc.actions[link] = entity.actions;
 
-  dataReducers[collection.link] = entity.dataReducer;
-  listsReducers[collection.link] = entity.listsReducer;
+    return acc;
+  },
+  {
+    reducers: {},
+    sagas: [],
+    actions: {},
+  }
+);
 
-  // sagas = [...sagas, ...entity.saga];
-});
+export const actions = entities.actions;
 
 const rootSaga = function* rootSaga() {
-  yield all(sagas);
+  yield all([...userSaga, ...entities.sagas]);
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
+  data: combineReducers(entities.reducers),
 });
 
 const loggerMiddleware = createLogger();

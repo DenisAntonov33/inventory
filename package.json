@@ -16,7 +16,7 @@
     "electron-test": "jest -c=jest.electron.config.js",
     "electron-test-w": "jest -c=jest.electron.config.js --watch",
     "electron-lint": "npx eslint electron",
-    "test": "npm run electron-test",
+    "test": "npm run electron-test && npm run react-test",
     "lint": "npm run electron-lint && npm run react-lint"
   },
   "husky": {

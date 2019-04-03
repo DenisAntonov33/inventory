@@ -29,7 +29,10 @@ exports.initApi = function() {
 
   entities.forEach(entity => {
     methods.forEach(method => {
-      ipcMain.on(`${entity.collection.link}_${method}`, entity[method]);
+      ipcMain.on(
+        `${entity.collection.link}_${method}`,
+        entity[method].bind(entity)
+      );
     });
   });
 };

@@ -118,8 +118,8 @@ describe("Entity", () => {
     }
   });
 
-  test("Check data availability", async () => {
-    expect.assertions(7);
+  test("Check user availability", async () => {
+    expect.assertions(2);
 
     const {
       returnValue: {
@@ -129,12 +129,6 @@ describe("Entity", () => {
     } = await me({}, { token: token1 });
 
     expect(status).toBe(200);
-    expect(user.data).toBeDefined();
-
-    expect(user.data[BodyValueCollection.link].length).toBe(2);
-    expect(user.data[BodyParamCollection.link].length).toBe(1);
-    expect(user.data[EntityCollection.link].length).toBe(1);
-    expect(user.data[PositionCollection.link].length).toBe(1);
-    expect(user.data[EmployeeCollection.link].length).toBe(1);
+    expect(user).toBeDefined();
   });
 });

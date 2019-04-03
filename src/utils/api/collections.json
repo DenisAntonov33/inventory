@@ -174,54 +174,5 @@
         }
       }
     }
-  },
-
-  "UserCollection": {
-    "name": "user",
-    "schema": {
-      "version": 0,
-      "properties": {
-        "id": {
-          "type": "string",
-          "primary": true
-        },
-        "name": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "data": {
-          "type": "object",
-          "properties": {
-            "bodyValues": {
-              "type": "array",
-              "items": { "type": "string", "ref": "body_value" }
-            },
-            "bodyParams": {
-              "type": "array",
-              "items": { "type": "string", "ref": "body_param" }
-            },
-            "entities": {
-              "type": "array",
-              "items": { "type": "string", "ref": "entity" }
-            },
-            "positions": {
-              "type": "array",
-              "items": { "type": "string", "ref": "position" }
-            },
-            "employees": {
-              "type": "array",
-              "items": { "type": "string", "ref": "employee" }
-            },
-            "history": {
-              "type": "array",
-              "items": { "type": "string", "ref": "history" }
-            }
-          }
-        }
-      },
-      "required": ["password"]
-    }
   }
 }
