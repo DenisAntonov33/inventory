@@ -4,20 +4,11 @@ import { connect } from "react-redux";
 import { actions, selectors } from "../../store/modules/entities";
 
 import bodyParamsForm from "./bodyParamsForm";
-import bodyParamsList from "./bodyParamsList";
+import EntityList from "./entityList";
 
 const formsComponents = {
   bodyValues: "",
   bodyParams: bodyParamsForm,
-  entities: "",
-  positions: "",
-  employees: "",
-  history: "",
-};
-
-const listsComponents = {
-  bodyValues: "",
-  bodyParams: bodyParamsList,
   entities: "",
   positions: "",
   employees: "",
@@ -45,7 +36,6 @@ class Instance extends Component {
   render() {
     const { alias, lists, data } = this.props;
     const Form = formsComponents[alias];
-    const List = listsComponents[alias];
 
     const items = selectors[alias].getItems(lists[alias], data);
 
@@ -56,7 +46,11 @@ class Instance extends Component {
         </header>
         <Form submitHandler={this.submitHandler} />
         <div>
-          <List items={items} removeHandler={this.removeHandler} />
+          <EntityList
+            alias={alias}
+            items={items}
+            removeHandler={this.removeHandler}
+          />
         </div>
       </div>
     );

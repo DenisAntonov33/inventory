@@ -18,9 +18,9 @@ export const Instance = props => {
     <div>
       <ul>
         {items &&
-          items.length &&
           items
             .filter(e => !e.isDeleted)
+            .sort((a, b) => b.createdAt - a.createdAt)
             .map(item => (
               <li key={item.id}>
                 {item.name} - {removeHandler && removeButton(item.id)}

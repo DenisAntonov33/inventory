@@ -136,6 +136,7 @@ class Entity {
 
       const item = await collection.insert({
         id: getId(),
+        createdAt: new Date().getTime(),
         ...args,
       });
 
@@ -216,6 +217,8 @@ class Entity {
       if (!item) throw new Error("Item not found");
 
       await item.remove();
+      await saveDatabase();
+
       return item.toJSON();
     } catch (err) {
       throw new Error(err);

@@ -21,6 +21,7 @@ exports.signup = async function(event, arg) {
       id: getId(),
       name,
       password: hash,
+      createdAt: new Date().getTime(),
       data: {
         bodyValues: [],
         bodyParams: [],
