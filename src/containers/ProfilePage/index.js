@@ -14,7 +14,7 @@ class Instance extends Component {
     return (
       <div>
         <header>
-          <h1>Home Page</h1>
+          <h1>Profile</h1>
           <p>Hi {user.name}</p>
         </header>
       </div>

@@ -1,11 +1,13 @@
 import { schema } from "normalizr";
 
-export const bodyValuesSchema = new schema.Entity("bodyValues", {}, {});
-export const bodyParamsSchema = new schema.Entity("bodyParams", {}, {});
-export const entitiesSchema = new schema.Entity("entities", {}, {});
-export const positionsSchema = new schema.Entity("positions", {}, {});
-export const employeesSchema = new schema.Entity("employees", {}, {});
-export const historySchema = new schema.Entity("history", {}, {});
+const bodyValuesSchema = new schema.Entity("bodyValues", {}, {});
+const bodyParamsSchema = new schema.Entity("bodyParams", {}, {});
+const entitiesSchema = new schema.Entity("entities", {}, {});
+const positionsSchema = new schema.Entity("positions", {}, {});
+const employeesSchema = new schema.Entity("employees", {}, {});
+const historySchema = new schema.Entity("history", {}, {});
+
+bodyValuesSchema.define({});
 
 bodyParamsSchema.define({
   values: [bodyValuesSchema],
@@ -22,7 +24,7 @@ positionsSchema.define({
 employeesSchema.define({
   positions: [positionsSchema],
   history: [historySchema],
-  bodyParams: { bodyParam: bodyParamsSchema, bodyValue: bodyValuesSchema },
+  bodyParams: [{ bodyParam: bodyParamsSchema, bodyValue: bodyValuesSchema }],
 });
 
 historySchema.define({
@@ -31,3 +33,12 @@ historySchema.define({
   entity: entitiesSchema,
   bodyValue: bodyValuesSchema,
 });
+
+export default {
+  bodyValues: bodyValuesSchema,
+  bodyParams: bodyParamsSchema,
+  entities: entitiesSchema,
+  positions: positionsSchema,
+  employees: employeesSchema,
+  history: historySchema,
+};

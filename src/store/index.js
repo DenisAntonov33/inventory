@@ -3,55 +3,35 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
 
-import collections from "../utils/api/collections.json";
-import { entityQueries } from "../utils/api/index";
-
-import { saga as userSaga } from "./modules/user/saga";
 import { reducer as userReducer } from "./modules/user/reducer";
+import { saga as userSaga } from "./modules/user/saga";
 
-import StoreEntity from "../utils/store-entity";
-import * as storeSchema from "../utils/store-schema";
+import {
+  reducer as entityReducer,
+  listReducer as entityListReducer,
+  sagas as entitySagas,
+} from "./modules/entities";
 
-const entities = Object.keys(collections).reduce(
-  (acc, key) => {
-    const link = collections[key].link;
-
-    const entity = new StoreEntity(
-      link,
-      storeSchema[link],
-      entityQueries[link]
-    );
-
-    acc.reducers[link] = entity.reducer;
-    acc.sagas = [...acc.sagas, ...entity.saga];
-    acc.actions[link] = entity.actions;
-
-    return acc;
-  },
-  {
-    reducers: {},
-    sagas: [],
-    actions: {},
-  }
-);
-
-export const actions = entities.actions;
+const isTest = process.env.NODE_ENV === "test";
 
 const rootSaga = function* rootSaga() {
-  yield all([...userSaga, ...entities.sagas]);
+  yield all([...userSaga, ...entitySagas]);
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
-  data: combineReducers(entities.reducers),
+  data: entityReducer,
+  lists: entityListReducer,
 });
 
-const loggerMiddleware = createLogger();
+const loggerMiddleware = isTest ? () => {} : createLogger();
 const sagaMiddleware = createSagaMiddleware();
 
-export const store = createStore(
-  rootReducer,
-  applyMiddleware(loggerMiddleware, sagaMiddleware)
-);
+const middlewares = [];
+
+middlewares.push(sagaMiddleware);
+if (!isTest) middlewares.push(loggerMiddleware);
+
+export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
 sagaMiddleware.run(rootSaga);

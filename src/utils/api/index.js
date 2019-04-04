@@ -1,5 +1,13 @@
 import { getToken } from "../localStorageService";
-import collections from "./collections";
+
+export const collections = [
+  "bodyValues",
+  "bodyParams",
+  "entities",
+  "positions",
+  "employees",
+  "history",
+];
 
 let ipcRenderer = { sendSync: query => ({ status: 200, data: query }) };
 
@@ -27,10 +35,7 @@ export const signupRequest = args =>
 export const meRequest = args =>
   responseHandler(ipcRenderer.sendSync("me", withToken(args)));
 
-export const entityQueries = Object.keys(collections).reduce((acc, key) => {
-  const collection = collections[key];
-  const link = collection.link;
-
+export const entityQueries = collections.reduce((acc, collection) => {
   const queries = [
     "create",
     "readById",
@@ -38,7 +43,7 @@ export const entityQueries = Object.keys(collections).reduce((acc, key) => {
     "updateById",
     "deleteById",
   ].reduce((_acc, curr) => {
-    const alias = `${link}_${curr}`;
+    const alias = `${collection}_${curr}`;
 
     _acc[curr] = args =>
       responseHandler(ipcRenderer.sendSync(alias, withToken(args)));
@@ -46,6 +51,6 @@ export const entityQueries = Object.keys(collections).reduce((acc, key) => {
     return _acc;
   }, {});
 
-  acc[link] = queries;
+  acc[collection] = queries;
   return acc;
 }, {});
