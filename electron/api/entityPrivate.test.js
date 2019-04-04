@@ -118,7 +118,7 @@ describe("BodyParam", () => {
     test("Success", async () => {
       expect.assertions(1);
       const item = await bodyParams._deleteById(id);
-      expect(item).toBe(true);
+      expect(item).toBeDefined();
     });
 
     test("Failure: empty id", async () => {

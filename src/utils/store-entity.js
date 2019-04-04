@@ -81,6 +81,8 @@ export default class StoreEntity {
         try {
           const { item, items } = yield call(request, payload);
 
+          console.log(item);
+
           if (type === DELETE_BY_ID) item.isDeleted = true;
 
           const { entities, result } = items

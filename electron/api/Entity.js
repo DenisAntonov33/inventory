@@ -34,7 +34,7 @@ class Entity {
   async _authorization(user, resourceId) {
     try {
       const _user = user.toJSON();
-      const item = _user[this.collection.link].find(e => e.id === resourceId);
+      const item = _user.data[this.collection.link].find(e => e === resourceId);
       if (!item) throw new Error("Forbidden");
 
       return item;
@@ -119,9 +119,9 @@ class Entity {
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
-      await this._deleteById(id);
+      const item = await this._deleteById(id);
 
-      event.returnValue = res.success({});
+      event.returnValue = res.success({ item });
       return event;
     } catch (err) {
       event.returnValue = res.error(500, err.message);
@@ -216,7 +216,7 @@ class Entity {
       if (!item) throw new Error("Item not found");
 
       await item.remove();
-      return true;
+      return item.toJSON();
     } catch (err) {
       throw new Error(err);
     }

@@ -37,6 +37,11 @@ class Instance extends Component {
     createEntity(alias, values);
   };
 
+  removeHandler = id => {
+    const { alias, removeEntity } = this.props;
+    removeEntity(alias, id);
+  };
+
   render() {
     const { alias, lists, data } = this.props;
     const Form = formsComponents[alias];
@@ -51,7 +56,7 @@ class Instance extends Component {
         </header>
         <Form submitHandler={this.submitHandler} />
         <div>
-          <List items={items} />
+          <List items={items} removeHandler={this.removeHandler} />
         </div>
       </div>
     );
@@ -66,6 +71,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createEntity: (alias, args) => dispatch(actions[alias].create(args)),
   readEntities: alias => dispatch(actions[alias].readMany()),
+  removeEntity: (alias, id) => dispatch(actions[alias].deleteById(id)),
 });
 
 export default connect(
