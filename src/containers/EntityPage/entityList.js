@@ -1,7 +1,21 @@
 import React from "react";
 
-export const Instance = props => {
-  const { items, removeHandler } = props;
+import Paper from "@material-ui/core/Paper";
+
+import BodyParamsList from "./lists/BodyParams";
+import EntitiesList from "./lists/Entities";
+
+const Lists = {
+  bodyParams: BodyParamsList,
+  entities: EntitiesList,
+  positions: "",
+  employees: "",
+  history: "",
+};
+
+export const EntityList = props => {
+  const { alias, items, removeHandler } = props;
+  const List = Lists[alias];
 
   const removeButton = id => (
     <span
@@ -15,20 +29,10 @@ export const Instance = props => {
   );
 
   return (
-    <div>
-      <ul>
-        {items &&
-          items
-            .filter(e => !e.isDeleted)
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .map(item => (
-              <li key={item.id}>
-                {item.name} - {removeHandler && removeButton(item.id)}
-              </li>
-            ))}
-      </ul>
-    </div>
+    <Paper>
+      <List items={items} removeButton={removeButton} />
+    </Paper>
   );
 };
 
-export default Instance;
+export default EntityList;

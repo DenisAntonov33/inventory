@@ -57,6 +57,11 @@ class App extends Component {
               path="/bodyparams"
               component={() => <EntityPage alias="bodyParams" />}
             />
+            <PrivateRoute
+              exact
+              path="/entities"
+              component={() => <EntityPage alias="entities" />}
+            />
             <PublicRoute
               exact
               path="/login"

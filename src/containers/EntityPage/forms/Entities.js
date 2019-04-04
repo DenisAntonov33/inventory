@@ -1,20 +1,22 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
-import FormikInput from "../../components/FormikInput";
+import FormikInput from "../../../components/FormikInput";
 
 import Button from "@material-ui/core/Button";
 
-export const Instance = props => {
+export const EntitiesForm = props => {
   const { submitHandler } = props;
 
   return (
     <div>
       <Formik
-        initialValues={{ name: "" }}
+        initialValues={{ name: "", replacementPeriod: "" }}
         validate={values => {
           let errors = {};
           if (!values.name) {
+            errors.name = "Required";
+          } else if (!values.replacementPeriod) {
             errors.name = "Required";
           }
           return errors;
@@ -31,6 +33,11 @@ export const Instance = props => {
         {({ isSubmitting }) => (
           <Form className="form form--row">
             <FormikInput type="text" name="name" label="Name" />
+            <FormikInput
+              type="text"
+              name="replacementPeriod"
+              label="ReplacementPeriod"
+            />
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -46,4 +53,4 @@ export const Instance = props => {
   );
 };
 
-export default Instance;
+export default EntitiesForm;

@@ -3,19 +3,20 @@ import { connect } from "react-redux";
 
 import { actions, selectors } from "../../store/modules/entities";
 
-import bodyParamsForm from "./bodyParamsForm";
-import EntityList from "./entityList";
+import BodyParamsForm from "./forms/BodyParams";
+import EntitiesForm from "./forms/Entities";
 
-const formsComponents = {
-  bodyValues: "",
-  bodyParams: bodyParamsForm,
-  entities: "",
+import EntityList from "./EntityList";
+
+const Forms = {
+  bodyParams: BodyParamsForm,
+  entities: EntitiesForm,
   positions: "",
   employees: "",
   history: "",
 };
 
-class Instance extends Component {
+class EntityPage extends Component {
   componentDidMount() {
     const { alias, readEntities, lists, data } = this.props;
     const items = selectors[alias].getItems(lists[alias], data);
@@ -35,9 +36,8 @@ class Instance extends Component {
 
   render() {
     const { alias, lists, data } = this.props;
-    const Form = formsComponents[alias];
-
     const items = selectors[alias].getItems(lists[alias], data);
+    const Form = Forms[alias];
 
     return (
       <div>
@@ -71,4 +71,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Instance);
+)(EntityPage);
