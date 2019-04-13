@@ -41,6 +41,7 @@
         "values": {
           "type": "array",
           "ref": "body_value",
+          "default": [],
           "items": {
             "type": "string"
           }
@@ -68,7 +69,7 @@
           "type": "string"
         },
         "replacementPeriod": {
-          "type": "string"
+          "type": "number"
         },
         "bodyParam": {
           "ref": "body_param",
@@ -99,6 +100,7 @@
         "entities": {
           "type": "array",
           "ref": "entity",
+          "default": [],
           "items": {
             "type": "string"
           }
@@ -127,13 +129,15 @@
         },
         "positions": {
           "type": "array",
+          "ref": "position",
+          "default": [],
           "items": {
-            "ref": "position",
             "type": "string"
           }
         },
         "bodyParams": {
           "type": "array",
+          "default": [],
           "items": {
             "type": "object",
             "properties": {
@@ -146,13 +150,6 @@
                 "ref": "body_value"
               }
             }
-          }
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "ref": "history",
-            "type": "string"
           }
         }
       },
@@ -177,6 +174,7 @@
         "date": "string",
         "positions": {
           "type": "array",
+          "default": [],
           "items": {
             "type": "string"
           }
@@ -191,7 +189,7 @@
           "type": "string"
         }
       },
-      "required": ["createdAt"]
+      "required": ["date", "createdAt"]
     }
   },
 
@@ -218,27 +216,33 @@
           "properties": {
             "bodyValues": {
               "type": "array",
-              "items": { "type": "string", "ref": "body_value" }
+              "ref": "body_value",
+              "items": { "type": "string" }
             },
             "bodyParams": {
               "type": "array",
-              "items": { "type": "string", "ref": "body_param" }
+              "ref": "body_param",
+              "items": { "type": "string" }
             },
             "entities": {
               "type": "array",
-              "items": { "type": "string", "ref": "entity" }
+              "ref": "entity",
+              "items": { "type": "string" }
             },
             "positions": {
               "type": "array",
-              "items": { "type": "string", "ref": "position" }
+              "ref": "position",
+              "items": { "type": "string" }
             },
             "employees": {
               "type": "array",
-              "items": { "type": "string", "ref": "employee" }
+              "ref": "employee",
+              "items": { "type": "string" }
             },
             "history": {
               "type": "array",
-              "items": { "type": "string", "ref": "history" }
+              "ref": "history",
+              "items": { "type": "string" }
             }
           }
         }

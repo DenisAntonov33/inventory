@@ -1,12 +1,27 @@
-const { res } = require("../services/response");
-const { getDatabase, saveDatabase } = require("../db/index");
-const { getId } = require("../services/id");
-const { tokenService } = require("../services/token");
-const { UserCollection } = require("../db/collections");
+const { res } = require("../../services/response");
+const { getDatabase, saveDatabase } = require("../../db/index");
+const { getId } = require("../../services/id");
+const { tokenService } = require("../../services/token");
+const { UserCollection } = require("../../db/collections");
 
 class Entity {
   constructor(collection) {
+    this.getDatabase = getDatabase;
+    this.saveDatabase = saveDatabase;
     this.collection = collection;
+    this.res = res;
+
+    this.defaultMethods = [
+      "create",
+      "readById",
+      "readMany",
+      "updateById",
+      "deleteById",
+    ];
+  }
+
+  getMethods() {
+    return this.defaultMethods;
   }
 
   async _authentification(token) {
@@ -14,20 +29,15 @@ class Entity {
       if (!token) throw new Error("Token is required");
       const { id } = tokenService.verify(token);
 
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[UserCollection.name];
-
-      const user = await collection
-        .findOne()
-        .where("id")
-        .eq(id)
-        .exec();
+      const user = await collection.findOne(id).exec();
 
       if (!user) throw new Error("User not found");
 
       return user;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
@@ -39,7 +49,7 @@ class Entity {
 
       return item;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
@@ -59,25 +69,27 @@ class Entity {
 
       await user.atomicUpdate(changeFunction);
 
-      event.returnValue = res.success({ item });
+      event.returnValue = this.res.success({ item });
       return event;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
+      event.returnValue = this.res.error(500, err.message);
       return event;
     }
   }
 
   async readById(event, _args) {
-    const { token, id } = _args;
     try {
+      const { token, id } = _args;
+      if (!id) throw new Error("Id required");
+
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
       const item = await this._readById(id);
-      event.returnValue = res.success({ item });
+      event.returnValue = this.res.success({ item });
       return event;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
+      event.returnValue = this.res.error(500, err.message);
       return event;
     }
   }
@@ -90,10 +102,10 @@ class Entity {
       const availableIds = _user[this.collection.link];
 
       const items = await this._readMany(availableIds, args);
-      event.returnValue = res.success({ items });
+      event.returnValue = this.res.success({ items });
       return event;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
+      event.returnValue = this.res.error(500, err.message);
       return event;
     }
   }
@@ -101,14 +113,18 @@ class Entity {
   async updateById(event, _args) {
     try {
       const { token, id, args } = _args;
+      if (!id) throw new Error("Id required");
+
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
       const item = await this._updateById(id, args);
-      event.returnValue = res.success({ item });
+      if (!item) throw new Error("Item not found");
+
+      event.returnValue = this.res.success({ item });
       return event;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
+      event.returnValue = this.res.error(500, err.message);
       return event;
     }
   }
@@ -116,22 +132,25 @@ class Entity {
   async deleteById(event, _args) {
     try {
       const { token, id } = _args;
+      if (!id) throw new Error("Id required");
+
       const user = await this._authentification(token);
       await this._authorization(user, id);
 
       const item = await this._deleteById(id);
+      if (!item) throw new Error("Item not found");
 
-      event.returnValue = res.success({ item });
+      event.returnValue = this.res.success({ item });
       return event;
     } catch (err) {
-      event.returnValue = res.error(500, err.message);
+      event.returnValue = this.res.error(500, err.message);
       return event;
     }
   }
 
   async _create(args) {
     try {
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[this.collection.name];
 
       const item = await collection.insert({
@@ -140,88 +159,90 @@ class Entity {
         ...args,
       });
 
-      await saveDatabase();
-      return item.toJSON();
+      await this.saveDatabase();
+      return item ? item.toJSON() : null;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
-  async _readMany(availableIds, args) {
+  async _readMany(availableIds) {
     try {
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[this.collection.name];
+      const items = await collection.find({ id: { $in: availableIds } }).exec();
 
-      const items = await collection
-        .find(availableIds)
-        .find(args)
-        .exec();
-      return items.map(e => e.toJSON());
+      return items
+        .map(e => e.toJSON())
+        .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
   async _readById(id) {
     try {
-      if (!id) throw new Error("Id required");
-
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[this.collection.name];
-      const item = await collection
-        .findOne()
-        .where("id")
-        .eq(id)
-        .exec();
+      const item = await collection.findOne(id).exec();
+      if (!item) return null;
 
-      if (!item) throw new Error("Item not found");
-      return item.toJSON();
+      const expandedItem = await this._expand(item);
+      return expandedItem;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
   async _updateById(id, args) {
     try {
-      if (!id) throw new Error("Id required");
-
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[this.collection.name];
       const item = await collection.findOne(id).exec();
+      if (!item) return null;
 
-      if (!item) throw new Error("Item not found");
+      const _args = await this._argsHandler(args);
 
-      await item.update({
-        $set: { ...args },
-      });
+      await item.update(_args);
+      await this.saveDatabase();
 
-      await saveDatabase();
-      return item.toJSON();
+      const expandedItem = await this._expand(item);
+
+      return expandedItem;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
   async _deleteById(id) {
     try {
-      if (!id) throw new Error("Id required");
-
-      const db = await getDatabase();
+      const db = await this.getDatabase();
       const collection = db[this.collection.name];
-      const item = await collection
-        .findOne()
-        .where("id")
-        .eq(id)
-        .exec();
-
-      if (!item) throw new Error("Item not found");
+      const item = await collection.findOne(id).exec();
+      if (!item) return null;
 
       await item.remove();
-      await saveDatabase();
+      await this.saveDatabase();
 
       return item.toJSON();
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
+    }
+  }
+
+  async _expand(item) {
+    try {
+      return item.toJSON();
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async _argsHandler(args) {
+    try {
+      return args;
+    } catch (err) {
+      throw new Error(err.message);
     }
   }
 }

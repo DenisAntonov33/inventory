@@ -1,6 +1,13 @@
 const { getDatabase } = require("../db/index");
-const { Entity } = require("./Entity.js");
+
 const { signup, me } = require("./auth");
+
+const { BodyValues } = require("./entities/BodyValues");
+const { BodyParams } = require("./entities/BodyParams");
+const { Entities } = require("./entities/Entities");
+const { Positions } = require("./entities/Positions");
+const { Employees } = require("./entities/Employees");
+const { History } = require("./entities/History");
 
 const {
   BodyValueCollection,
@@ -11,12 +18,12 @@ const {
   HistoryCollection,
 } = require("../db/collections");
 
-const bodyValues = new Entity(BodyValueCollection);
-const bodyParams = new Entity(BodyParamCollection);
-const entities = new Entity(EntityCollection);
-const positions = new Entity(PositionCollection);
-const employees = new Entity(EmployeeCollection);
-const history = new Entity(HistoryCollection);
+const bodyValues = new BodyValues(BodyValueCollection);
+const bodyParams = new BodyParams(BodyParamCollection);
+const entities = new Entities(EntityCollection);
+const positions = new Positions(PositionCollection);
+const employees = new Employees(EmployeeCollection);
+const history = new History(HistoryCollection);
 
 describe("Entity", () => {
   let token1, bodyValue1, bodyValue2, bodyParam1, entity1, position1, employee1;
@@ -58,7 +65,6 @@ describe("Entity", () => {
 
       const bodyParamData1 = {
         name: "param1",
-        values: [bodyValue1.id, bodyValue2.id],
       };
 
       const {
@@ -66,12 +72,25 @@ describe("Entity", () => {
           data: { item: _bodyParam1 },
         },
       } = await bodyParams.create({}, { token: token1, args: bodyParamData1 });
-      bodyParam1 = _bodyParam1;
+
+      const {
+        returnValue: {
+          data: { item: __bodyParam1 },
+        },
+      } = await bodyParams.updateById(
+        {},
+        {
+          token: token1,
+          id: _bodyParam1.id,
+          args: { $pushAll: { values: [bodyValue1.id, bodyValue2.id] } },
+        }
+      );
+
+      bodyParam1 = __bodyParam1;
 
       const entityData1 = {
         name: "entity1",
-        replacementPeriod: "1",
-        bodyParam: bodyParam1.id,
+        replacementPeriod: 1,
       };
 
       const {
@@ -79,22 +98,46 @@ describe("Entity", () => {
           data: { item: _entity1 },
         },
       } = await entities.create({}, { token: token1, args: entityData1 });
-      entity1 = _entity1;
 
-      const positionData1 = { name: "position1", entities: [entity1.id] };
+      const {
+        returnValue: {
+          data: { item: __entity1 },
+        },
+      } = await entities.updateById(
+        {},
+        {
+          token: token1,
+          id: _entity1.id,
+          args: { $set: { bodyParam: bodyParam1.id } },
+        }
+      );
+      entity1 = __entity1;
+
+      const positionData1 = { name: "position1" };
 
       const {
         returnValue: {
           data: { item: _position1 },
         },
       } = await positions.create({}, { token: token1, args: positionData1 });
-      position1 = _position1;
+
+      const {
+        returnValue: {
+          data: { item: __position1 },
+        },
+      } = await positions.updateById(
+        {},
+        {
+          token: token1,
+          id: _position1.id,
+          args: { $push: { entities: entity1.id } },
+        }
+      );
+
+      position1 = __position1;
 
       const employeeData1 = {
         name: "employee1",
-        positions: [position1.id],
-        bodyParams: [{ bodyParam: bodyParam1.id, bodyValue: bodyValue1.id }],
-        history: [],
       };
 
       const {
@@ -102,7 +145,29 @@ describe("Entity", () => {
           data: { item: _employee1 },
         },
       } = await employees.create({}, { token: token1, args: employeeData1 });
-      employee1 = _employee1;
+
+      const {
+        returnValue: {
+          data: { item: __employee1 },
+        },
+      } = await employees.updateById(
+        {},
+        {
+          token: token1,
+          id: _employee1.id,
+          args: {
+            $push: {
+              positions: position1.id,
+              bodyParams: {
+                bodyParam: bodyParam1.id,
+                bodyValue: bodyValue1.id,
+              },
+            },
+          },
+        }
+      );
+
+      employee1 = __employee1;
 
       const historyItemData1 = {
         date: new Date().toString(),

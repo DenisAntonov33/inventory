@@ -10,7 +10,7 @@ import LoginPage from "../LoginPage";
 import SignupPage from "../SignupPage";
 import DashboardPage from "../DashboardPage";
 import ProfilePage from "../ProfilePage";
-import EntityPage from "../EntityPage";
+import BodyParamsPage from "../BodyParamsPage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -52,16 +52,7 @@ class App extends Component {
           <Switch>
             <PrivateRoute exact path="/" component={DashboardPage} />
             <PrivateRoute exact path="/profile" component={ProfilePage} />
-            <PrivateRoute
-              exact
-              path="/bodyparams"
-              component={() => <EntityPage alias="bodyParams" />}
-            />
-            <PrivateRoute
-              exact
-              path="/entities"
-              component={() => <EntityPage alias="entities" />}
-            />
+            <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
             <PublicRoute
               exact
               path="/login"

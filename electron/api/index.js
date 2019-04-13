@@ -1,7 +1,13 @@
 const { ipcMain } = require("electron");
 const { login, signup, me } = require("./auth");
 
-const { Entity } = require("./Entity.js");
+const { BodyValues } = require("./BodyValues");
+const { BodyParams } = require("./BodyParams");
+const { Entities } = require("./Entities");
+const { Positions } = require("./Positions");
+const { Employees } = require("./Employees");
+const { History } = require("./History");
+
 const {
   BodyValueCollection,
   BodyParamCollection,
@@ -12,15 +18,13 @@ const {
 } = require("../db/collections");
 
 const entities = [
-  new Entity(BodyValueCollection),
-  new Entity(BodyParamCollection),
-  new Entity(EntityCollection),
-  new Entity(PositionCollection),
-  new Entity(EmployeeCollection),
-  new Entity(HistoryCollection),
+  new BodyValues(BodyValueCollection),
+  new BodyParams(BodyParamCollection),
+  new Entities(EntityCollection),
+  new Positions(PositionCollection),
+  new Employees(EmployeeCollection),
+  new History(HistoryCollection),
 ];
-
-const methods = ["create", "readById", "readMany", "updateById", "deleteById"];
 
 exports.initApi = function() {
   ipcMain.on("login", login);
@@ -28,6 +32,8 @@ exports.initApi = function() {
   ipcMain.on("me", me);
 
   entities.forEach(entity => {
+    const methods = entity.getMethods();
+
     methods.forEach(method => {
       ipcMain.on(
         `${entity.collection.link}_${method}`,
