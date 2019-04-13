@@ -6,4 +6,5 @@ exports.EntityCollection = collections["EntityCollection"];
 exports.PositionCollection = collections["PositionCollection"];
 exports.EmployeeCollection = collections["EmployeeCollection"];
 exports.HistoryCollection = collections["HistoryCollection"];
+exports.StoreCollection = collections["StoreCollection"];
 exports.UserCollection = collections["UserCollection"];

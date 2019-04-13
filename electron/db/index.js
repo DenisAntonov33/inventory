@@ -10,6 +10,7 @@ const {
   PositionCollection,
   EmployeeCollection,
   HistoryCollection,
+  StoreCollection,
   UserCollection,
 } = require("./collections");
 
@@ -64,6 +65,7 @@ async function createDatabase(name, adapter) {
     await db.collection(PositionCollection);
     await db.collection(EmployeeCollection);
     await db.collection(HistoryCollection);
+    await db.collection(StoreCollection);
 
     const userCollection = await db.collection(UserCollection);
     userCollection.preInsert(async plainData => {

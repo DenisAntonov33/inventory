@@ -157,6 +157,36 @@
     }
   },
 
+  "StoreCollection": {
+    "name": "store",
+    "link": "store",
+    "schema": {
+      "version": 0,
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "primary": true
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "entity": {
+          "type": "string",
+          "ref": "entity"
+        },
+        "bodyValue": {
+          "type": "string",
+          "ref": "body_value"
+        },
+        "count": {
+          "type": "number"
+        }
+      },
+      "required": ["createdAt"]
+    }
+  },
+
   "HistoryCollection": {
     "name": "history",
     "link": "history",
@@ -242,6 +272,11 @@
             "history": {
               "type": "array",
               "ref": "history",
+              "items": { "type": "string" }
+            },
+            "store": {
+              "type": "array",
+              "ref": "store",
               "items": { "type": "string" }
             }
           }

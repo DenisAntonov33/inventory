@@ -21,7 +21,7 @@ const employees = new Employees(EmployeeCollection);
 class History extends Entity {
   constructor(collection) {
     super(collection);
-    this.defaultMethods = ["create", "readMany", "deleteById"];
+    this.defaultMethods = ["create", "readMany", "updateMany", "deleteById"];
   }
 
   async _create(args) {
@@ -60,6 +60,46 @@ class History extends Entity {
 
       await this.saveDatabase();
       return item ? item.toJSON() : null;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async updateMany(event, _args) {
+    try {
+      const { token, id, args } = _args;
+      if (!id) throw new Error("Id required");
+
+      const user = await this._authentification(token);
+      await this._authorization(user, id);
+
+      const item = await this._updateMany(id, args);
+      if (!item) throw new Error("Item not found");
+
+      event.returnValue = this.res.success({ item });
+      return event;
+    } catch (err) {
+      event.returnValue = this.res.error(500, err.message);
+      return event;
+    }
+  }
+
+  async _updateMany(ids, args) {
+    try {
+      const db = await this.getDatabase();
+      const collection = db[this.collection.name];
+
+      const items = await collection.find({ id: { $in: ids } }).exec();
+      if (!items.length) return null;
+
+      const _args = await this._argsHandler(args);
+
+      await items.update(_args);
+      await this.saveDatabase();
+
+      return items
+        .map(e => e.toJSON())
+        .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
       throw new Error(err.message);
     }
