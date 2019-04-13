@@ -41,11 +41,14 @@ class Entity {
     }
   }
 
-  async _authorization(user, resourceId) {
+  async _authorization(user, ids) {
     try {
       const _user = user.toJSON();
-      const item = _user.data[this.collection.link].find(e => e === resourceId);
-      if (!item) throw new Error("Forbidden");
+      const availableIds = _user.data[this.collection.link];
+
+      const item = ids.forEach(e => {
+        if (!availableIds.includes(e)) throw new Error("Forbidden");
+      });
 
       return item;
     } catch (err) {
@@ -83,7 +86,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id);
+      await this._authorization(user, [id]);
 
       const item = await this._readById(id);
       event.returnValue = this.res.success({ item });
@@ -96,10 +99,11 @@ class Entity {
 
   async readMany(event, _args) {
     try {
-      const { token, args } = _args;
+      const { token, ids, args } = _args;
       const user = await this._authentification(token);
       const _user = user.toJSON();
-      const availableIds = _user[this.collection.link];
+
+      const availableIds = ids ? ids : _user[this.collection.link];
 
       const items = await this._readMany(availableIds, args);
       event.returnValue = this.res.success({ items });
@@ -116,7 +120,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id);
+      await this._authorization(user, [id]);
 
       const item = await this._updateById(id, args);
       if (!item) throw new Error("Item not found");
@@ -135,7 +139,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id);
+      await this._authorization(user, [id]);
 
       const item = await this._deleteById(id);
       if (!item) throw new Error("Item not found");
@@ -166,11 +170,11 @@ class Entity {
     }
   }
 
-  async _readMany(availableIds) {
+  async _readMany(ids) {
     try {
       const db = await this.getDatabase();
       const collection = db[this.collection.name];
-      const items = await collection.find({ id: { $in: availableIds } }).exec();
+      const items = await collection.find({ id: { $in: ids } }).exec();
 
       return items
         .map(e => e.toJSON())

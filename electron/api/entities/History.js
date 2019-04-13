@@ -67,16 +67,15 @@ class History extends Entity {
 
   async updateMany(event, _args) {
     try {
-      const { token, id, args } = _args;
-      if (!id) throw new Error("Id required");
+      const { token, ids, args } = _args;
+      if (!ids || !ids.length) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id);
+      await this._authorization(user, ids);
 
-      const item = await this._updateMany(id, args);
-      if (!item) throw new Error("Item not found");
+      const items = await this._updateMany(ids, args);
 
-      event.returnValue = this.res.success({ item });
+      event.returnValue = this.res.success({ items });
       return event;
     } catch (err) {
       event.returnValue = this.res.error(500, err.message);
