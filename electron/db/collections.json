@@ -201,22 +201,29 @@
         "createdAt": {
           "type": "number"
         },
-        "date": "string",
-        "positions": {
+        "date": { "type": "number" },
+        "list": {
           "type": "array",
-          "default": [],
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "employee": {
+                "type": "string"
+              },
+              "positions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "entity": {
+                "type": "string"
+              },
+              "bodyValue": {
+                "type": "string"
+              }
+            }
           }
-        },
-        "employee": {
-          "type": "string"
-        },
-        "entity": {
-          "type": "string"
-        },
-        "bodyValue": {
-          "type": "string"
         }
       },
       "required": ["date", "createdAt"]

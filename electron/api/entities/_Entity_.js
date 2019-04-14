@@ -102,6 +102,7 @@ class Entity {
       const { token, ids, args } = _args;
       const user = await this._authentification(token);
       const _user = user.toJSON();
+      await this._authorization(user, ids);
 
       const availableIds = ids ? ids : _user[this.collection.link];
 

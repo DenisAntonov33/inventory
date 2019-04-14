@@ -1,12 +1,15 @@
 const { getId } = require("../../services/id");
-const { Entity } = require("./_Entity_");
+const { normalize } = require("../../utils");
 
+const { Entity } = require("./_Entity_");
 const { Entities } = require("./Entities");
+const { BodyValues } = require("./BodyValues");
 const { BodyParams } = require("./BodyParams");
 const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
 
 const {
+  BodyValueCollection,
   BodyParamCollection,
   EntityCollection,
   PositionCollection,
@@ -14,6 +17,7 @@ const {
 } = require("../../db/collections");
 
 const entities = new Entities(EntityCollection);
+const bodyValues = new BodyValues(BodyValueCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
 const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
@@ -29,76 +33,80 @@ class History extends Entity {
       const db = await this.getDatabase();
       const collection = db[this.collection.name];
 
-      const historyPositions = await positions._readMany(args.positions);
-      if (!historyPositions.length) throw new Error("invalid positions");
+      const data = args.list.reduce(
+        (acc, curr) => {
+          if (!curr.employee) throw new Error("employee required");
+          if (!curr.positions || !curr.positions.length)
+            throw new Error("positions required");
+          if (!curr.entity) throw new Error(" entity required");
+          if (!curr.bodyValue) throw new Error("bodyValue required");
 
-      const historyEmployee = await employees._readById(args.employee);
-      if (!historyEmployee) throw new Error("invalid employee");
-
-      const historyEntity = await entities._readById(args.entity);
-      if (!historyEntity) throw new Error("invalid entity");
-
-      const historyBodyParam = await bodyParams._readById(
-        historyEntity.bodyParam.id
+          acc.employees.push(curr.employee);
+          acc.positions = [...acc.positions, ...curr.positions];
+          acc.entities.push(curr.entity);
+          return acc;
+        },
+        {
+          employees: [],
+          positions: [],
+          entities: [],
+        }
       );
-      if (!historyBodyParam) throw new Error("invalid body param");
+      const employeesList = await employees._readMany(data.employees);
+      const positionsList = await positions._readMany(data.positions);
 
-      const historyBodyValue = historyBodyParam.values.find(
-        e => e.id === args.bodyValue
+      const availableEntities = positionsList.reduce(
+        (acc, curr) => [...acc, ...curr.entities],
+        []
       );
-      if (!historyBodyValue) throw new Error("invalid body value");
+      const entitiesList = await entities._readMany(availableEntities);
+
+      const availableBodyParams = entitiesList.map(e => e.bodyParam);
+      const bodyParamsList = await bodyParams._readMany(availableBodyParams);
+
+      const availableBodyValues = bodyParamsList.reduce(
+        (acc, curr) => [...acc, ...curr.values],
+        []
+      );
+      const bodyValuesList = await bodyValues._readMany(availableBodyValues);
+
+      const normalizedEmployeesList = normalize(employeesList);
+      const normalizedPositionsList = normalize(positionsList);
+      const normalizedEntitiesList = normalize(entitiesList);
+      const normalizedBodyValuesList = normalize(bodyValuesList);
+
+      const list = args.list.map(e => {
+        const employee = normalizedEmployeesList[e.employee];
+        if (!employee) throw new Error("invalid employee");
+
+        const positions = e.positions.map(
+          position => normalizedPositionsList[position]
+        );
+        if (!positions.length) throw new Error("invalid positions");
+
+        const entity = normalizedEntitiesList[e.entity];
+        if (!entity) throw new Error("invalid entity");
+
+        const bodyValue = normalizedBodyValuesList[e.bodyValue];
+        if (!bodyValue) throw new Error("invalid bodyValue");
+
+        return {
+          employee: employee.name,
+          positions: positions.name,
+          entity: entity.name,
+          bodyValue: bodyValue.name,
+        };
+      });
 
       const item = await collection.insert({
         id: getId(),
         createdAt: new Date().getTime(),
-        date: "1",
-        positions: historyPositions.map(e => e.name),
-        employee: historyEmployee.name,
-        entity: historyEntity.name,
-        bodyValue: historyBodyValue.name,
+        date: args.date,
+        list,
       });
 
       await this.saveDatabase();
       return item ? item.toJSON() : null;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
-  async updateMany(event, _args) {
-    try {
-      const { token, ids, args } = _args;
-      if (!ids || !ids.length) throw new Error("Id required");
-
-      const user = await this._authentification(token);
-      await this._authorization(user, ids);
-
-      const items = await this._updateMany(ids, args);
-
-      event.returnValue = this.res.success({ items });
-      return event;
-    } catch (err) {
-      event.returnValue = this.res.error(500, err.message);
-      return event;
-    }
-  }
-
-  async _updateMany(ids, args) {
-    try {
-      const db = await this.getDatabase();
-      const collection = db[this.collection.name];
-
-      const items = await collection.find({ id: { $in: ids } }).exec();
-      if (!items.length) return null;
-
-      const _args = await this._argsHandler(args);
-
-      await items.update(_args);
-      await this.saveDatabase();
-
-      return items
-        .map(e => e.toJSON())
-        .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
       throw new Error(err.message);
     }

@@ -19,7 +19,7 @@ const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
 const history = new History(HistoryCollection);
 
-describe("Employees", () => {
+describe("History", () => {
   beforeEach(async () => {
     try {
       const dbSuffix = new Date().getTime();
@@ -47,7 +47,7 @@ describe("Employees", () => {
     });
 
     const entityData1 = { name: "entity1", replacementPeriod: 1 };
-    const entityData2 = { name: "entity1", replacementPeriod: 1 };
+    const entityData2 = { name: "entity2", replacementPeriod: 1 };
 
     let entity1 = await entities._create(entityData1);
     entity1 = await entities._updateById(entity1.id, {
@@ -84,12 +84,25 @@ describe("Employees", () => {
       $push: { positions: position2.id },
     });
 
+    employee1 = await employees._updateById(employee1.id, {
+      $push: {
+        bodyParams: {
+          bodyParam: param1.id,
+          bodyValue: param1.values[0].id,
+        },
+      },
+    });
+
     const historyData1 = {
       date: 1,
-      positions: [position1.id, position2.id],
-      employeee: employee1.id,
-      entity: entity1.id,
-      bodyValue: param1.values[0].id,
+      list: [
+        {
+          positions: [position1.id, position2.id],
+          employee: employee1.id,
+          entity: entity1.id,
+          bodyValue: param1.values[0].id,
+        },
+      ],
     };
 
     let history1 = await history._create(historyData1);
@@ -102,13 +115,13 @@ describe("Employees", () => {
     try {
       const historyData1 = {
         date: 1,
-        positions: [1],
+        list: [{}],
       };
 
       await history._create(historyData1);
     } catch (err) {
       expect(err.message).toBeDefined();
-      expect(err.message).toBe("invalid positions");
+      expect(err.message).toBe("employee required");
       expect.assertions(2);
     }
   });

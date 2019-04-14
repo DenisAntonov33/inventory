@@ -1,3 +1,4 @@
+const { normalize } = require("../../utils");
 const { Entity } = require("./_Entity_");
 const { BodyValues } = require("./BodyValues");
 const { BodyParams } = require("./BodyParams");
@@ -8,12 +9,6 @@ const {
 
 const bodyValues = new BodyValues(BodyValueCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
-
-const normalize = data =>
-  data.reduce((acc, curr) => {
-    acc[curr.id] = curr;
-    return acc;
-  }, {});
 
 class Employees extends Entity {
   async _expand(item) {
