@@ -3,13 +3,11 @@ const { normalize } = require("../../utils");
 
 const { Entity } = require("./_Entity_");
 const { Entities } = require("./Entities");
-const { BodyValues } = require("./BodyValues");
 const { BodyParams } = require("./BodyParams");
 const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
 
 const {
-  BodyValueCollection,
   BodyParamCollection,
   EntityCollection,
   PositionCollection,
@@ -17,7 +15,6 @@ const {
 } = require("../../db/collections");
 
 const entities = new Entities(EntityCollection);
-const bodyValues = new BodyValues(BodyValueCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
 const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
@@ -68,12 +65,11 @@ class History extends Entity {
         (acc, curr) => [...acc, ...curr.values],
         []
       );
-      const bodyValuesList = await bodyValues._readMany(availableBodyValues);
 
       const normalizedEmployeesList = normalize(employeesList);
       const normalizedPositionsList = normalize(positionsList);
       const normalizedEntitiesList = normalize(entitiesList);
-      const normalizedBodyValuesList = normalize(bodyValuesList);
+      const normalizedBodyValuesList = normalize(availableBodyValues);
 
       const list = args.list.map(e => {
         const employee = normalizedEmployeesList[e.employee];
