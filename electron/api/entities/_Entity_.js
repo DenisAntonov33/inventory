@@ -86,7 +86,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, [id]);
+      await this._authorization(user, id ? [id] : []);
 
       const item = await this._readById(id);
       event.returnValue = this.res.success({ item });
@@ -102,7 +102,7 @@ class Entity {
       const { token, ids, args } = _args;
       const user = await this._authentification(token);
       const _user = user.toJSON();
-      await this._authorization(user, ids);
+      await this._authorization(user, ids || []);
 
       const availableIds = ids ? ids : _user[this.collection.link];
 
@@ -121,7 +121,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, [id]);
+      await this._authorization(user, id ? [id] : []);
 
       const item = await this._updateById(id, args);
       if (!item) throw new Error("Item not found");
@@ -140,7 +140,7 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, [id]);
+      await this._authorization(user, id ? [id] : []);
 
       const item = await this._deleteById(id);
       if (!item) throw new Error("Item not found");

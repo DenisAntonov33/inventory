@@ -76,7 +76,7 @@ class History extends Entity {
         if (!employee) throw new Error("invalid employee");
 
         const positions = e.positions.map(
-          position => normalizedPositionsList[position]
+          position => normalizedPositionsList[position].name
         );
         if (!positions.length) throw new Error("invalid positions");
 
@@ -88,7 +88,7 @@ class History extends Entity {
 
         return {
           employee: employee.name,
-          positions: positions.name,
+          positions: positions,
           entity: entity.name,
           bodyValue: bodyValue.name,
         };

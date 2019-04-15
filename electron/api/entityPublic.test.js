@@ -169,23 +169,25 @@ describe("Entity", () => {
 
       employee1 = __employee1;
 
-      const historyItemData1 = {
-        date: new Date().toString(),
-        positions: [position1.name],
-        employee: employee1.name,
-        entity: entity1.name,
-        bodyValue: bodyValue1.name,
+      const historyData1 = {
+        date: 1,
+        list: [
+          {
+            positions: [position1.id],
+            employee: employee1.id,
+            entity: entity1.id,
+            bodyValue: bodyParam1.values[0].id,
+          },
+        ],
       };
 
-      await history.create({}, { token: token1, args: historyItemData1 });
+      await history.create({}, { token: token1, args: historyData1 });
     } catch (err) {
       console.log(err);
     }
   });
 
   test("Check user availability", async () => {
-    expect.assertions(2);
-
     const {
       returnValue: {
         status,
@@ -195,5 +197,30 @@ describe("Entity", () => {
 
     expect(status).toBe(200);
     expect(user).toBeDefined();
+
+    expect.assertions(2);
+  });
+
+  test("Check history availability", async () => {
+    const {
+      returnValue: {
+        status,
+        data: { items },
+      },
+    } = await history.readMany({}, { token: token1 });
+
+    const historyItem = items[0].list[0];
+
+    expect(status).toBe(200);
+    expect(items).toBeDefined();
+
+    expect(historyItem).toBeDefined();
+    expect(historyItem.entity).toBeDefined();
+    expect(historyItem.employee).toBeDefined();
+    expect(historyItem.positions).toBeDefined();
+    expect(historyItem.positions.length).toBeGreaterThan(0);
+    expect(historyItem.bodyValue).toBeDefined();
+
+    expect.assertions(8);
   });
 });
