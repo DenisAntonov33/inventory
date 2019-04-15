@@ -6,6 +6,7 @@ const {
   PositionCollection,
   EmployeeCollection,
   HistoryCollection,
+  StoreCollection,
   UserCollection,
 } = require("./collections");
 
@@ -33,6 +34,7 @@ describe("DB", () => {
     expect(db[PositionCollection.name]).toBeDefined();
     expect(db[EmployeeCollection.name]).toBeDefined();
     expect(db[HistoryCollection.name]).toBeDefined();
+    expect(db[StoreCollection.name]).toBeDefined();
     expect(db[UserCollection.name]).toBeDefined();
   });
 });
