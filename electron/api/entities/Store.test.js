@@ -46,16 +46,28 @@ describe("Store", () => {
       $set: { bodyParam: param1.id },
     });
 
-    let storeItem = await store._create({});
-    const storeId = storeItem.id;
-
-    storeItem = await store._updateById(storeId, {
+    let storeItem = await store._create({
       entity: entity1.id,
       bodyValue: param1.values[0].id,
       count: 5,
     });
 
+    storeItem = await store._create({
+      entity: entity1.id,
+      bodyValue: param1.values[1].id,
+      count: 10,
+    });
+
+    const items = await store._readMany();
+
     expect(storeItem).toBeDefined();
-    expect.assertions(1);
+    expect(items.length).toBe(2);
+
+    storeItem = await store._updateById(storeItem.id, {
+      $set: { count: 100 },
+    });
+
+    expect(storeItem.count).toBe(100);
+    expect.assertions(3);
   });
 });

@@ -206,9 +206,16 @@
         "createdAt": {
           "type": "number"
         },
-        "entities": {
-          "type": "object",
-          "default": {}
+        "entity": {
+          "ref": "entity",
+          "type": "string"
+        },
+        "bodyValue": {
+          "ref": "body_value",
+          "type": "string"
+        },
+        "count": {
+          "type": "number"
         }
       },
       "required": ["createdAt"]
@@ -266,9 +273,10 @@
               "ref": "history",
               "items": { "type": "string" }
             },
-            "storeId": {
-              "type": "string",
-              "ref": "store"
+            "store": {
+              "type": "array",
+              "ref": "store",
+              "items": { "type": "string" }
             }
           }
         }

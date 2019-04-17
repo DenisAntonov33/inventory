@@ -1,5 +1,6 @@
-const { Entity } = require("./_Entity_");
+const { getId } = require("../../services/id");
 
+const { Entity } = require("./_Entity_");
 const { Entities } = require("./Entities");
 const { BodyParams } = require("./BodyParams");
 
@@ -16,13 +17,10 @@ class Store extends Entity {
     super(collection);
   }
 
-  async _updateById(id, args) {
+  async _create(args) {
     try {
       const db = await this.getDatabase();
       const collection = db[this.collection.name];
-
-      const item = await collection.findOne(id).exec();
-      if (!item) return null;
 
       const storeEntity = await entities._readById(args.entity);
       if (!storeEntity) throw new Error("invalid entity");
@@ -37,20 +35,33 @@ class Store extends Entity {
       );
       if (!storeBodyValue) throw new Error("invalid body value");
 
-      console.log(item.toJSON());
-
-      // if (!item.entities[storeEntity.id]) item.entities[storeEntity.id] = {};
-      // await item.save();
-
-      // if (!item.entities[storeEntity.id][storeBodyValue.id])
-      //   item.entities[storeEntity.id][storeBodyValue.id] = 0;
-
-      // await item.save();
+      const item = await collection.insert({
+        id: getId(),
+        createdAt: new Date().getTime(),
+        entity: storeEntity.id,
+        bodyValue: args.bodyValue,
+        count: args.count,
+      });
 
       await this.saveDatabase();
 
       const expandedItem = await this._expand(item);
       return expandedItem;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async _expand(item) {
+    try {
+      const entity = await item.entity_;
+      const bodyValue = await item.bodyValue_;
+
+      return {
+        ...item.toJSON(),
+        entity: entity.toJSON(),
+        bodyValue: bodyValue.toJSON(),
+      };
     } catch (err) {
       throw new Error(err.message);
     }
