@@ -95,6 +95,7 @@ class History extends Entity {
       const item = await collection.insert({
         id: getId(),
         createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
         date: args.date,
         employee: _employee.name,
         positions: _positions,

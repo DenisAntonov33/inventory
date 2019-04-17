@@ -42,6 +42,7 @@ class Store extends Entity {
       const item = await collection.insert({
         id: getId(),
         createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
         entity: storeEntity.id,
         bodyValue: args.bodyValue,
         count: args.count,

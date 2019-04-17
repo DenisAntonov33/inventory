@@ -169,6 +169,7 @@ class Entity {
       const item = await collection.insert({
         id: getId(),
         createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
         ...args,
       });
 
@@ -216,7 +217,14 @@ class Entity {
 
       const _args = await this._argsHandler(args);
 
-      await item.update(_args);
+      await item.update({
+        ..._args,
+        $set: {
+          updatedAt: new Date().getTime(),
+          ...(_args.$set || {}),
+        },
+      });
+
       await this.saveDatabase();
 
       const expandedItem = await this._expand(item);
