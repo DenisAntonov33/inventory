@@ -1,13 +1,13 @@
 const { ipcMain } = require("electron");
 const { login, signup, me } = require("./auth");
 
-const { BodyValues } = require("./BodyValues");
-const { BodyParams } = require("./BodyParams");
-const { Entities } = require("./Entities");
-const { Positions } = require("./Positions");
-const { Employees } = require("./Employees");
-const { History } = require("./History");
-const { Store } = require("./Store");
+const { BodyValues } = require("./entities/BodyValues");
+const { BodyParams } = require("./entities/BodyParams");
+const { Entities } = require("./entities/Entities");
+const { Positions } = require("./entities/Positions");
+const { Employees } = require("./entities/Employees");
+const { History } = require("./entities/History");
+const { Store } = require("./entities/Store");
 
 const {
   BodyValueCollection,

@@ -25,7 +25,6 @@ const store = new Store(StoreCollection);
 class History extends Entity {
   constructor(collection) {
     super(collection);
-    this.defaultMethods = ["create", "readMany", "updateMany", "deleteById"];
   }
 
   async _create(args) {
