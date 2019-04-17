@@ -171,14 +171,10 @@ describe("Entity", () => {
 
       const historyData1 = {
         date: 1,
-        list: [
-          {
-            positions: [position1.id],
-            employee: employee1.id,
-            entity: entity1.id,
-            bodyValue: bodyParam1.values[0].id,
-          },
-        ],
+        positions: [position1.id],
+        employee: employee1.id,
+        entity: entity1.id,
+        bodyValue: bodyParam1.values[0].id,
       };
 
       await history.create({}, { token: token1, args: historyData1 });
@@ -209,7 +205,7 @@ describe("Entity", () => {
       },
     } = await history.readMany({}, { token: token1 });
 
-    const historyItem = items[0].list[0];
+    const historyItem = items[0];
 
     expect(status).toBe(200);
     expect(items).toBeDefined();

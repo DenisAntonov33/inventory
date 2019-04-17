@@ -7,6 +7,7 @@ const { Entities } = require("./Entities");
 const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
 const { History } = require("./History");
+const { Store } = require("./Store");
 
 const {
   BodyValueCollection,
@@ -15,6 +16,7 @@ const {
   PositionCollection,
   EmployeeCollection,
   HistoryCollection,
+  StoreCollection,
 } = require("../db/collections");
 
 const entities = [
@@ -24,6 +26,7 @@ const entities = [
   new Positions(PositionCollection),
   new Employees(EmployeeCollection),
   new History(HistoryCollection),
+  new Store(StoreCollection),
 ];
 
 exports.initApi = function() {

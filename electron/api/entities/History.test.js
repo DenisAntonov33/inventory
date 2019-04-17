@@ -95,14 +95,10 @@ describe("History", () => {
 
     const historyData1 = {
       date: 1,
-      list: [
-        {
-          positions: [position1.id, position2.id],
-          employee: employee1.id,
-          entity: entity1.id,
-          bodyValue: param1.values[0].id,
-        },
-      ],
+      positions: [position1.id, position2.id],
+      employee: employee1.id,
+      entity: entity1.id,
+      bodyValue: param1.values[0].id,
     };
 
     let history1 = await history._create(historyData1);
@@ -111,11 +107,10 @@ describe("History", () => {
     expect.assertions(1);
   });
 
-  test("Creating error", async () => {
+  test("Creating error - employee required", async () => {
     try {
       const historyData1 = {
         date: 1,
-        list: [{}],
       };
 
       await history._create(historyData1);

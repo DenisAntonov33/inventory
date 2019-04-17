@@ -157,36 +157,6 @@
     }
   },
 
-  "StoreCollection": {
-    "name": "store",
-    "link": "store",
-    "schema": {
-      "version": 0,
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "primary": true
-        },
-        "createdAt": {
-          "type": "number"
-        },
-        "entity": {
-          "type": "string",
-          "ref": "entity"
-        },
-        "bodyValue": {
-          "type": "string",
-          "ref": "body_value"
-        },
-        "count": {
-          "type": "number"
-        }
-      },
-      "required": ["createdAt"]
-    }
-  },
-
   "HistoryCollection": {
     "name": "history",
     "link": "history",
@@ -202,31 +172,46 @@
           "type": "number"
         },
         "date": { "type": "number" },
-        "list": {
+        "employee": {
+          "type": "string"
+        },
+        "positions": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "employee": {
-                "type": "string"
-              },
-              "positions": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "entity": {
-                "type": "string"
-              },
-              "bodyValue": {
-                "type": "string"
-              }
-            }
+            "type": "string"
           }
+        },
+        "entity": {
+          "type": "string"
+        },
+        "bodyValue": {
+          "type": "string"
         }
       },
       "required": ["date", "createdAt"]
+    }
+  },
+
+  "StoreCollection": {
+    "name": "store",
+    "link": "store",
+    "schema": {
+      "version": 0,
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "primary": true
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "entities": {
+          "type": "object",
+          "default": {}
+        }
+      },
+      "required": ["createdAt"]
     }
   },
 
@@ -281,10 +266,9 @@
               "ref": "history",
               "items": { "type": "string" }
             },
-            "store": {
-              "type": "array",
-              "ref": "store",
-              "items": { "type": "string" }
+            "storeId": {
+              "type": "string",
+              "ref": "store"
             }
           }
         }

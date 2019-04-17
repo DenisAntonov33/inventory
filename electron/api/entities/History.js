@@ -30,27 +30,15 @@ class History extends Entity {
       const db = await this.getDatabase();
       const collection = db[this.collection.name];
 
-      const data = args.list.reduce(
-        (acc, curr) => {
-          if (!curr.employee) throw new Error("employee required");
-          if (!curr.positions || !curr.positions.length)
-            throw new Error("positions required");
-          if (!curr.entity) throw new Error(" entity required");
-          if (!curr.bodyValue) throw new Error("bodyValue required");
+      if (!args.date) throw new Error("date required");
+      if (!args.employee) throw new Error("employee required");
+      if (!args.positions || !args.positions.length)
+        throw new Error("positions required");
+      if (!args.entity) throw new Error(" entity required");
+      if (!args.bodyValue) throw new Error("bodyValue required");
 
-          acc.employees.push(curr.employee);
-          acc.positions = [...acc.positions, ...curr.positions];
-          acc.entities.push(curr.entity);
-          return acc;
-        },
-        {
-          employees: [],
-          positions: [],
-          entities: [],
-        }
-      );
-      const employeesList = await employees._readMany(data.employees);
-      const positionsList = await positions._readMany(data.positions);
+      const employeeItem = await employees._readById(args.employee);
+      const positionsList = await positions._readMany(args.positions);
 
       const availableEntities = positionsList.reduce(
         (acc, curr) => [...acc, ...curr.entities],
@@ -66,39 +54,39 @@ class History extends Entity {
         []
       );
 
-      const normalizedEmployeesList = normalize(employeesList);
       const normalizedPositionsList = normalize(positionsList);
       const normalizedEntitiesList = normalize(entitiesList);
       const normalizedBodyValuesList = normalize(availableBodyValues);
 
-      const list = args.list.map(e => {
-        const employee = normalizedEmployeesList[e.employee];
-        if (!employee) throw new Error("invalid employee");
+      const _employee = employeeItem;
+      if (!_employee) throw new Error("invalid employee");
 
-        const positions = e.positions.map(
-          position => normalizedPositionsList[position].name
-        );
-        if (!positions.length) throw new Error("invalid positions");
+      const _positions = args.positions.map(
+        position => normalizedPositionsList[position].name
+      );
+      if (!_positions.length) throw new Error("invalid positions");
 
-        const entity = normalizedEntitiesList[e.entity];
-        if (!entity) throw new Error("invalid entity");
+      const _entity = normalizedEntitiesList[args.entity];
+      if (!_entity) throw new Error("invalid entity");
 
-        const bodyValue = normalizedBodyValuesList[e.bodyValue];
-        if (!bodyValue) throw new Error("invalid bodyValue");
+      const _bodyValue = normalizedBodyValuesList[args.bodyValue];
+      if (!_bodyValue) throw new Error("invalid bodyValue");
 
-        return {
-          employee: employee.name,
-          positions: positions,
-          entity: entity.name,
-          bodyValue: bodyValue.name,
-        };
-      });
+      const storeRelease = {
+        entity: _entity.id,
+        bodyValue: _bodyValue.id,
+      };
+
+      console.log(storeRelease);
 
       const item = await collection.insert({
         id: getId(),
         createdAt: new Date().getTime(),
         date: args.date,
-        list,
+        employee: _employee.name,
+        positions: _positions,
+        entity: _entity.name,
+        bodyValue: _bodyValue.name,
       });
 
       await this.saveDatabase();

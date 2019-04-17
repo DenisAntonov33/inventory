@@ -13,7 +13,7 @@ const bodyParams = new BodyParams(BodyParamCollection);
 const entities = new Entities(EntityCollection);
 const store = new Store(StoreCollection);
 
-describe("Entities", () => {
+describe("Store", () => {
   beforeEach(async () => {
     try {
       const dbSuffix = new Date().getTime();
@@ -46,15 +46,16 @@ describe("Entities", () => {
       $set: { bodyParam: param1.id },
     });
 
-    const storeData1 = {
+    let storeItem = await store._create({});
+    const storeId = storeItem.id;
+
+    storeItem = await store._updateById(storeId, {
       entity: entity1.id,
       bodyValue: param1.values[0].id,
       count: 5,
-    };
+    });
 
-    let storeItem1 = await store._create(storeData1);
-
-    expect(storeItem1).toBeDefined();
+    expect(storeItem).toBeDefined();
     expect.assertions(1);
   });
 });
