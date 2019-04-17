@@ -49,7 +49,16 @@ export default class StoreEntity {
       switch (action.type) {
         case ADD_ENTITIES: {
           const newState = cloneDeep(state);
-          return mergeWith(newState, action.payload[STATE_KEY]);
+          return mergeWith(
+            newState,
+            action.payload[STATE_KEY],
+            (objValue, srcValue) => {
+              if (!objValue) return srcValue;
+              return objValue.updatedAt > srcValue.updatedAt
+                ? objValue
+                : srcValue;
+            }
+          );
         }
         default:
           return state;
@@ -80,8 +89,6 @@ export default class StoreEntity {
 
         try {
           const { item, items } = yield call(request, payload);
-
-          console.log(item);
 
           if (type === DELETE_BY_ID) item.isDeleted = true;
 

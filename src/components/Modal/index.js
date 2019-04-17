@@ -1,22 +1,22 @@
 import React from "react";
 
+import "./index.scss";
 import Modal from "@material-ui/core/Modal";
+import Paper from "@material-ui/core/Paper";
 
 class SimpleModal extends React.Component {
   render() {
-    const { children, isOpen, handleClose } = this.props;
+    const { children, isOpen, onClose } = this.props;
 
     return (
-      <div>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isOpen}
-          onClose={handleClose}
-        >
-          <div>{children}</div>
-        </Modal>
-      </div>
+      <Modal
+        className="modal"
+        onClose={onClose}
+        aria-labelledby="customized-dialog-title"
+        open={isOpen}
+      >
+        <Paper className="modal__container">{children}</Paper>
+      </Modal>
     );
   }
 }

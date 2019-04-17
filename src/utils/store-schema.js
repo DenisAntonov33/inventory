@@ -1,7 +1,7 @@
 import { schema } from "normalizr";
 
 const bodyValuesSchema = new schema.Entity("bodyValues", {}, {});
-const bodyParamsSchema = new schema.Entity("bodyParams", {}, {});
+const bodyParamsSchema = new schema.Entity("bodyParams", {});
 const entitiesSchema = new schema.Entity("entities", {}, {});
 const positionsSchema = new schema.Entity("positions", {}, {});
 const employeesSchema = new schema.Entity("employees", {}, {});

@@ -1,0 +1,9 @@
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__container {
+        padding: 25px;
+    }
+}
