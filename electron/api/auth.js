@@ -28,6 +28,7 @@ exports.signup = async function(event, arg) {
         entities: [],
         positions: [],
         employees: [],
+        store: [],
         history: [],
       },
     });

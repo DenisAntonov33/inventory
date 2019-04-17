@@ -6,18 +6,21 @@ const { Entities } = require("./Entities");
 const { BodyParams } = require("./BodyParams");
 const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
+const { Store } = require("./Store");
 
 const {
   BodyParamCollection,
   EntityCollection,
   PositionCollection,
   EmployeeCollection,
+  StoreCollection,
 } = require("../../db/collections");
 
 const entities = new Entities(EntityCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
 const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
+const store = new Store(StoreCollection);
 
 class History extends Entity {
   constructor(collection) {
@@ -70,14 +73,25 @@ class History extends Entity {
       if (!_entity) throw new Error("invalid entity");
 
       const _bodyValue = normalizedBodyValuesList[args.bodyValue];
+
       if (!_bodyValue) throw new Error("invalid bodyValue");
 
-      const storeRelease = {
-        entity: _entity.id,
-        bodyValue: _bodyValue.id,
-      };
+      const storeCollection = db[store.collection.name];
+      const storeItem = await storeCollection
+        .findOne({
+          $and: [
+            { entity: { $eq: _entity.id } },
+            { bodyValue: { $eq: _bodyValue.id } },
+          ],
+        })
+        .exec();
 
-      console.log(storeRelease);
+      if (!storeItem) throw new Error("item is unavailable in store");
+      if (!storeItem.count) throw new Error("store is empty");
+
+      await store._updateById(storeItem.id, {
+        $inc: { count: -1 },
+      });
 
       const item = await collection.insert({
         id: getId(),
@@ -90,7 +104,9 @@ class History extends Entity {
       });
 
       await this.saveDatabase();
-      return item ? item.toJSON() : null;
+
+      const expandedItem = await this._expand(item);
+      return expandedItem;
     } catch (err) {
       throw new Error(err.message);
     }

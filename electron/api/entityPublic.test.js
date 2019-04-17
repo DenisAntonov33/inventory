@@ -8,6 +8,7 @@ const { Entities } = require("./entities/Entities");
 const { Positions } = require("./entities/Positions");
 const { Employees } = require("./entities/Employees");
 const { History } = require("./entities/History");
+const { Store } = require("./entities/Store");
 
 const {
   BodyValueCollection,
@@ -16,6 +17,7 @@ const {
   PositionCollection,
   EmployeeCollection,
   HistoryCollection,
+  StoreCollection,
 } = require("../db/collections");
 
 const bodyValues = new BodyValues(BodyValueCollection);
@@ -24,11 +26,12 @@ const entities = new Entities(EntityCollection);
 const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
 const history = new History(HistoryCollection);
+const store = new Store(StoreCollection);
 
 describe("Entity", () => {
   let token1, bodyValue1, bodyValue2, bodyParam1, entity1, position1, employee1;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     try {
       const dbSuffix = new Date().getTime();
       await getDatabase(`test${dbSuffix}`, "memory");
@@ -169,15 +172,13 @@ describe("Entity", () => {
 
       employee1 = __employee1;
 
-      const historyData1 = {
-        date: 1,
-        positions: [position1.id],
-        employee: employee1.id,
+      const storeItemData1 = {
         entity: entity1.id,
-        bodyValue: bodyParam1.values[0].id,
+        bodyValue: bodyValue1.id,
+        count: 20,
       };
 
-      await history.create({}, { token: token1, args: historyData1 });
+      await store.create({}, { token: token1, args: storeItemData1 });
     } catch (err) {
       console.log(err);
     }
@@ -197,26 +198,78 @@ describe("Entity", () => {
     expect.assertions(2);
   });
 
-  test("Check history availability", async () => {
+  test("Check store availability", async () => {
     const {
       returnValue: {
         status,
         data: { items },
       },
-    } = await history.readMany({}, { token: token1 });
-
-    const historyItem = items[0];
+    } = await store.readMany({}, { token: token1 });
 
     expect(status).toBe(200);
-    expect(items).toBeDefined();
+    expect(items.length).toBe(1);
 
-    expect(historyItem).toBeDefined();
-    expect(historyItem.entity).toBeDefined();
-    expect(historyItem.employee).toBeDefined();
-    expect(historyItem.positions).toBeDefined();
-    expect(historyItem.positions.length).toBeGreaterThan(0);
-    expect(historyItem.bodyValue).toBeDefined();
+    expect.assertions(2);
+  });
 
-    expect.assertions(8);
+  test("Check history work", async () => {
+    const {
+      returnValue: {
+        data: {
+          items: [oldStoreItem],
+        },
+      },
+    } = await store.readMany({}, { token: token1 });
+
+    expect(oldStoreItem.count).toBe(20);
+
+    const historyItemData1 = {
+      date: 1,
+      employee: employee1.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: bodyValue1.id,
+    };
+
+    await history.create({}, { token: token1, args: historyItemData1 });
+
+    const {
+      returnValue: {
+        data: {
+          items: [newStoreItem],
+        },
+      },
+    } = await store.readMany({}, { token: token1 });
+
+    expect(newStoreItem.count).toBe(19);
+
+    expect.assertions(2);
+  });
+
+  test("Check history work error - 0 items", async () => {
+    const storeItemData1 = {
+      entity: entity1.id,
+      bodyValue: bodyValue2.id,
+      count: 0,
+    };
+
+    await store.create({}, { token: token1, args: storeItemData1 });
+
+    const historyItemData1 = {
+      date: 1,
+      employee: employee1.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: bodyValue2.id,
+    };
+
+    const {
+      returnValue: { status, message },
+    } = await history.create({}, { token: token1, args: historyItemData1 });
+
+    expect(status).toBe(500);
+    expect(message).toBe("store is empty");
+
+    expect.assertions(2);
   });
 });

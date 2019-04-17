@@ -49,8 +49,8 @@ describe("_Entity_ (BodyParams)", () => {
       await bodyParams._create(bodyParamData1);
     } catch (err) {
       expect(err.message).toBeDefined();
-      expect.assertions(1);
     }
+    expect.assertions(1);
   });
 
   test("Update error", async () => {
@@ -60,7 +60,7 @@ describe("_Entity_ (BodyParams)", () => {
       await bodyParams._updateById(item.id, { surname: "surname" });
     } catch (err) {
       expect(err.message).toBeDefined();
-      expect.assertions(1);
     }
+    expect.assertions(1);
   });
 });

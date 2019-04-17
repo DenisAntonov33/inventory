@@ -1,3 +1,4 @@
+const { intersection: _intersection } = require("lodash");
 const { res } = require("../../services/response");
 const { getDatabase, saveDatabase } = require("../../db/index");
 const { getId } = require("../../services/id");
@@ -9,6 +10,7 @@ class Entity {
     this.getDatabase = getDatabase;
     this.saveDatabase = saveDatabase;
     this.collection = collection;
+    this.userCollection = collection;
     this.res = res;
 
     this.defaultMethods = [
@@ -104,7 +106,8 @@ class Entity {
       const _user = user.toJSON();
       await this._authorization(user, ids || []);
 
-      const availableIds = ids ? ids : _user[this.collection.link];
+      const userIds = _user.data[this.collection.link];
+      const availableIds = ids ? _intersection(userIds, ids) : userIds;
 
       const items = await this._readMany(availableIds, args);
       event.returnValue = this.res.success({ items });

@@ -3,6 +3,7 @@ const { Entities } = require("./Entities");
 const { BodyParams } = require("./BodyParams");
 const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
+const { Store } = require("./Store");
 const { History } = require("./History");
 
 const {
@@ -10,6 +11,7 @@ const {
   EntityCollection,
   PositionCollection,
   EmployeeCollection,
+  StoreCollection,
   HistoryCollection,
 } = require("../../db/collections");
 
@@ -17,6 +19,7 @@ const entities = new Entities(EntityCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
 const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
+const store = new Store(StoreCollection);
 const history = new History(HistoryCollection);
 
 describe("History", () => {
@@ -91,6 +94,12 @@ describe("History", () => {
           bodyValue: param1.values[0].id,
         },
       },
+    });
+
+    await store._create({
+      entity: entity1.id,
+      bodyValue: param1.values[0].id,
+      count: 10,
     });
 
     const historyData1 = {
