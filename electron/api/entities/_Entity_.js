@@ -73,6 +73,7 @@ class Entity {
       };
 
       await user.atomicUpdate(changeFunction);
+      await this.saveDatabase();
 
       event.returnValue = this.res.success({ item });
       return event;
@@ -124,7 +125,9 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id ? [id] : []);
+
+      const ids = id ? [id] : [];
+      await this._authorization(user, ids);
 
       const item = await this._updateById(id, args);
       if (!item) throw new Error("Item not found");
@@ -143,7 +146,9 @@ class Entity {
       if (!id) throw new Error("Id required");
 
       const user = await this._authentification(token);
-      await this._authorization(user, id ? [id] : []);
+
+      const ids = id ? [id] : [];
+      await this._authorization(user, ids);
 
       const item = await this._deleteById(id);
       if (!item) throw new Error("Item not found");

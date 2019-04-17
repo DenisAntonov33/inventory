@@ -54,13 +54,17 @@ class BodyParams extends Entity {
             break;
         }
 
-        if (key === "$create") {
-          const value = await bodyValues._create(args[key]["value"]);
+        if (key === "$create" && args[key]["values"]) {
+          const value = await bodyValues._create(args[key]["values"]);
           acc["$push"] = { values: value.id };
         }
 
-        if (key === "$pull") {
-          const value = await bodyValues._deleteById(args[key]["values"]);
+        if (
+          key === "$pull" &&
+          args[key]["values"] &&
+          args[key]["values"]["id"]
+        ) {
+          const value = await bodyValues._deleteById(args[key]["values"]["id"]);
           acc["$pullAll"] = { values: [value.id] };
         }
 

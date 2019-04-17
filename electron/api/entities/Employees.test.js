@@ -38,19 +38,19 @@ describe("Employees", () => {
     let param2 = await bodyParams._create(bodyParamData2);
 
     param1 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData1 },
+      $create: { values: bodyValueData1 },
     });
 
     param1 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData2 },
+      $create: { values: bodyValueData2 },
     });
 
     param2 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData3 },
+      $create: { values: bodyValueData3 },
     });
 
     param2 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData4 },
+      $create: { values: bodyValueData4 },
     });
 
     const entityData1 = { name: "entity1", replacementPeriod: 1 };
@@ -109,11 +109,11 @@ describe("Employees", () => {
     let param1 = await bodyParams._create(bodyParamData1);
 
     param1 = await bodyParams._updateById(param1.id, {
-      $create: { value: bodyValueData1 },
+      $create: { values: bodyValueData1 },
     });
 
     param1 = await bodyParams._updateById(param1.id, {
-      $create: { value: bodyValueData2 },
+      $create: { values: bodyValueData2 },
     });
 
     const employeeData1 = { name: "employee1" };
@@ -144,11 +144,11 @@ describe("Employees", () => {
       let param1 = await bodyParams._create(bodyParamData1);
 
       param1 = await bodyParams._updateById(param1.id, {
-        $create: { value: bodyValueData1 },
+        $create: { values: bodyValueData1 },
       });
 
       param1 = await bodyParams._updateById(param1.id, {
-        $create: { value: bodyValueData2 },
+        $create: { values: bodyValueData2 },
       });
 
       const employeeData1 = { name: "employee1" };
@@ -177,11 +177,11 @@ describe("Employees", () => {
       let param1 = await bodyParams._create(bodyParamData1);
 
       param1 = await bodyParams._updateById(param1.id, {
-        $create: { value: bodyValueData1 },
+        $create: { values: bodyValueData1 },
       });
 
       param1 = await bodyParams._updateById(param1.id, {
-        $create: { value: bodyValueData2 },
+        $create: { values: bodyValueData2 },
       });
 
       const employeeData1 = { name: "employee1" };

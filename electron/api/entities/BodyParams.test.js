@@ -25,18 +25,18 @@ describe("BodyParams", () => {
     let item = bodyParams._create(bodyParamData1);
 
     item = await bodyParams._updateById(item.id, {
-      $create: { value: bodyValueData1 },
+      $create: { values: bodyValueData1 },
     });
 
     expect(item.values.length).toBe(1);
     expect(item.values.find(e => e.name === bodyValueData1.name)).toBeDefined();
 
     item = await bodyParams._updateById(item.id, {
-      $create: { value: bodyValueData2 },
+      $create: { values: bodyValueData2 },
     });
 
     item = await bodyParams._updateById(item.id, {
-      $create: { value: bodyValueData3 },
+      $create: { values: bodyValueData3 },
     });
 
     expect(item.values.length).toBe(3);
@@ -46,7 +46,7 @@ describe("BodyParams", () => {
 
     const valueForDeleting = item.values[0];
     item = await bodyParams._updateById(item.id, {
-      $pull: { values: valueForDeleting.id },
+      $pull: { values: { id: valueForDeleting.id } },
     });
 
     expect(item.values.length).toBe(2);

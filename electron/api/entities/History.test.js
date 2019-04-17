@@ -42,11 +42,11 @@ describe("History", () => {
     let param2 = await bodyParams._create(bodyParamData2);
 
     param1 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData1 },
+      $create: { values: bodyValueData1 },
     });
 
     param1 = await bodyParams._updateById(param2.id, {
-      $create: { value: bodyValueData2 },
+      $create: { values: bodyValueData2 },
     });
 
     const entityData1 = { name: "entity1", replacementPeriod: 1 };
