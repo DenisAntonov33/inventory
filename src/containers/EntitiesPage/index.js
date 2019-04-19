@@ -65,7 +65,8 @@ class EntityPage extends Component {
               title: "Body param",
               field: "bodyParam",
               lookup: formattedBodyParams,
-              render: rowData => rowData.bodyParam.name,
+              render: rowData =>
+                rowData.bodyParam ? rowData.bodyParam.name : "",
             },
           ]}
           data={filteredEntities}
