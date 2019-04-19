@@ -20,6 +20,23 @@ describe("Entities", () => {
     }
   });
 
+  test("Creating", async () => {
+    const bodyParamData1 = { name: "param1" };
+    const param1 = await bodyParams._create(bodyParamData1);
+
+    const entityData1 = {
+      name: "param1",
+      replacementPeriod: 1,
+      bodyParam: param1.id,
+    };
+    const entity1 = await entities._create(entityData1);
+
+    expect(entity1.name).toBe(entityData1.name);
+    expect(entity1.bodyParam.name).toBe(param1.name);
+
+    expect.assertions(2);
+  });
+
   test("Adding and removing params", async () => {
     const bodyParamData1 = { name: "param1" };
     const bodyParamData2 = { name: "param2" };

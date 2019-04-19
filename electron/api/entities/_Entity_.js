@@ -174,7 +174,9 @@ class Entity {
       });
 
       await this.saveDatabase();
-      return item ? item.toJSON() : null;
+
+      const expandedItem = await this._expand(item);
+      return expandedItem;
     } catch (err) {
       throw new Error(err.message);
     }
