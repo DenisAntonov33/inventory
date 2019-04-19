@@ -42,7 +42,7 @@ class EntityPage extends Component {
 
             {
               title: "Body Values",
-              field: "bodyValues",
+              field: "values",
               render: rowData => rowData.values.map(e => e.name).join(", "),
               editComponent: props => {
                 const values = props.value || [];
