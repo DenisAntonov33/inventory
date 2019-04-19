@@ -1,71 +1,33 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import Modal from "../../components/Modal";
+import history from "../../utils/history";
+import MaterialTable from "material-table";
 
 import { actions, selectors } from "../../store/modules/entities";
-import BodyParamsForm from "./BodyParamForm";
-import BodyParamsList from "./BodyParamsList";
-
-import BodyValueForm from "./BodyValueForm";
-import BodyValuesList from "./BodyValuesList";
 
 const bodyParamsAlias = ["bodyParams"];
 const bodyParamsActions = actions[bodyParamsAlias];
 const bodyParamsSelectors = selectors[bodyParamsAlias];
 
 class EntityPage extends Component {
-  state = {
-    isModalOpen: true,
-    selectedItemId: null,
-  };
-
   componentDidMount() {
     const { readBodyParams, bodyParamsIds, data } = this.props;
-    const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
 
+    const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
     if (!bodyParams.length) readBodyParams();
   }
 
-  submitHandler = values => {
-    const { createBodyParam } = this.props;
-    createBodyParam(values);
-  };
-
-  openItemModal = id => {
-    if (!id) return;
-    this.setState({ isModalOpen: true, selectedItemId: id });
-  };
-
-  closeItemModal = () => {
-    this.setState({ isModalOpen: false, selectedItemId: null });
-  };
-
-  createValueHandler = (id, values) => {
-    const { updateBodyParam } = this.props;
-    const { name } = values;
-    updateBodyParam(id, { $create: { values: { name } } });
-  };
-
-  removeValueHandler = (id, valueId) => {
-    const { updateBodyParam } = this.props;
-    updateBodyParam(id, { $pull: { values: { id: valueId } } });
-  };
-
-  removeHandler = id => {
-    const { deleteBodyParam } = this.props;
-    deleteBodyParam(id);
-  };
-
   render() {
-    const { isModalOpen, selectedItemId } = this.state;
-    const { bodyParamsIds, data } = this.props;
+    const {
+      data,
+      bodyParamsIds,
+      createBodyParam,
+      updateBodyParam,
+      deleteBodyParam,
+    } = this.props;
 
     const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
-
-    const selectedItem = selectedItemId
-      ? bodyParamsSelectors.getItemById(selectedItemId, data)
-      : null;
+    const filteredBodyParams = bodyParams.filter(e => !e.isDeleted);
 
     return (
       <div>
@@ -73,25 +35,59 @@ class EntityPage extends Component {
           <h1>{bodyParamsAlias}</h1>
         </header>
 
-        {selectedItemId && (
-          <Modal isOpen={isModalOpen} onClose={this.closeItemModal}>
-            <BodyValueForm
-              submitHandler={values =>
-                this.createValueHandler(selectedItemId, values)
-              }
-            />
-            <BodyValuesList
-              items={[...selectedItem.values]}
-              removeHandler={id => this.removeValueHandler(selectedItemId, id)}
-            />
-          </Modal>
-        )}
+        <MaterialTable
+          title="Editable Example"
+          columns={[
+            { title: "Name", field: "name" },
 
-        <BodyParamsForm submitHandler={this.submitHandler} />
-        <BodyParamsList
-          items={bodyParams}
-          updateHandler={this.openItemModal}
-          removeHandler={this.removeHandler}
+            {
+              title: "Body Values",
+              field: "bodyValues",
+              render: rowData => rowData.values.map(e => e.name).join(", "),
+              editComponent: props => {
+                const values = props.value || [];
+                return values.map(e => e.name).join(", ");
+              },
+            },
+          ]}
+          data={filteredBodyParams}
+          actions={[
+            {
+              icon: "link",
+              tooltip: "Show User Info",
+              onClick: (event, rowData) => {
+                history.push(`/bodyparams/${rowData.id}`);
+              },
+            },
+          ]}
+          editable={{
+            onRowAdd: newData =>
+              new Promise(resolve => {
+                console.log(newData);
+                createBodyParam({
+                  ...newData,
+                });
+                resolve();
+              }),
+
+            onRowUpdate: (newData, oldData) =>
+              new Promise(resolve => {
+                const args = Object.keys(newData).reduce((acc, curr) => {
+                  if (newData[curr] !== oldData[curr])
+                    acc[curr] = newData[curr];
+                  return acc;
+                }, {});
+
+                updateBodyParam(oldData.id, { $set: args });
+                resolve();
+              }),
+
+            onRowDelete: oldData =>
+              new Promise(resolve => {
+                deleteBodyParam(oldData.id);
+                resolve();
+              }),
+          }}
         />
       </div>
     );
