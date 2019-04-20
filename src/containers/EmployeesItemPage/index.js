@@ -27,8 +27,7 @@ class EntityPage extends Component {
       data,
     } = this.props;
 
-    const employee = EmployeesSelectors.getItemById(id, data);
-    if (!employee) readEmployee(id);
+    readEmployee(id);
 
     const bodyParams = BodyParamsSelectors.getItems(bodyParamsIds, data);
     if (!bodyParams.length) readBodyParams();

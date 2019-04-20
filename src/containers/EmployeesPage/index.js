@@ -8,6 +8,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import Button from "@material-ui/core/Button";
 
 import { actions, selectors } from "../../store/modules/entities";
 
@@ -44,6 +45,14 @@ class EntityPage extends Component {
     if (!bodyParams.length) readBodyParams();
   }
 
+  refreshData = () => {
+    const { readEmployees, readPositions, readBodyParams } = this.props;
+
+    readEmployees();
+    readPositions();
+    readBodyParams();
+  };
+
   render() {
     const {
       createEmployee,
@@ -62,8 +71,15 @@ class EntityPage extends Component {
 
     return (
       <div>
-        <header>
+        <header className="page__header">
           <h1>{EmployeesAlias}</h1>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.refreshData}
+          >
+            Refresh
+          </Button>
         </header>
 
         <MaterialTable

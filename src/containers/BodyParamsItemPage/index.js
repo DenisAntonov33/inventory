@@ -18,11 +18,9 @@ class EntityPage extends Component {
         params: { id },
       },
       readBodyParam,
-      data,
     } = this.props;
 
-    const bodyParam = bodyParamsSelectors.getItemById(id, data);
-    if (!bodyParam) readBodyParam(id);
+    readBodyParam(id);
   }
 
   render() {

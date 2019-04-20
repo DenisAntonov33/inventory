@@ -19,7 +19,12 @@ class Instance extends Component {
         <header>
           <h1>Home Page</h1>
         </header>
-        <Button component={Link} to="/requisition">
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/requisition"
+        >
           Create requisition
         </Button>
       </div>

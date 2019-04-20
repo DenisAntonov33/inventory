@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import history from "../../utils/history";
 import MaterialTable from "material-table";
 
+import Button from "@material-ui/core/Button";
+
 import { actions, selectors } from "../../store/modules/entities";
 
 const bodyParamsAlias = ["bodyParams"];
@@ -16,6 +18,11 @@ class EntityPage extends Component {
     const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
     if (!bodyParams.length) readBodyParams();
   }
+
+  refreshData = () => {
+    const { readBodyParams } = this.props;
+    readBodyParams();
+  };
 
   render() {
     const {
@@ -31,8 +38,15 @@ class EntityPage extends Component {
 
     return (
       <div>
-        <header>
+        <header className="page__header">
           <h1>{bodyParamsAlias}</h1>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.refreshData}
+          >
+            Refresh
+          </Button>
         </header>
 
         <MaterialTable

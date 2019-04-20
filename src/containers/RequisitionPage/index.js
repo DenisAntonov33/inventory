@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { DateTime } from "luxon";
 
 import MaterialTable from "material-table";
-import { pull } from "lodash";
+import { pull, pullAllWith, isEqual } from "lodash";
 
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -11,9 +11,20 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 
 import { actions, selectors } from "../../store/modules/entities";
-import { CreateRequisitionRequest } from "../../store/modules/requisition/actions";
+import {
+  CreateRequisitionRequest,
+  CreateRequisitionSuccess,
+} from "../../store/modules/requisition/actions";
+
+const HistoryAlias = ["history"];
+const HistoryActions = actions[HistoryAlias];
+
+const StoreAlias = ["store"];
+const StoreActions = actions[StoreAlias];
+const StoreSelectors = selectors[StoreAlias];
 
 const EmployeesAlias = ["employees"];
 const EmployeesActions = actions[EmployeesAlias];
@@ -30,15 +41,20 @@ const EntitiesSelectors = selectors[EntitiesAlias];
 const BodyParamsAlias = ["bodyParams"];
 const BodyParamsActions = actions[BodyParamsAlias];
 
+const BodyValuesAlias = ["bodyValues"];
+const BodyValuesSelectors = selectors[BodyValuesAlias];
+
 class EntityPage extends Component {
   componentDidMount() {
     const {
       createRequisition,
       requisition,
+      readStore,
       readEmployees,
       readPositions,
       readEntities,
       readBodyParams,
+      storeIds,
       employeesIds,
       positionsIds,
       entitiesIds,
@@ -46,23 +62,41 @@ class EntityPage extends Component {
     } = this.props;
 
     if (!requisition.length) createRequisition();
-
+    if (!storeIds.length) readStore();
     if (!employeesIds.length) readEmployees();
     if (!positionsIds.length) readPositions();
     if (!entitiesIds.length) readEntities();
     if (!bodyParamsIds.length) readBodyParams();
   }
 
+  pushHistory = () => {
+    const {
+      requisition,
+      createHistoryItem,
+      updateRequisitionItems,
+    } = this.props;
+
+    requisition.forEach(e => {
+      createHistoryItem(e);
+    });
+
+    updateRequisitionItems([]);
+  };
+
   render() {
     const {
-      createHistoryItem,
-      deleteHistoryItem,
+      storeIds,
       employeesIds,
       data,
       requisition,
+      updateRequisitionItems,
     } = this.props;
 
-    console.log(requisition);
+    const store = StoreSelectors.getItems(storeIds, data);
+    const filteredStore = store.filter(e => !e.isDeleted);
+
+    console.log(filteredStore);
+
     const employees = EmployeesSelectors.getItems(employeesIds, data);
     const filteredEmployees = employees.filter(e => !e.isDeleted);
 
@@ -125,6 +159,8 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+              render: rowData =>
+                EmployeesSelectors.getItemById(rowData.employee, data).name,
             },
             {
               title: "Positions",
@@ -176,7 +212,10 @@ class EntityPage extends Component {
                   </FormControl>
                 );
               },
-              render: rowData => rowData.positions.join(", "),
+              render: rowData =>
+                rowData.positions
+                  .map(e => PositionsSelectors.getItemById(e, data).name)
+                  .join(", "),
             },
             {
               title: "Entity",
@@ -237,6 +276,8 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+              render: rowData =>
+                EntitiesSelectors.getItemById(rowData.entity, data).name,
             },
             {
               title: "Body Value",
@@ -274,26 +315,45 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+
+              render: rowData =>
+                BodyValuesSelectors.getItemById(rowData.bodyValue, data).name,
             },
           ]}
-          data={[]}
+          data={requisition}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
-                createHistoryItem({
-                  ...newData,
-                  date: Date.parse(newData.date),
-                });
+                updateRequisitionItems([
+                  ...requisition,
+                  {
+                    ...newData,
+                    date: Date.parse(newData.date),
+                  },
+                ]);
+
                 resolve();
               }),
 
             onRowDelete: oldData =>
               new Promise(resolve => {
-                deleteHistoryItem(oldData.id);
+                updateRequisitionItems(
+                  pullAllWith(requisition, [oldData], isEqual)
+                );
+
                 resolve();
               }),
           }}
         />
+        <div className="page__footer">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.pushHistory}
+          >
+            Approve
+          </Button>
+        </div>
       </div>
     );
   }
@@ -302,6 +362,7 @@ class EntityPage extends Component {
 const mapStateToProps = ({ lists, data, requisition }) => ({
   requisition: requisition.data,
   data,
+  storeIds: lists[StoreAlias],
   employeesIds: lists[EmployeesAlias],
   entitiesIds: lists[EntitiesAlias],
   positionsIds: lists[PositionsAlias],
@@ -310,6 +371,9 @@ const mapStateToProps = ({ lists, data, requisition }) => ({
 
 const mapDispatchToProps = dispatch => ({
   createRequisition: () => dispatch(CreateRequisitionRequest()),
+  updateRequisitionItems: items => dispatch(CreateRequisitionSuccess(items)),
+  createHistoryItem: args => dispatch(HistoryActions.create(args)),
+  readStore: () => dispatch(StoreActions.readMany()),
   readEmployees: () => dispatch(EmployeesActions.readMany()),
   readEntities: () => dispatch(EntitiesActions.readMany()),
   readPositions: () => dispatch(PositionsActions.readMany()),

@@ -11,6 +11,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 
 import { actions, selectors } from "../../store/modules/entities";
 
@@ -56,6 +57,22 @@ class EntityPage extends Component {
     if (!bodyParamsIds.length) readBodyParams();
   }
 
+  refreshData = () => {
+    const {
+      readHistory,
+      readEmployees,
+      readPositions,
+      readEntities,
+      readBodyParams,
+    } = this.props;
+
+    readHistory();
+    readEmployees();
+    readPositions();
+    readEntities();
+    readBodyParams();
+  };
+
   render() {
     const {
       createHistoryItem,
@@ -77,8 +94,15 @@ class EntityPage extends Component {
 
     return (
       <div>
-        <header>
+        <header className="page__header">
           <h1>{HistoryAlias}</h1>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.refreshData}
+          >
+            Refresh
+          </Button>
         </header>
 
         <MaterialTable
