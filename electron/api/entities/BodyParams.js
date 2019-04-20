@@ -7,12 +7,17 @@ const { BodyValueCollection } = require("../../db/collections");
 const bodyValues = new BodyValues(BodyValueCollection);
 
 class BodyParams extends Entity {
-  async _readMany(ids) {
+  async _expand(item) {
     try {
-      const db = await this.getDatabase();
-      const collection = db[this.collection.name];
-      const items = await collection.find({ id: { $in: ids } }).exec();
+      const values = (await item.values_) || [];
+      return { ...item.toJSON(), values: values.map(e => e.toJSON()) };
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 
+  async _expandList(items) {
+    try {
       const availableBodyValues = items.reduce(
         (acc, curr) => [...acc, ...curr.values],
         []
@@ -27,15 +32,6 @@ class BodyParams extends Entity {
           values: e.values.map(valueId => normalizedBodyValuesList[valueId]),
         }))
         .sort((a, b) => a.createdAt - b.createdAt);
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
-  async _expand(item) {
-    try {
-      const values = (await item.values_) || [];
-      return { ...item.toJSON(), values: values.map(e => e.toJSON()) };
     } catch (err) {
       throw new Error(err.message);
     }

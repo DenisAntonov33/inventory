@@ -56,4 +56,28 @@ describe("BodyParams", () => {
 
     expect.assertions(6);
   });
+
+  test("Expand list", async () => {
+    const bodyValueData1 = { name: "value1" };
+    const bodyParamData1 = { name: "param1" };
+    const bodyParamData2 = { name: "param2" };
+
+    let param1 = bodyParams._create(bodyParamData1);
+    let param2 = bodyParams._create(bodyParamData2);
+
+    await bodyParams._updateById(param1.id, {
+      $create: { values: bodyValueData1 },
+    });
+
+    await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData1 },
+    });
+
+    const expectedItems = await bodyParams._readMany();
+
+    expect(typeof expectedItems[0].values[0]).toBe("object");
+    expect(typeof expectedItems[0].values[0]).toBe("object");
+
+    expect.assertions(2);
+  });
 });

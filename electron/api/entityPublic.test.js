@@ -275,7 +275,7 @@ describe("Entity", () => {
     expect.assertions(2);
   });
 
-  test.only("Check requisition workflow", async () => {
+  test("Check requisition workflow", async () => {
     const {
       returnValue: {
         data: { items },

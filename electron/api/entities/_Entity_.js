@@ -188,9 +188,8 @@ class Entity {
       const collection = db[this.collection.name];
       const items = await collection.find({ id: { $in: ids } }).exec();
 
-      return items
-        .map(e => e.toJSON())
-        .sort((a, b) => a.createdAt - b.createdAt);
+      const expandedItems = await this._expandList(items);
+      return expandedItems;
     } catch (err) {
       throw new Error(err.message);
     }
@@ -256,6 +255,16 @@ class Entity {
   async _expand(item) {
     try {
       return item.toJSON();
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async _expandList(items) {
+    try {
+      return items
+        .map(e => e.toJSON())
+        .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
       throw new Error(err.message);
     }

@@ -171,7 +171,7 @@ describe("Requisition", () => {
     expect.assertions(1);
   });
 
-  test.only("History testing", async () => {
+  test("History testing", async () => {
     const bodyValueData1 = { name: "value1" };
     const bodyValueData2 = { name: "value2" };
     const bodyValueData3 = { name: "value3" };
