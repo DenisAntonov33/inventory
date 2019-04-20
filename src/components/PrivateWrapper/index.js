@@ -100,8 +100,8 @@ const styles = theme => ({
 class Instance extends React.Component {
   toolbarLinks = [
     { text: "Dashboard", link: "/", icon: HomeIcon },
-    { text: "Employees", link: "/employees", icon: GroupIcon },
     { text: "History", link: "/history", icon: HistoryIcon },
+    { text: "Employees", link: "/employees", icon: GroupIcon },
     { text: "Positions", link: "/positions", icon: ListAltIcon },
     { text: "Entities", link: "/entities", icon: ShoppingCartIcon },
     { text: "Body params", link: "/bodyparams", icon: PanToolIcon },

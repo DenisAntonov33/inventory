@@ -14,6 +14,8 @@ import BodyParamsPage from "../BodyParamsPage";
 import BodyParamsItemPage from "../BodyParamsItemPage";
 import EntitiesPage from "../EntitiesPage";
 import PositionsPage from "../PositionsPage";
+import EmployeesPage from "../EmployeesPage";
+import EmployeesItemPage from "../EmployeesItemPage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -62,6 +64,12 @@ class App extends Component {
             <PrivateRoute exact path="/bodyparams" component={BodyParamsPage} />
             <PrivateRoute exact path="/entities" component={EntitiesPage} />
             <PrivateRoute exact path="/positions" component={PositionsPage} />
+            <PrivateRoute
+              exact
+              path="/employees/:id"
+              component={EmployeesItemPage}
+            />
+            <PrivateRoute exact path="/employees" component={EmployeesPage} />
             <PublicRoute
               path="/login"
               title="Login page"
