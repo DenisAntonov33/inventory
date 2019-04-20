@@ -101,7 +101,7 @@ class EntityPage extends Component {
                 );
               },
               render: rowData => {
-                return rowData.entities.map(e => e.name).join(", ");
+                return rowData.entities.map(e => (e ? e.name : "")).join(", ");
               },
             },
           ]}
@@ -119,7 +119,11 @@ class EntityPage extends Component {
                   ...(newData.name !== oldData.name
                     ? { name: newData.name }
                     : {}),
-                  ...{ entities: newData.entities },
+                  ...{
+                    entities: newData.entities.map(e =>
+                      typeof e === "object" ? e.id : e
+                    ),
+                  },
                 };
 
                 updatePosition(oldData.id, { $set: args });

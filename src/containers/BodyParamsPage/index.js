@@ -53,7 +53,7 @@ class EntityPage extends Component {
           data={filteredBodyParams}
           actions={[
             {
-              icon: "link",
+              icon: "open_in_new",
               tooltip: "Show User Info",
               onClick: (event, rowData) => {
                 history.push(`/bodyparams/${rowData.id}`);
