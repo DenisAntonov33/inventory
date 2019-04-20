@@ -106,3 +106,4 @@ async function createDatabase(name, adapter) {
 
 exports.getDatabase = getDatabase;
 exports.saveDatabase = saveDatabase;
+exports.createDatabase = createDatabase;

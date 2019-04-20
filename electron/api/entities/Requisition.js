@@ -1,18 +1,8 @@
-const { normalize } = require("../../utils");
-
 const { Entity } = require("./_Entity_");
-const { Entities } = require("./Entities");
-const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
 
-const {
-  EntityCollection,
-  PositionCollection,
-  EmployeeCollection,
-} = require("../../db/collections");
+const { EmployeeCollection } = require("../../db/collections");
 
-const entities = new Entities(EntityCollection);
-const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
 
 class Requisition extends Entity {
@@ -44,45 +34,27 @@ class Requisition extends Entity {
     try {
       const employeesList = await employees._readMany();
 
-      const availablePositions = employeesList.reduce(
-        (acc, curr) => [...acc, ...curr.positions],
-        []
-      );
-      const positionsList = await positions._readMany(availablePositions);
-
-      const availableEntities = positionsList.reduce(
-        (acc, curr) => [...acc, ...curr.entities],
-        []
-      );
-      const entitiesList = await entities._readMany(availableEntities);
-
-      const normalizedPositionsList = normalize(positionsList);
-      const normalizedEntitiesList = normalize(entitiesList);
-
       const data = employeesList.reduce((employeeAcc, employeeCurr) => {
         const date = new Date().getTime();
 
         employeeCurr.positions.forEach(employeePosition => {
-          normalizedPositionsList[employeePosition].entities.forEach(
-            employeeEntityId => {
-              const entityBodyParamId =
-                normalizedEntitiesList[employeeEntityId].bodyParam;
+          employeePosition.entities.forEach(employeeEntity => {
+            const entityBodyParam = employeeEntity.bodyParam;
 
-              const employeeBodyParam = employeeCurr.bodyParams.find(
-                e => e.bodyParam === entityBodyParamId
-              );
+            const employeeBodyParam = employeeCurr.bodyParams.find(
+              e => e.bodyParam.id === entityBodyParam.id
+            );
 
-              const employeeBodyValueId = employeeBodyParam.bodyValue;
+            const employeeBodyValue = employeeBodyParam.bodyValue;
 
-              employeeAcc.push({
-                date,
-                employee: employeeCurr.id,
-                positions: employeeCurr.positions,
-                entity: employeeEntityId,
-                bodyValue: employeeBodyValueId,
-              });
-            }
-          );
+            employeeAcc.push({
+              date,
+              employee: employeeCurr.id,
+              positions: employeeCurr.positions.map(e => e.id),
+              entity: employeeEntity.id,
+              bodyValue: employeeBodyValue.id,
+            });
+          });
         });
         return employeeAcc;
       }, []);

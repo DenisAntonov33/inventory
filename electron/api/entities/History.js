@@ -2,23 +2,11 @@ const { getId } = require("../../services/id");
 const { normalize } = require("../../utils");
 
 const { Entity } = require("./_Entity_");
-const { Entities } = require("./Entities");
-const { BodyParams } = require("./BodyParams");
-const { Positions } = require("./Positions");
 const { Employees } = require("./Employees");
 const { Store } = require("./Store");
 
-const {
-  BodyParamCollection,
-  EntityCollection,
-  PositionCollection,
-  EmployeeCollection,
-  StoreCollection,
-} = require("../../db/collections");
+const { EmployeeCollection, StoreCollection } = require("../../db/collections");
 
-const entities = new Entities(EntityCollection);
-const bodyParams = new BodyParams(BodyParamCollection);
-const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
 const store = new Store(StoreCollection);
 
@@ -40,25 +28,21 @@ class History extends Entity {
       if (!args.bodyValue) throw new Error("bodyValue required");
 
       const employeeItem = await employees._readById(args.employee);
-      const positionsList = await positions._readMany(args.positions);
-
-      const availableEntities = positionsList.reduce(
+      const positionsList = employeeItem.positions;
+      const entitiesList = positionsList.reduce(
         (acc, curr) => [...acc, ...curr.entities],
         []
       );
-      const entitiesList = await entities._readMany(availableEntities);
 
-      const availableBodyParams = entitiesList.map(e => e.bodyParam);
-      const bodyParamsList = await bodyParams._readMany(availableBodyParams);
-
-      const availableBodyValues = bodyParamsList.reduce(
+      const bodyParamsList = entitiesList.map(e => e.bodyParam);
+      const bodyValuesList = bodyParamsList.reduce(
         (acc, curr) => [...acc, ...curr.values],
         []
       );
 
       const normalizedPositionsList = normalize(positionsList);
       const normalizedEntitiesList = normalize(entitiesList);
-      const normalizedBodyValuesList = normalize(availableBodyValues);
+      const normalizedBodyValuesList = normalize(bodyValuesList);
 
       const _employee = employeeItem;
       if (!_employee) throw new Error("invalid employee");

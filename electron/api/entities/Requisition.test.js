@@ -139,36 +139,49 @@ describe("Requisition", () => {
     });
 
     const data = await requisition._create();
+    const convertedData = data.map(e => ({
+      employee: e.employee,
+      positions: e.positions,
+      entity: e.entity,
+      bodyValue: e.bodyValue,
+    }));
 
-    expect(
-      data.map(e => ({
-        employee: e.employee,
-        positions: e.positions,
-        entity: e.entity,
-        bodyValue: e.bodyValue,
-      }))
-    ).toEqual([
-      {
-        employee: employee1.id,
-        positions: [position1.id],
-        entity: entity1.id,
-        bodyValue: param1.values[0].id,
-      },
-      {
-        employee: employee2.id,
-        positions: [position1.id],
-        entity: entity1.id,
-        bodyValue: param1.values[1].id,
-      },
-      {
-        employee: employee3.id,
-        positions: [position1.id],
-        entity: entity1.id,
-        bodyValue: param1.values[2].id,
-      },
-    ]);
+    console.log(convertedData);
 
-    expect.assertions(1);
+    const dataItem1 = convertedData.find(
+      e => e.bodyValue === param1.values[0].id
+    );
+
+    const dataItem2 = convertedData.find(
+      e => e.bodyValue === param1.values[1].id
+    );
+
+    const dataItem3 = convertedData.find(
+      e => e.bodyValue === param1.values[2].id
+    );
+
+    expect(dataItem1).toEqual({
+      employee: employee1.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: param1.values[0].id,
+    });
+
+    expect(dataItem2).toEqual({
+      employee: employee2.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: param1.values[1].id,
+    });
+
+    expect(dataItem3).toEqual({
+      employee: employee3.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: param1.values[2].id,
+    });
+
+    expect.assertions(3);
   });
 
   test("History testing", async () => {

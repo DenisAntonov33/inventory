@@ -287,4 +287,147 @@ describe("Employees", () => {
       expect.assertions(1);
     }
   });
+
+  test("Expand item", async () => {
+    const bodyValueData1 = { name: "value1" };
+    const bodyValueData2 = { name: "value2" };
+    const bodyValueData3 = { name: "value3" };
+    const bodyValueData4 = { name: "value4" };
+
+    const bodyParamData1 = { name: "param1" };
+    const bodyParamData2 = { name: "param2" };
+    let param1 = await bodyParams._create(bodyParamData1);
+    let param2 = await bodyParams._create(bodyParamData2);
+
+    param1 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData1 },
+    });
+
+    param1 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData2 },
+    });
+
+    param2 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData3 },
+    });
+
+    param2 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData4 },
+    });
+
+    const entityData1 = {
+      name: "entity1",
+      replacementPeriod: 1,
+      bodyParam: param1.id,
+    };
+    const entityData2 = {
+      name: "entity1",
+      replacementPeriod: 1,
+      bodyParam: param2.id,
+    };
+
+    let entity1 = await entities._create(entityData1);
+    let entity2 = await entities._create(entityData2);
+
+    const positionData1 = { name: "position1", entities: [entity1.id] };
+    const positionData2 = { name: "position2", entities: [entity2.id] };
+
+    let position1 = await positions._create(positionData1);
+    let position2 = await positions._create(positionData2);
+
+    const employeeData1 = {
+      name: "employee1",
+      positions: [position1.id, position2.id],
+    };
+
+    let employee1 = await employees._create(employeeData1);
+    employee1 = await employees._updateById(employee1.id, {
+      $push: {
+        bodyParams: { bodyParam: param1.id, bodyValue: param1.values[0].id },
+      },
+    });
+
+    expect(typeof employee1.positions[0]).toBe("object");
+    expect(typeof employee1.positions[0].entities[0]).toBe("object");
+    expect(typeof employee1.positions[0].entities[0].bodyParam).toBe("object");
+    expect(typeof employee1.bodyParams[0]).toBe("object");
+    expect(typeof employee1.bodyParams[0].bodyParam).toBe("object");
+    expect(typeof employee1.bodyParams[0].bodyValue).toBe("object");
+
+    expect.assertions(6);
+  });
+
+  test("Expand list", async () => {
+    const bodyValueData1 = { name: "value1" };
+    const bodyValueData2 = { name: "value2" };
+    const bodyValueData3 = { name: "value3" };
+    const bodyValueData4 = { name: "value4" };
+
+    const bodyParamData1 = { name: "param1" };
+    const bodyParamData2 = { name: "param2" };
+    let param1 = await bodyParams._create(bodyParamData1);
+    let param2 = await bodyParams._create(bodyParamData2);
+
+    param1 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData1 },
+    });
+
+    param1 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData2 },
+    });
+
+    param2 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData3 },
+    });
+
+    param2 = await bodyParams._updateById(param2.id, {
+      $create: { values: bodyValueData4 },
+    });
+
+    const entityData1 = {
+      name: "entity1",
+      replacementPeriod: 1,
+      bodyParam: param1.id,
+    };
+    const entityData2 = {
+      name: "entity1",
+      replacementPeriod: 1,
+      bodyParam: param2.id,
+    };
+
+    let entity1 = await entities._create(entityData1);
+    let entity2 = await entities._create(entityData2);
+
+    const positionData1 = { name: "position1", entities: [entity1.id] };
+    const positionData2 = { name: "position2", entities: [entity2.id] };
+
+    let position1 = await positions._create(positionData1);
+    let position2 = await positions._create(positionData2);
+
+    const employeeData1 = {
+      name: "employee1",
+      positions: [position1.id, position2.id],
+    };
+
+    let employee1 = await employees._create(employeeData1);
+    employee1 = await employees._updateById(employee1.id, {
+      $push: {
+        bodyParams: { bodyParam: param1.id, bodyValue: param1.values[0].id },
+      },
+    });
+
+    const employeesList = await employees._readMany();
+    const employeeItem = employeesList.find(e => e.id === employee1.id);
+
+    expect(typeof employeeItem.positions[0]).toBe("object");
+    expect(typeof employeeItem.positions[0].entities[0]).toBe("object");
+    expect(typeof employeeItem.positions[0].entities[0].bodyParam).toBe(
+      "object"
+    );
+    expect(typeof employeeItem.bodyParams[0]).toBe("object");
+    expect(typeof employeeItem.bodyParams[0].bodyParam).toBe("object");
+    expect(typeof employeeItem.bodyParams[0].bodyValue).toBe("object");
+
+    expect.assertions(6);
+  });
 });

@@ -1,14 +1,43 @@
+const { normalize } = require("../../utils");
+
 const { Entity } = require("./_Entity_");
+const { Entities } = require("./Entities");
+
+const { EntityCollection } = require("../../db/collections");
+
+const entities = new Entities(EntityCollection);
 
 class Positions extends Entity {
   async _expand(item) {
     try {
-      const entities = await item.entities_;
+      const entitiesList = await item.entities_;
+      const expandedEntities = await entities._expandList(entitiesList);
 
       return {
         ...item.toJSON(),
-        entities: entities.map(e => e.toJSON()),
+        entities: expandedEntities,
       };
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async _expandList(items) {
+    try {
+      const availableEntities = items.reduce(
+        (acc, curr) => [...acc, ...curr.entities],
+        []
+      );
+
+      const entitiesList = await entities._readMany(availableEntities);
+      const normalizedEntitiesList = normalize(entitiesList);
+
+      return items
+        .map(e => ({
+          ...e.toJSON(),
+          entities: e.entities.map(e1 => normalizedEntitiesList[e1]),
+        }))
+        .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
       throw new Error(err.message);
     }

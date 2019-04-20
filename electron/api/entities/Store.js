@@ -3,17 +3,14 @@ const { normalize } = require("../../utils");
 
 const { Entity } = require("./_Entity_");
 const { Entities } = require("./Entities");
-const { BodyParams } = require("./BodyParams");
 const { BodyValues } = require("./BodyValues");
 
 const {
   BodyValueCollection,
-  BodyParamCollection,
   EntityCollection,
 } = require("../../db/collections");
 
 const bodyValues = new BodyValues(BodyValueCollection);
-const bodyParams = new BodyParams(BodyParamCollection);
 const entities = new Entities(EntityCollection);
 
 class Store extends Entity {
@@ -29,9 +26,7 @@ class Store extends Entity {
       const storeEntity = await entities._readById(args.entity);
       if (!storeEntity) throw new Error("invalid entity");
 
-      const storeBodyParam = await bodyParams._readById(
-        storeEntity.bodyParam.id
-      );
+      const storeBodyParam = storeEntity.bodyParam;
       if (!storeBodyParam) throw new Error("invalid body param");
 
       const storeBodyValue = storeBodyParam.values.find(
@@ -57,14 +52,12 @@ class Store extends Entity {
     }
   }
 
-  async _readMany(ids) {
+  async _expandList(items) {
     try {
-      const db = await this.getDatabase();
-      const collection = db[this.collection.name];
-      const items = await collection.find({ id: { $in: ids } }).exec();
-
       const availableEntities = items.map(e => e.entity);
       const entitiesList = await entities._readMany(availableEntities);
+
+      console.log(entitiesList);
 
       const availableBodyValues = items.map(e => e.bodyValue);
       const bodyValuesList = await bodyValues._readMany(availableBodyValues);
@@ -77,7 +70,6 @@ class Store extends Entity {
         entity: normalizedEntitiesList[e.entity],
         bodyValue: normalizedBodyValuesList[e.bodyValue],
       }));
-
       return expandedItems.sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
       throw new Error(err.message);
@@ -86,13 +78,15 @@ class Store extends Entity {
 
   async _expand(item) {
     try {
-      const entity = await item.entity_;
-      const bodyValue = await item.bodyValue_;
+      const entity = await entities._readById(item.entity);
+      const bodyValue = entity.bodyParam.values.find(
+        e => e.id === item.bodyValue
+      );
 
       return {
         ...item.toJSON(),
-        entity: entity.toJSON(),
-        bodyValue: bodyValue.toJSON(),
+        entity: entity,
+        bodyValue: bodyValue,
       };
     } catch (err) {
       throw new Error(err.message);
