@@ -9,6 +9,7 @@ const { Positions } = require("./entities/Positions");
 const { Employees } = require("./entities/Employees");
 const { History } = require("./entities/History");
 const { Store } = require("./entities/Store");
+const { Requisition } = require("./entities/Requisition");
 
 const {
   BodyValueCollection,
@@ -27,6 +28,7 @@ const positions = new Positions(PositionCollection);
 const employees = new Employees(EmployeeCollection);
 const history = new History(HistoryCollection);
 const store = new Store(StoreCollection);
+const requisition = new Requisition();
 
 describe("Entity", () => {
   let token1, bodyValue1, bodyValue2, bodyParam1, entity1, position1, employee1;
@@ -269,6 +271,19 @@ describe("Entity", () => {
 
     expect(status).toBe(500);
     expect(message).toBe("store is empty");
+
+    expect.assertions(2);
+  });
+
+  test.only("Check requisition workflow", async () => {
+    const {
+      returnValue: {
+        data: { items },
+      },
+    } = await requisition.create({}, { token: token1 });
+
+    expect(items).toBeDefined();
+    expect(items.length).toBeGreaterThan(0);
 
     expect.assertions(2);
   });

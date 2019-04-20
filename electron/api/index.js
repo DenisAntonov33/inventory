@@ -8,6 +8,7 @@ const { Positions } = require("./entities/Positions");
 const { Employees } = require("./entities/Employees");
 const { History } = require("./entities/History");
 const { Store } = require("./entities/Store");
+const { Requisition } = require("./entities/Requisition");
 
 const {
   BodyValueCollection,
@@ -29,10 +30,13 @@ const entities = [
   new Store(StoreCollection),
 ];
 
+const requisition = new Requisition();
+
 exports.initApi = function() {
   ipcMain.on("login", login);
   ipcMain.on("signup", signup);
   ipcMain.on("me", me);
+  ipcMain.on("requisition_create", requisition.create.bind(requisition));
 
   entities.forEach(entity => {
     const methods = entity.getMethods();

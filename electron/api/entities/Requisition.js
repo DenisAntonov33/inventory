@@ -18,6 +18,7 @@ const employees = new Employees(EmployeeCollection);
 class Requisition extends Entity {
   constructor(collection) {
     super(collection);
+    this.defaultMethods = ["create"];
   }
 
   async create(event, _args) {
@@ -25,16 +26,13 @@ class Requisition extends Entity {
       const { token } = _args;
       const user = await this._authentification(token);
       const expandedUser = user.toJSON();
-
       const args = {
         availableEmployees: expandedUser.data["employees"],
         availablePositions: expandedUser.data["positions"],
         availableEntities: expandedUser.data["entities"],
       };
-
-      const item = await this._create(args);
-
-      event.returnValue = this.res.success({ item });
+      const items = await this._create(args);
+      event.returnValue = this.res.success({ items });
       return event;
     } catch (err) {
       event.returnValue = this.res.error(500, err.message);
