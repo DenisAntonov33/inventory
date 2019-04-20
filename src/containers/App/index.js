@@ -16,6 +16,8 @@ import EntitiesPage from "../EntitiesPage";
 import PositionsPage from "../PositionsPage";
 import EmployeesPage from "../EmployeesPage";
 import EmployeesItemPage from "../EmployeesItemPage";
+import HistoryPage from "../HistoryPage";
+import StorePage from "../StorePage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -70,6 +72,8 @@ class App extends Component {
               component={EmployeesItemPage}
             />
             <PrivateRoute exact path="/employees" component={EmployeesPage} />
+            <PrivateRoute exact path="/history" component={HistoryPage} />
+            <PrivateRoute exact path="/store" component={StorePage} />
             <PublicRoute
               path="/login"
               title="Login page"

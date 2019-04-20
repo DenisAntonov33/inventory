@@ -22,7 +22,7 @@ export default class StoreEntity {
     const { create, readById, readMany, updateById, deleteById } = queries;
 
     const READ_MANY = `@@${STATE_KEY}/READ_MANY`;
-    const CREATE = `@@${STATE_KEY}/CREATE}`;
+    const CREATE = `@@${STATE_KEY}/CREATE`;
     const READ_BY_ID = `@@${STATE_KEY}/READ_BY_ID`;
     const UPDATE_BY_ID = `@@${STATE_KEY}/UPDATE_BY_ID`;
     const DELETE_BY_ID = `@@${STATE_KEY}/DELETE_BY_ID`;

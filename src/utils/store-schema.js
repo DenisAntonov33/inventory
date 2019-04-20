@@ -6,6 +6,7 @@ const entitiesSchema = new schema.Entity("entities", {}, {});
 const positionsSchema = new schema.Entity("positions", {}, {});
 const employeesSchema = new schema.Entity("employees", {}, {});
 const historySchema = new schema.Entity("history", {}, {});
+const storeSchema = new schema.Entity("store", {}, {});
 
 bodyValuesSchema.define({});
 
@@ -27,9 +28,9 @@ employeesSchema.define({
   bodyParams: [{ bodyParam: bodyParamsSchema, bodyValue: bodyValuesSchema }],
 });
 
-historySchema.define({
-  positions: [positionsSchema],
-  employee: employeesSchema,
+historySchema.define({});
+
+storeSchema.define({
   entity: entitiesSchema,
   bodyValue: bodyValuesSchema,
 });
@@ -41,4 +42,5 @@ export default {
   positions: positionsSchema,
   employees: employeesSchema,
   history: historySchema,
+  store: storeSchema,
 };

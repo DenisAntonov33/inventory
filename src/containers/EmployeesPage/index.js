@@ -122,6 +122,7 @@ class EntityPage extends Component {
                   .map(e => `${e.bodyParam.name} - ${e.bodyValue.name}`)
                   .join(", ");
               },
+              editComponent: () => "-",
             },
           ]}
           data={filteredEmployees}
@@ -147,7 +148,11 @@ class EntityPage extends Component {
                   ...(newData.name !== oldData.name
                     ? { name: newData.name }
                     : {}),
-                  ...{ entities: newData.entities },
+                  ...{
+                    positions: newData.positions.map(e =>
+                      typeof e === "object" ? e.id : e
+                    ),
+                  },
                 };
 
                 updateEmployee(oldData.id, { $set: args });

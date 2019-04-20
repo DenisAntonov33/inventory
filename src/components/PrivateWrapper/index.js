@@ -24,9 +24,11 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import HomeIcon from "@material-ui/icons/Home";
 import GroupIcon from "@material-ui/icons/Group";
 import HistoryIcon from "@material-ui/icons/History";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import PanToolIcon from "@material-ui/icons/PanTool";
+import AllInboxIcon from "@material-ui/icons/AllInbox";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import VerticalAlignCenterIcon from "@material-ui/icons/VerticalAlignCenter";
 
 const drawerWidth = 240;
 
@@ -102,23 +104,29 @@ class Instance extends React.Component {
     { text: "Dashboard", link: "/", icon: HomeIcon },
     { text: "History", link: "/history", icon: HistoryIcon },
     { text: "Employees", link: "/employees", icon: GroupIcon },
+    { text: "Body params", link: "/bodyparams", icon: VerticalAlignCenterIcon },
     { text: "Positions", link: "/positions", icon: ListAltIcon },
-    { text: "Entities", link: "/entities", icon: ShoppingCartIcon },
-    { text: "Body params", link: "/bodyparams", icon: PanToolIcon },
-    { text: "Profile", link: "/profile", icon: PanToolIcon },
+    { text: "Entities", link: "/entities", icon: PanToolIcon },
+    { text: "Store", link: "/store", icon: AllInboxIcon },
+    { text: "Profile", link: "/profile", icon: AccountCircleIcon },
   ];
 
   state = {
     open: false,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const isDrawerOpen = localStorage.getItem("isDrawerOpen") === "true";
+    this.setState({ open: isDrawerOpen });
+  }
 
   handleDrawerOpen = () => {
+    localStorage.setItem("isDrawerOpen", true);
     this.setState({ open: true });
   };
 
   handleDrawerClose = () => {
+    localStorage.setItem("isDrawerOpen", false);
     this.setState({ open: false });
   };
 

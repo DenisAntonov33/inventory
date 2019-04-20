@@ -7,6 +7,7 @@ export const collections = [
   "positions",
   "employees",
   "history",
+  "store",
 ];
 
 let ipcRenderer = { sendSync: query => ({ status: 200, data: query }) };
