@@ -101,7 +101,7 @@ describe("Employees", () => {
     expect.assertions(3);
   });
 
-  test("Adding and removing bodyParams", async () => {
+  test("Adding bodyParams", async () => {
     const bodyValueData1 = { name: "value1" };
     const bodyValueData2 = { name: "value2" };
 
@@ -135,6 +135,93 @@ describe("Employees", () => {
     expect.assertions(3);
   });
 
+  test("Removing bodyParams", async () => {
+    const bodyValueData1 = { name: "value1" };
+    const bodyValueData2 = { name: "value2" };
+
+    const bodyParamData1 = { name: "param1" };
+    let param1 = await bodyParams._create(bodyParamData1);
+
+    param1 = await bodyParams._updateById(param1.id, {
+      $create: { values: bodyValueData1 },
+    });
+
+    param1 = await bodyParams._updateById(param1.id, {
+      $create: { values: bodyValueData2 },
+    });
+
+    const employeeData1 = { name: "employee1" };
+    let employee1 = await employees._create(employeeData1);
+
+    employee1 = await employees._updateById(employee1.id, {
+      $push: {
+        bodyParams: {
+          bodyParam: param1.id,
+          bodyValue: param1.values[0].id,
+        },
+      },
+    });
+
+    expect(employee1.bodyParams.length).toBe(1);
+    expect(typeof employee1.bodyParams[0].bodyValue).toBe("object");
+    expect(typeof employee1.bodyParams[0].bodyParam).toBe("object");
+
+    employee1 = await employees._updateById(employee1.id, {
+      $pull: {
+        bodyParams: {
+          bodyParam: param1.id,
+          bodyValue: param1.values[0].id,
+        },
+      },
+    });
+
+    expect(employee1.bodyParams.length).toBe(0);
+
+    expect.assertions(4);
+  });
+
+  test("Adding repeated bodyParams - error", async () => {
+    try {
+      const bodyValueData1 = { name: "value1" };
+      const bodyValueData2 = { name: "value2" };
+
+      const bodyParamData1 = { name: "param1" };
+      let param1 = await bodyParams._create(bodyParamData1);
+
+      param1 = await bodyParams._updateById(param1.id, {
+        $create: { values: bodyValueData1 },
+      });
+
+      param1 = await bodyParams._updateById(param1.id, {
+        $create: { values: bodyValueData2 },
+      });
+
+      const employeeData1 = { name: "employee1" };
+      let employee1 = await employees._create(employeeData1);
+
+      await employees._updateById(employee1.id, {
+        $push: {
+          bodyParams: {
+            bodyParam: param1.id,
+            bodyValue: param1.values[0].id,
+          },
+        },
+      });
+
+      await employees._updateById(employee1.id, {
+        $push: {
+          bodyParams: {
+            bodyParam: param1.id,
+            bodyValue: param1.values[0].id,
+          },
+        },
+      });
+    } catch (err) {
+      expect(err.message).toBe("bodyParam with this value already exists");
+      expect.assertions(1);
+    }
+  });
+
   test("Body Param Id Error", async () => {
     try {
       const bodyValueData1 = { name: "value1" };
@@ -163,7 +250,7 @@ describe("Employees", () => {
         },
       });
     } catch (err) {
-      expect(err.message).toBe("Cannot read property 'values' of null");
+      expect(err.message).toBe("param required");
       expect.assertions(1);
     }
   });
