@@ -6,6 +6,9 @@ import { all } from "redux-saga/effects";
 import { reducer as userReducer } from "./modules/user/reducer";
 import { saga as userSaga } from "./modules/user/saga";
 
+import { reducer as requisitionReducer } from "./modules/requisition/reducer";
+import { saga as requisitionSaga } from "./modules/requisition/saga";
+
 import {
   reducer as entityReducer,
   listReducer as entityListReducer,
@@ -15,13 +18,14 @@ import {
 const isTest = process.env.NODE_ENV === "test";
 
 const rootSaga = function* rootSaga() {
-  yield all([...userSaga, ...entitySagas]);
+  yield all([...userSaga, ...requisitionSaga, ...entitySagas]);
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   data: entityReducer,
   lists: entityListReducer,
+  requisition: requisitionReducer,
 });
 
 const loggerMiddleware = isTest ? () => {} : createLogger();

@@ -13,10 +13,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import { actions, selectors } from "../../store/modules/entities";
-
-const HistoryAlias = ["history"];
-const HistoryActions = actions[HistoryAlias];
-const HistorySelectors = selectors[HistoryAlias];
+import { CreateRequisitionRequest } from "../../store/modules/requisition/actions";
 
 const EmployeesAlias = ["employees"];
 const EmployeesActions = actions[EmployeesAlias];
@@ -36,20 +33,20 @@ const BodyParamsActions = actions[BodyParamsAlias];
 class EntityPage extends Component {
   componentDidMount() {
     const {
-      readHistory,
+      createRequisition,
+      requisition,
       readEmployees,
       readPositions,
       readEntities,
       readBodyParams,
-
-      historyIds,
       employeesIds,
       positionsIds,
       entitiesIds,
       bodyParamsIds,
     } = this.props;
 
-    if (!historyIds.length) readHistory();
+    if (!requisition.length) createRequisition();
+
     if (!employeesIds.length) readEmployees();
     if (!positionsIds.length) readPositions();
     if (!entitiesIds.length) readEntities();
@@ -60,14 +57,12 @@ class EntityPage extends Component {
     const {
       createHistoryItem,
       deleteHistoryItem,
-      historyIds,
       employeesIds,
       data,
+      requisition,
     } = this.props;
 
-    const history = HistorySelectors.getItems(historyIds, data);
-    const filteredHistory = history.filter(e => !e.isDeleted);
-
+    console.log(requisition);
     const employees = EmployeesSelectors.getItems(employeesIds, data);
     const filteredEmployees = employees.filter(e => !e.isDeleted);
 
@@ -78,7 +73,7 @@ class EntityPage extends Component {
     return (
       <div>
         <header>
-          <h1>{HistoryAlias}</h1>
+          <h1>Requisition Page</h1>
         </header>
 
         <MaterialTable
@@ -281,7 +276,7 @@ class EntityPage extends Component {
               },
             },
           ]}
-          data={filteredHistory}
+          data={[]}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -304,9 +299,9 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
+const mapStateToProps = ({ lists, data, requisition }) => ({
+  requisition: requisition.data,
   data,
-  historyIds: lists[HistoryAlias],
   employeesIds: lists[EmployeesAlias],
   entitiesIds: lists[EntitiesAlias],
   positionsIds: lists[PositionsAlias],
@@ -314,10 +309,7 @@ const mapStateToProps = ({ lists, data }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  createHistoryItem: args => dispatch(HistoryActions.create(args)),
-  readHistory: () => dispatch(HistoryActions.readMany()),
-  deleteHistoryItem: id => dispatch(HistoryActions.deleteById(id)),
-
+  createRequisition: () => dispatch(CreateRequisitionRequest()),
   readEmployees: () => dispatch(EmployeesActions.readMany()),
   readEntities: () => dispatch(EntitiesActions.readMany()),
   readPositions: () => dispatch(PositionsActions.readMany()),

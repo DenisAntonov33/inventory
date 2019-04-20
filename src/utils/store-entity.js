@@ -114,6 +114,6 @@ export default class StoreEntity {
       yield takeLatest(DELETE_BY_ID, itemFetch(deleteById));
     }
 
-    this.saga = this.saga = [sagaWatcher()];
+    this.saga = [sagaWatcher()];
   }
 }
