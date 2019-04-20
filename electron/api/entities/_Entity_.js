@@ -10,7 +10,7 @@ class Entity {
     this.getDatabase = getDatabase;
     this.saveDatabase = saveDatabase;
     this.collection = collection;
-    this.userCollection = collection;
+    this.userCollection = UserCollection;
     this.res = res;
 
     this.defaultMethods = [
@@ -32,7 +32,7 @@ class Entity {
       const { id } = tokenService.verify(token);
 
       const db = await this.getDatabase();
-      const collection = db[UserCollection.name];
+      const collection = db[this.userCollection.name];
       const user = await collection.findOne(id).exec();
 
       if (!user) throw new Error("User not found");
