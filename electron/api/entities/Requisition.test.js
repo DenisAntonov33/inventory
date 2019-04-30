@@ -376,7 +376,7 @@ describe("Requisition", () => {
       employee: employee1.id,
       entity: entity1.id,
       bodyValue: param1.values[0].id,
-      count: 1,
+      count: 3,
     };
     await history._create(historyData1);
 
@@ -389,7 +389,7 @@ describe("Requisition", () => {
       e => e.entity.id === entity1.id && e.bodyValue.id === param1.values[0].id
     );
 
-    expect(storeItem1.count).toBe(9);
+    expect(storeItem1.count).toBe(7);
 
     expect.assertions(1);
   });

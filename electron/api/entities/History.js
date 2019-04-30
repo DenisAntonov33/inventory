@@ -76,7 +76,7 @@ class History extends Entity {
       if (!storeItem.count) throw new Error("store is empty");
 
       await store._updateById(storeItem.id, {
-        $inc: { count: -1 },
+        $inc: { count: -args.count },
       });
 
       const item = await collection.insert({
