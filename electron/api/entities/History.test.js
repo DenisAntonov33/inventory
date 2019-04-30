@@ -108,6 +108,7 @@ describe("History", () => {
       employee: employee1.id,
       entity: entity1.id,
       bodyValue: param1.values[0].id,
+      count: 1,
     };
 
     let history1 = await history._create(historyData1);

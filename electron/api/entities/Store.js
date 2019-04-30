@@ -57,8 +57,6 @@ class Store extends Entity {
       const availableEntities = items.map(e => e.entity);
       const entitiesList = await entities._readMany(availableEntities);
 
-      console.log(entitiesList);
-
       const availableBodyValues = items.map(e => e.bodyValue);
       const bodyValuesList = await bodyValues._readMany(availableBodyValues);
 

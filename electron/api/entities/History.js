@@ -22,10 +22,13 @@ class History extends Entity {
 
       if (!args.date) throw new Error("date required");
       if (!args.employee) throw new Error("employee required");
+      if (typeof args.count !== "number") throw new Error("count required");
       if (!args.positions || !args.positions.length)
         throw new Error("positions required");
       if (!args.entity) throw new Error(" entity required");
       if (!args.bodyValue) throw new Error("bodyValue required");
+
+      if (!args.count) return;
 
       const employeeItem = await employees._readById(args.employee);
       const positionsList = employeeItem.positions;
@@ -85,6 +88,7 @@ class History extends Entity {
         positions: _positions,
         entity: _entity.name,
         bodyValue: _bodyValue.name,
+        count: args.count,
       });
 
       await this.saveDatabase();

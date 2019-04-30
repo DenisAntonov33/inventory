@@ -231,6 +231,7 @@ describe("Entity", () => {
       positions: [position1.id],
       entity: entity1.id,
       bodyValue: bodyValue1.id,
+      count: 1,
     };
 
     await history.create({}, { token: token1, args: historyItemData1 });
@@ -263,6 +264,7 @@ describe("Entity", () => {
       positions: [position1.id],
       entity: entity1.id,
       bodyValue: bodyValue2.id,
+      count: 1,
     };
 
     const {

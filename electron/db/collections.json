@@ -204,9 +204,12 @@
         },
         "bodyValue": {
           "type": "string"
+        },
+        "count": {
+          "type": "number"
         }
       },
-      "required": ["date", "createdAt"]
+      "required": ["date", "createdAt", "count"]
     }
   },
 
