@@ -23,14 +23,10 @@ class EntityPage extends Component {
       },
       readEmployee,
       readBodyParams,
-      bodyParamsIds,
-      data,
     } = this.props;
 
     readEmployee(id);
-
-    const bodyParams = BodyParamsSelectors.getItems(bodyParamsIds, data);
-    if (!bodyParams.length) readBodyParams();
+    readBodyParams();
   }
 
   render() {

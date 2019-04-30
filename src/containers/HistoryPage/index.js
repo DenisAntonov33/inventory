@@ -36,25 +36,7 @@ const BodyParamsActions = actions[BodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const {
-      readHistory,
-      readEmployees,
-      readPositions,
-      readEntities,
-      readBodyParams,
-
-      historyIds,
-      employeesIds,
-      positionsIds,
-      entitiesIds,
-      bodyParamsIds,
-    } = this.props;
-
-    if (!historyIds.length) readHistory();
-    if (!employeesIds.length) readEmployees();
-    if (!positionsIds.length) readPositions();
-    if (!entitiesIds.length) readEntities();
-    if (!bodyParamsIds.length) readBodyParams();
+    this.refreshData();
   }
 
   refreshData = () => {
@@ -304,6 +286,11 @@ class EntityPage extends Component {
                 );
               },
             },
+            {
+              title: "Count",
+              field: "count",
+              type: "number",
+            },
           ]}
           data={filteredHistory}
           editable={{
@@ -312,6 +299,7 @@ class EntityPage extends Component {
                 createHistoryItem({
                   ...newData,
                   date: Date.parse(newData.date),
+                  count: +newData.count,
                 });
                 resolve();
               }),

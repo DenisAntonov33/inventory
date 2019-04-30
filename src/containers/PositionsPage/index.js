@@ -21,19 +21,7 @@ const EntitiesSelectors = selectors[EntitiesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const {
-      readPositions,
-      readEntities,
-      positionsIds,
-      entitiesIds,
-      data,
-    } = this.props;
-
-    const positions = PositionsSelectors.getItems(positionsIds, data);
-    if (!positions.length) readPositions();
-
-    const entities = EntitiesSelectors.getItems(entitiesIds, data);
-    if (!entities.length) readEntities();
+    this.refreshData();
   }
 
   refreshData = () => {

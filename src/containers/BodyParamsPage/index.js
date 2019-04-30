@@ -13,10 +13,7 @@ const bodyParamsSelectors = selectors[bodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const { readBodyParams, bodyParamsIds, data } = this.props;
-
-    const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
-    if (!bodyParams.length) readBodyParams();
+    this.refreshData();
   }
 
   refreshData = () => {

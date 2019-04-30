@@ -25,24 +25,7 @@ const BodyParamsActions = actions[BodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const {
-      readEmployees,
-      readPositions,
-      readBodyParams,
-      employeesIds,
-      positionsIds,
-      bodyParamsIds,
-      data,
-    } = this.props;
-
-    const employees = EmployeesSelectors.getItems(employeesIds, data);
-    if (!employees.length) readEmployees();
-
-    const positions = PositionsSelectors.getItems(positionsIds, data);
-    if (!positions.length) readPositions();
-
-    const bodyParams = PositionsSelectors.getItems(bodyParamsIds, data);
-    if (!bodyParams.length) readBodyParams();
+    this.refreshData();
   }
 
   refreshData = () => {

@@ -24,19 +24,7 @@ const BodyValuesSelectors = selectors[BodyValuesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const {
-      readStore,
-      readEntities,
-      readBodyParams,
-
-      storeIds,
-      entitiesIds,
-      bodyParamsIds,
-    } = this.props;
-
-    if (!storeIds.length) readStore();
-    if (!entitiesIds.length) readEntities();
-    if (!bodyParamsIds.length) readBodyParams();
+    this.refreshData();
   }
 
   refreshData = () => {
