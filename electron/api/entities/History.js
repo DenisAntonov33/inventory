@@ -23,12 +23,11 @@ class History extends Entity {
       if (!args.date) throw new Error("date required");
       if (!args.employee) throw new Error("employee required");
       if (typeof args.count !== "number") throw new Error("count required");
+      if (!args.count) throw new Error("count shoud be more than 0");
       if (!args.positions || !args.positions.length)
         throw new Error("positions required");
       if (!args.entity) throw new Error(" entity required");
       if (!args.bodyValue) throw new Error("bodyValue required");
-
-      if (!args.count) return;
 
       const employeeItem = await employees._readById(args.employee);
       const positionsList = employeeItem.positions;
@@ -74,6 +73,7 @@ class History extends Entity {
 
       if (!storeItem) throw new Error("item is unavailable in store");
       if (!storeItem.count) throw new Error("store is empty");
+      if (storeItem.count - args.count < 0) throw new Error("out of store");
 
       await store._updateById(storeItem.id, {
         $inc: { count: -args.count },

@@ -382,6 +382,8 @@ describe("Requisition", () => {
 
     const data = await requisition._create({});
 
+    console.log(data);
+
     await Promise.all(data.map(e => history._create(e)));
     const storeItems = await store._readMany();
 
