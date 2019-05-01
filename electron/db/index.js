@@ -50,7 +50,7 @@ async function saveDatabase() {
   }
 }
 
-async function clearDatabase() {
+async function removeDatabaseFile() {
   if (isTest) return;
   try {
     fs.unlinkSync(filePath);
@@ -116,4 +116,4 @@ async function createDatabase(name, adapter) {
 exports.getDatabase = getDatabase;
 exports.saveDatabase = saveDatabase;
 exports.createDatabase = createDatabase;
-exports.clearDatabase = clearDatabase;
+exports.removeDatabaseFile = removeDatabaseFile;

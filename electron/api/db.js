@@ -1,9 +1,9 @@
 const { res } = require("../services/response");
-const { clearDatabase } = require("../db");
+const { removeDatabaseFile } = require("../db");
 
-exports.clearDatabase = async function(event) {
+exports.removeDatabaseFile = async function(event) {
   try {
-    await clearDatabase();
+    await removeDatabaseFile();
 
     event.returnValue = res.success();
     return event;

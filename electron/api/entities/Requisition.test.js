@@ -26,13 +26,9 @@ const history = new History(HistoryCollection);
 const requisition = new Requisition();
 
 describe("Requisition", () => {
-  beforeEach(async () => {
-    try {
-      const dbSuffix = new Date().getTime();
-      await getDatabase(`test${dbSuffix}`, "memory");
-    } catch (err) {
-      console.log(err);
-    }
+  beforeAll(async () => {
+    const dbSuffix = new Date().getTime();
+    await getDatabase(`test${dbSuffix}`, "memory");
   });
 
   test("Create", async () => {
@@ -286,7 +282,9 @@ describe("Requisition", () => {
 
     const data = await requisition._create({});
 
-    await Promise.all(data.map(e => history._create(e)));
+    await Promise.all(
+      data.map(e => history._create({ ...e, count: e.count > 0 ? e.count : 1 }))
+    );
 
     const storeItems = await store._readMany();
 
@@ -382,9 +380,11 @@ describe("Requisition", () => {
 
     const data = await requisition._create({});
 
-    console.log(data);
-
-    await Promise.all(data.map(e => history._create(e)));
+    await Promise.all(
+      data
+        .filter(e => e.entity.id === entity1.id)
+        .map(e => history._create({ ...e, count: e.count > 0 ? e.count : 1 }))
+    );
     const storeItems = await store._readMany();
 
     const storeItem1 = storeItems.find(
@@ -481,7 +481,11 @@ describe("Requisition", () => {
 
     const data = await requisition._create({});
 
-    await Promise.all(data.map(e => history._create(e)));
+    await Promise.all(
+      data
+        .filter(e => e.entity.id === entity1.id)
+        .map(e => history._create({ ...e, count: e.count > 0 ? e.count : 1 }))
+    );
     const storeItems = await store._readMany();
 
     const storeItem1 = storeItems.find(
