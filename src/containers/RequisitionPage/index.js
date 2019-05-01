@@ -38,10 +38,10 @@ const BodyValuesSelectors = selectors[BodyValuesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
-    const { createRequisition, requisition } = this.props;
+    const { createRequisition } = this.props;
 
     this.refreshData();
-    if (!requisition.length) createRequisition();
+    createRequisition();
   }
 
   refreshData = () => {
@@ -64,13 +64,13 @@ class EntityPage extends Component {
   };
 
   pushHistory = () => {
-    const { requisition, createHistoryItem, setRequisitionItems } = this.props;
+    const { requisition, createHistoryItem } = this.props;
 
-    requisition.forEach(e => {
-      createHistoryItem(e);
-    });
-
-    setRequisitionItems([]);
+    requisition
+      .filter(e => e.count > 0)
+      .forEach(e => {
+        createHistoryItem(e);
+      });
   };
 
   render() {
@@ -138,18 +138,18 @@ class EntityPage extends Component {
           ]}
           data={requisition}
           editable={{
-            onRowAdd: newData =>
-              new Promise(resolve => {
-                setRequisitionItems([
-                  ...requisition,
-                  {
-                    ...newData,
-                    date: Date.parse(newData.date),
-                  },
-                ]);
+            // onRowAdd: newData =>
+            //   new Promise(resolve => {
+            //     setRequisitionItems([
+            //       ...requisition,
+            //       {
+            //         ...newData,
+            //         date: Date.parse(newData.date),
+            //       },
+            //     ]);
 
-                resolve();
-              }),
+            //     resolve();
+            //   }),
 
             onRowUpdate: (newData, oldData) =>
               new Promise(resolve => {
