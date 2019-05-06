@@ -30,8 +30,8 @@ const history = new History(HistoryCollection);
 const store = new Store(StoreCollection);
 const requisition = new Requisition();
 
-describe("Entity", () => {
-  let token1, bodyValue1, bodyValue2, bodyParam1, entity1, position1, employee1;
+describe("Public", () => {
+  let token1, bodyParam1, entity1, position1, employee1;
 
   beforeEach(async () => {
     try {
@@ -54,20 +54,6 @@ describe("Entity", () => {
       const bodyValueData1 = { name: "value1" };
       const bodyValueData2 = { name: "value2" };
 
-      const {
-        returnValue: {
-          data: { item: _bodyValue1 },
-        },
-      } = await bodyValues.create({}, { token: token1, args: bodyValueData1 });
-      bodyValue1 = _bodyValue1;
-
-      const {
-        returnValue: {
-          data: { item: _bodyValue2 },
-        },
-      } = await bodyValues.create({}, { token: token1, args: bodyValueData2 });
-      bodyValue2 = _bodyValue2;
-
       const bodyParamData1 = {
         name: "param1",
       };
@@ -78,6 +64,15 @@ describe("Entity", () => {
         },
       } = await bodyParams.create({}, { token: token1, args: bodyParamData1 });
 
+      await bodyParams.updateById(
+        {},
+        {
+          token: token1,
+          id: _bodyParam1.id,
+          args: { $create: { values: bodyValueData1 } },
+        }
+      );
+
       const {
         returnValue: {
           data: { item: __bodyParam1 },
@@ -87,7 +82,7 @@ describe("Entity", () => {
         {
           token: token1,
           id: _bodyParam1.id,
-          args: { $pushAll: { values: [bodyValue1.id, bodyValue2.id] } },
+          args: { $create: { values: bodyValueData2 } },
         }
       );
 
@@ -165,7 +160,7 @@ describe("Entity", () => {
               positions: position1.id,
               bodyParams: {
                 bodyParam: bodyParam1.id,
-                bodyValue: bodyValue1.id,
+                bodyValue: bodyParam1.values[0].id,
               },
             },
           },
@@ -176,7 +171,7 @@ describe("Entity", () => {
 
       const storeItemData1 = {
         entity: entity1.id,
-        bodyValue: bodyValue1.id,
+        bodyValue: bodyParam1.values[0].id,
         count: 20,
       };
 
@@ -230,7 +225,7 @@ describe("Entity", () => {
       employee: employee1.id,
       positions: [position1.id],
       entity: entity1.id,
-      bodyValue: bodyValue1.id,
+      bodyValue: bodyParam1.values[0].id,
       count: 1,
     };
 
@@ -252,7 +247,7 @@ describe("Entity", () => {
   test("Check history work error - 0 items", async () => {
     const storeItemData1 = {
       entity: entity1.id,
-      bodyValue: bodyValue2.id,
+      bodyValue: bodyParam1.values[1].id,
       count: 0,
     };
 
@@ -263,7 +258,7 @@ describe("Entity", () => {
       employee: employee1.id,
       positions: [position1.id],
       entity: entity1.id,
-      bodyValue: bodyValue2.id,
+      bodyValue: bodyParam1.values[1].id,
       count: 1,
     };
 
@@ -288,5 +283,24 @@ describe("Entity", () => {
     expect(items.length).toBeGreaterThan(0);
 
     expect.assertions(2);
+  });
+
+  test("Update body value - success", async () => {
+    const {
+      returnValue: {
+        data: { item },
+      },
+    } = await bodyValues.updateById(
+      {},
+      {
+        token: token1,
+        id: bodyParam1.values[0].id,
+        args: { $set: { name: "newName" } },
+      }
+    );
+
+    expect(item.name).toBe("newName");
+
+    expect.assertions(1);
   });
 });

@@ -1,3 +1,4 @@
+const { union } = require("lodash");
 const { normalize } = require("../../utils");
 
 const { Entity } = require("./_Entity_");
@@ -7,6 +8,44 @@ const { BodyValueCollection } = require("../../db/collections");
 const bodyValues = new BodyValues(BodyValueCollection);
 
 class BodyParams extends Entity {
+  async updateById(event, _args) {
+    try {
+      const { token, id, args } = _args;
+      if (!id) throw new Error("Id required");
+
+      const user = await this._authentification(token);
+
+      const ids = id ? [id] : [];
+      await this._authorization(user, ids);
+
+      const item = await this._updateById(id, args);
+      if (!item) throw new Error("Item not found");
+
+      if (args["$create"]) {
+        const _user = user.toJSON();
+        const userBodyValues = _user.data[this.collection.link];
+        const newBodyValues = item.values.map(e => e.id);
+        const newUserBodyValues = union(userBodyValues, newBodyValues);
+
+        const changeFunction = oldData => {
+          oldData.data[bodyValues.collection.link] = newUserBodyValues;
+          return oldData;
+        };
+
+        await user.atomicUpdate(changeFunction);
+        await this.saveDatabase();
+      }
+
+      event.returnValue = this.res.success({ item });
+      return event;
+    } catch (err) {
+      console.log(err);
+
+      event.returnValue = this.res.error(500, err.message);
+      return event;
+    }
+  }
+
   async _expand(item) {
     try {
       const values = (await item.values_) || [];
