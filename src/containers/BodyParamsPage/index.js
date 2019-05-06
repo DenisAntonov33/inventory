@@ -83,13 +83,12 @@ class EntityPage extends Component {
 
             onRowUpdate: (newData, oldData) =>
               new Promise(resolve => {
-                const args = Object.keys(newData).reduce((acc, curr) => {
-                  if (newData[curr] !== oldData[curr])
-                    acc[curr] = newData[curr];
-                  return acc;
-                }, {});
+                if (newData.name === oldData.name) {
+                  resolve();
+                  return;
+                }
 
-                updateBodyParam(oldData.id, { $set: args });
+                updateBodyParam(oldData.id, { $set: { name: newData.name } });
                 resolve();
               }),
 

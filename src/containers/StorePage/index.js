@@ -52,7 +52,7 @@ class EntityPage extends Component {
     const entities = EntitiesSelectors.getItems(entitiesIds, data);
     const filteredEntities = entities.filter(e => !e.isDeleted);
 
-    let selectedEntity = "";
+    let selectedEntity = null;
 
     return (
       <div>
@@ -167,6 +167,7 @@ class EntityPage extends Component {
             {
               title: "Count",
               field: "count",
+              type: "numeric",
             },
           ]}
           data={filteredStore}

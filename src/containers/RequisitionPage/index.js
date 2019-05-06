@@ -133,7 +133,7 @@ class EntityPage extends Component {
             {
               title: "Count",
               field: "count",
-              type: "number",
+              type: "numeric",
             },
           ]}
           data={requisition}
