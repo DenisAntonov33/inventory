@@ -80,7 +80,7 @@ class EntityPage extends Component {
                 createEntity({
                   ...newData,
                   replacementPeriod: +newData.replacementPeriod,
-                  bodyParam: newData.bodyParam.id,
+                  bodyParam: newData.bodyParam,
                 });
                 resolve();
               }),
