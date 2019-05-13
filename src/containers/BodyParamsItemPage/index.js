@@ -1,19 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import MaterialTable from "material-table";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
-import { actions, selectors } from "../../store/modules/entities";
-
-const bodyParamsAlias = ["bodyParams"];
-const bodyParamsActions = actions[bodyParamsAlias];
-const bodyParamsSelectors = selectors[bodyParamsAlias];
-
-const bodyValuesAlias = ["bodyValues"];
-const bodyValuesActions = actions[bodyValuesAlias];
+import storeItemsHOC from "../StoreItemsHOC";
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -29,15 +21,15 @@ class EntityPage extends Component {
 
   render() {
     const {
-      data,
       match: {
         params: { id },
       },
       updateBodyParam,
       updateBodyValue,
+      getBodyParamsItem,
     } = this.props;
 
-    const bodyParam = bodyParamsSelectors.getItemById(id, data);
+    const bodyParam = getBodyParamsItem(id);
 
     const filteredBodyValues = bodyParam
       ? bodyParam.values.filter(e => !e.isDeleted)
@@ -95,19 +87,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ data }) => ({
-  data,
-});
-
-const mapDispatchToProps = dispatch => ({
-  readBodyParam: id => dispatch(bodyParamsActions.readById(id)),
-  updateBodyParam: (id, args) =>
-    dispatch(bodyParamsActions.updateById(id, args)),
-  updateBodyValue: (id, args) =>
-    dispatch(bodyValuesActions.updateById(id, args)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

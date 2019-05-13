@@ -1,30 +1,15 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import MaterialTable from "material-table";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const StoreAlias = ["store"];
-const StoreActions = actions[StoreAlias];
-const StoreSelectors = selectors[StoreAlias];
-
-const EntitiesAlias = ["entities"];
-const EntitiesActions = actions[EntitiesAlias];
-const EntitiesSelectors = selectors[EntitiesAlias];
-
-const BodyParamsAlias = ["bodyParams"];
-const BodyParamsActions = actions[BodyParamsAlias];
-
-const BodyValuesAlias = ["bodyValues"];
-const BodyValuesSelectors = selectors[BodyValuesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -44,17 +29,11 @@ class EntityPage extends Component {
       createStoreItem,
       updateStoreItem,
       deleteStoreItem,
-
-      storeIds,
-      entitiesIds,
-      data,
+      storeItems,
+      entitiesItems,
+      getEntitiesItem,
+      getBodyValuesItem,
     } = this.props;
-
-    const store = StoreSelectors.getItems(storeIds, data);
-    const filteredStore = store.filter(e => !e.isDeleted);
-
-    const entities = EntitiesSelectors.getItems(entitiesIds, data);
-    const filteredEntities = entities.filter(e => !e.isDeleted);
 
     let selectedEntity = null;
 
@@ -86,7 +65,7 @@ class EntityPage extends Component {
                 const entity =
                   typeof rowData.entity === "object"
                     ? rowData.entity
-                    : EntitiesSelectors.getItemById(rowData.entity, data);
+                    : getEntitiesItem(rowData.entity);
 
                 if (!entity) return "";
                 return entity.name;
@@ -101,17 +80,14 @@ class EntityPage extends Component {
                       if (selectedEntity && selectedEntity.id === entityId)
                         return;
 
-                      selectedEntity = EntitiesSelectors.getItemById(
-                        entityId,
-                        data
-                      );
+                      selectedEntity = getEntitiesItem(entityId);
                       props.onChange(entityId);
                     }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {filteredEntities.map(e => {
+                    {entitiesItems.map(e => {
                       return (
                         <MenuItem key={e.id} value={e.id}>
                           {e.name}
@@ -132,7 +108,7 @@ class EntityPage extends Component {
                 const bodyValue =
                   typeof rowData.bodyValue === "object"
                     ? rowData.bodyValue
-                    : BodyValuesSelectors.getItemById(rowData.bodyValue, data);
+                    : getBodyValuesItem(rowData.bodyValue);
 
                 if (!bodyValue) return "";
                 return bodyValue.name;
@@ -176,7 +152,7 @@ class EntityPage extends Component {
               type: "numeric",
             },
           ]}
-          data={filteredStore}
+          data={storeItems}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -207,24 +183,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  storeIds: lists[StoreAlias],
-  entitiesIds: lists[EntitiesAlias],
-  bodyParamsIds: lists[BodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createStoreItem: args => dispatch(StoreActions.create(args)),
-  readStore: () => dispatch(StoreActions.readMany()),
-  updateStoreItem: (id, args) => dispatch(StoreActions.updateById(id, args)),
-  deleteStoreItem: id => dispatch(StoreActions.deleteById(id)),
-
-  readEntities: () => dispatch(EntitiesActions.readMany()),
-  readBodyParams: () => dispatch(BodyParamsActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

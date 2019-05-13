@@ -1,21 +1,13 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import MaterialTable from "material-table";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import Button from "@material-ui/core/Button";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const entitiesAlias = ["entities"];
-const EntitiesActions = actions[entitiesAlias];
-const EntitiesSelectors = selectors[entitiesAlias];
-
-const bodyParamsAlias = ["bodyParams"];
-const bodyParamsActions = actions[bodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -31,19 +23,15 @@ class EntityPage extends Component {
 
   render() {
     const {
-      entitiesIds,
-      data,
+      bodyParamsItems,
+      entitiesItems,
       createEntity,
       updateEntity,
       deleteEntity,
     } = this.props;
 
-    const entities = EntitiesSelectors.getItems(entitiesIds, data);
-    const filteredEntities = entities.filter(e => !e.isDeleted);
-
-    const bodyParams = data[bodyParamsAlias];
-    const formattedBodyParams = Object.keys(bodyParams).reduce((acc, curr) => {
-      acc[curr] = bodyParams[curr].name;
+    const formattedBodyParams = bodyParamsItems.reduce((acc, curr) => {
+      acc[curr.id] = curr.name;
       return acc;
     }, {});
 
@@ -82,7 +70,7 @@ class EntityPage extends Component {
                 rowData.bodyParam ? rowData.bodyParam.name : "",
             },
           ]}
-          data={filteredEntities}
+          data={entitiesItems}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -124,23 +112,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  entitiesIds: lists[entitiesAlias],
-  bodyParamsIds: lists[bodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createEntity: args => dispatch(EntitiesActions.create(args)),
-  readEntities: () => dispatch(EntitiesActions.readMany()),
-  readEntity: id => dispatch(EntitiesActions.readById(id)),
-  updateEntity: (id, args) => dispatch(EntitiesActions.updateById(id, args)),
-  deleteEntity: id => dispatch(EntitiesActions.deleteById(id)),
-
-  readBodyParams: () => dispatch(bodyParamsActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { DateTime } from "luxon";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
+
+import storeItemsHOC from "../StoreItemsHOC";
 
 import MaterialTable from "material-table";
 import { pull } from "lodash";
@@ -16,27 +17,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const HistoryAlias = ["history"];
-const HistoryActions = actions[HistoryAlias];
-const HistorySelectors = selectors[HistoryAlias];
-
-const EmployeesAlias = ["employees"];
-const EmployeesActions = actions[EmployeesAlias];
-const EmployeesSelectors = selectors[EmployeesAlias];
-
-const PositionsAlias = ["positions"];
-const PositionsActions = actions[PositionsAlias];
-const PositionsSelectors = selectors[PositionsAlias];
-
-const EntitiesAlias = ["entities"];
-const EntitiesActions = actions[EntitiesAlias];
-const EntitiesSelectors = selectors[EntitiesAlias];
-
-const BodyParamsAlias = ["bodyParams"];
-const BodyParamsActions = actions[BodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -61,18 +41,13 @@ class EntityPage extends Component {
 
   render() {
     const {
+      getPositionsItem,
+      getEntitiesItem,
       createHistoryItem,
       deleteHistoryItem,
-      historyIds,
-      employeesIds,
-      data,
+      historyItems,
+      employeesItems,
     } = this.props;
-
-    const history = HistorySelectors.getItems(historyIds, data);
-    const filteredHistory = history.filter(e => !e.isDeleted);
-
-    const employees = EmployeesSelectors.getItems(employeesIds, data);
-    const filteredEmployees = employees.filter(e => !e.isDeleted);
 
     let selectedEmployee = "";
     let selectedPositions = [];
@@ -126,7 +101,7 @@ class EntityPage extends Component {
                       )
                         return;
 
-                      selectedEmployee = employees.find(
+                      selectedEmployee = employeesItems.find(
                         e => e.id === employeeId
                       );
 
@@ -139,7 +114,7 @@ class EntityPage extends Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {filteredEmployees.map(e => {
+                    {employeesItems.map(e => {
                       return (
                         <MenuItem key={e.id} value={e.id}>
                           {e.name}
@@ -211,7 +186,7 @@ class EntityPage extends Component {
                 if (!selectedPositions.length) return "-";
 
                 const expandedPositions = selectedPositions.map(e => {
-                  return PositionsSelectors.getItemById(e, data);
+                  return getPositionsItem(e);
                 });
                 console.log("expandedPositions", expandedPositions);
 
@@ -241,10 +216,7 @@ class EntityPage extends Component {
                       if (selectedEntity && selectedEntity.id === entityId)
                         return;
 
-                      selectedEntity = EntitiesSelectors.getItemById(
-                        entityId,
-                        data
-                      );
+                      selectedEntity = getEntitiesItem(entityId);
                       props.onChange(entityId);
                     }}
                   >
@@ -305,7 +277,7 @@ class EntityPage extends Component {
               type: "numeric",
             },
           ]}
-          data={filteredHistory}
+          data={historyItems}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -329,27 +301,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  historyIds: lists[HistoryAlias],
-  employeesIds: lists[EmployeesAlias],
-  entitiesIds: lists[EntitiesAlias],
-  positionsIds: lists[PositionsAlias],
-  bodyParamsIds: lists[BodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createHistoryItem: args => dispatch(HistoryActions.create(args)),
-  readHistory: () => dispatch(HistoryActions.readMany()),
-  deleteHistoryItem: id => dispatch(HistoryActions.deleteById(id)),
-
-  readEmployees: () => dispatch(EmployeesActions.readMany()),
-  readEntities: () => dispatch(EntitiesActions.readMany()),
-  readPositions: () => dispatch(PositionsActions.readMany()),
-  readBodyParams: () => dispatch(BodyParamsActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

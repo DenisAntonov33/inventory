@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import history from "../../utils/history";
 import MaterialTable from "material-table";
 
@@ -7,15 +6,11 @@ import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import Button from "@material-ui/core/Button";
 
-import { actions, selectors } from "../../store/modules/entities";
-
-const bodyParamsAlias = ["bodyParams"];
-const bodyParamsActions = actions[bodyParamsAlias];
-const bodyParamsSelectors = selectors[bodyParamsAlias];
-
-class EntityPage extends Component {
+class Page extends Component {
   componentDidMount() {
     this.refreshData();
   }
@@ -27,15 +22,11 @@ class EntityPage extends Component {
 
   render() {
     const {
-      data,
-      bodyParamsIds,
+      bodyParamsItems,
       createBodyParam,
       updateBodyParam,
       deleteBodyParam,
     } = this.props;
-
-    const bodyParams = bodyParamsSelectors.getItems(bodyParamsIds, data);
-    const filteredBodyParams = bodyParams.filter(e => !e.isDeleted);
 
     return (
       <div>
@@ -70,7 +61,7 @@ class EntityPage extends Component {
               },
             },
           ]}
-          data={filteredBodyParams}
+          data={bodyParamsItems}
           actions={[
             {
               icon: "open_in_new",
@@ -113,21 +104,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  bodyParamsIds: lists[bodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createBodyParam: args => dispatch(bodyParamsActions.create(args)),
-  readBodyParams: () => dispatch(bodyParamsActions.readMany()),
-  readBodyParam: id => dispatch(bodyParamsActions.readById(id)),
-  updateBodyParam: (id, args) =>
-    dispatch(bodyParamsActions.updateById(id, args)),
-  deleteBodyParam: id => dispatch(bodyParamsActions.deleteById(id)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(Page);

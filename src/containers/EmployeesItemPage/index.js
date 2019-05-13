@@ -1,23 +1,14 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import MaterialTable from "material-table";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const EmployeesAlias = ["employees"];
-const EmployeesActions = actions[EmployeesAlias];
-const EmployeesSelectors = selectors[EmployeesAlias];
-
-const BodyParamsAlias = ["bodyParams"];
-const BodyParamsActions = actions[BodyParamsAlias];
-const BodyParamsSelectors = selectors[BodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -38,18 +29,16 @@ class EntityPage extends Component {
       match: {
         params: { id },
       },
+      bodyParamsItems,
+      getEmployeesItem,
+      getBodyParamsItem,
       updateEmployee,
-      bodyParamsIds,
-      data,
     } = this.props;
 
-    const employee = EmployeesSelectors.getItemById(id, data);
+    const employee = getEmployeesItem(id);
     const employeeBodyParams = employee
       ? employee.bodyParams.filter(e => !e.isDeleted)
       : [];
-
-    const bodyParams = BodyParamsSelectors.getItems(bodyParamsIds, data);
-    const filteredBodyParams = bodyParams.filter(e => !e.isDeleted);
 
     let selectedBodyParam = "";
 
@@ -83,7 +72,7 @@ class EntityPage extends Component {
                       )
                         return;
 
-                      selectedBodyParam = bodyParams.find(
+                      selectedBodyParam = bodyParamsItems.find(
                         e => e.id === bodyParamId
                       );
 
@@ -93,7 +82,7 @@ class EntityPage extends Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {filteredBodyParams.map(e => {
+                    {bodyParamsItems.map(e => {
                       return (
                         <MenuItem key={e.id} value={e.id}>
                           {e.name}
@@ -149,10 +138,7 @@ class EntityPage extends Component {
                   return;
                 }
 
-                const bodyParam = BodyParamsSelectors.getItemById(
-                  bodyParamId,
-                  data
-                );
+                const bodyParam = getBodyParamsItem(bodyParamId);
 
                 if (
                   !bodyParam ||
@@ -194,21 +180,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  bodyParamsIds: lists[BodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createEmployee: args => dispatch(EmployeesActions.create(args)),
-  readEmployee: id => dispatch(EmployeesActions.readById(id)),
-  updateEmployee: (id, args) => dispatch(EmployeesActions.updateById(id, args)),
-  deleteEmployee: id => dispatch(EmployeesActions.deleteById(id)),
-
-  readBodyParams: () => dispatch(BodyParamsActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

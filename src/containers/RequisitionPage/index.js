@@ -6,39 +6,16 @@ import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import MaterialTable from "material-table";
 import { pullAllWith, isEqual } from "lodash";
 import Button from "@material-ui/core/Button";
 
-import { actions, selectors } from "../../store/modules/entities";
 import {
   CreateRequisitionRequest,
   CreateRequisitionSuccess,
 } from "../../store/modules/requisition/actions";
-
-const HistoryAlias = ["history"];
-const HistoryActions = actions[HistoryAlias];
-
-const StoreAlias = ["store"];
-const StoreActions = actions[StoreAlias];
-
-const EmployeesAlias = ["employees"];
-const EmployeesActions = actions[EmployeesAlias];
-const EmployeesSelectors = selectors[EmployeesAlias];
-
-const PositionsAlias = ["positions"];
-const PositionsActions = actions[PositionsAlias];
-const PositionsSelectors = selectors[PositionsAlias];
-
-const EntitiesAlias = ["entities"];
-const EntitiesActions = actions[EntitiesAlias];
-const EntitiesSelectors = selectors[EntitiesAlias];
-
-const BodyParamsAlias = ["bodyParams"];
-const BodyParamsActions = actions[BodyParamsAlias];
-
-const BodyValuesAlias = ["bodyValues"];
-const BodyValuesSelectors = selectors[BodyValuesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -78,7 +55,15 @@ class EntityPage extends Component {
   };
 
   render() {
-    const { data, requisition, setRequisitionItems } = this.props;
+    const {
+      requisition,
+      setRequisitionItems,
+
+      getBodyValuesItem,
+      getEmployeesItem,
+      getPositionsItem,
+      getEntitiesItem,
+    } = this.props;
 
     return (
       <div>
@@ -110,31 +95,26 @@ class EntityPage extends Component {
               title: <FormattedMessage {...commonMessages.employee} />,
               field: "employee",
               readonly: true,
-              render: rowData =>
-                EmployeesSelectors.getItemById(rowData.employee, data).name,
+              render: rowData => getEmployeesItem(rowData.employee).name,
             },
             {
               title: <FormattedMessage {...commonMessages.positions} />,
               field: "positions",
               readonly: true,
               render: rowData =>
-                rowData.positions
-                  .map(e => PositionsSelectors.getItemById(e, data).name)
-                  .join(", "),
+                rowData.positions.map(e => getPositionsItem(e).name).join(", "),
             },
             {
               title: <FormattedMessage {...commonMessages.entity} />,
               field: "entity",
               readonly: true,
-              render: rowData =>
-                EntitiesSelectors.getItemById(rowData.entity, data).name,
+              render: rowData => getEntitiesItem(rowData.entity).name,
             },
             {
               title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
-              render: rowData =>
-                BodyValuesSelectors.getItemById(rowData.bodyValue, data).name,
+              render: rowData => getBodyValuesItem(rowData.bodyValue).name,
             },
             {
               title: <FormattedMessage {...commonMessages.count} />,
@@ -191,28 +171,18 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data, requisition }) => ({
+const mapStateToProps = ({ requisition }) => ({
   requisition: requisition.data,
-  data,
-  storeIds: lists[StoreAlias],
-  employeesIds: lists[EmployeesAlias],
-  entitiesIds: lists[EntitiesAlias],
-  positionsIds: lists[PositionsAlias],
-  bodyParamsIds: lists[BodyParamsAlias],
 });
 
 const mapDispatchToProps = dispatch => ({
   createRequisition: () => dispatch(CreateRequisitionRequest()),
   setRequisitionItems: items => dispatch(CreateRequisitionSuccess(items)),
-  createHistoryItem: args => dispatch(HistoryActions.create(args)),
-  readStore: () => dispatch(StoreActions.readMany()),
-  readEmployees: () => dispatch(EmployeesActions.readMany()),
-  readEntities: () => dispatch(EntitiesActions.readMany()),
-  readPositions: () => dispatch(PositionsActions.readMany()),
-  readBodyParams: () => dispatch(BodyParamsActions.readMany()),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(EntityPage)
+);

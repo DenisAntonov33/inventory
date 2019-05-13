@@ -31,7 +31,8 @@ export default class StoreEntity {
 
     this.selectors = {
       getItemById: (id, data) => denormalize(id, schema, data),
-      getItems: (ids, data) => denormalize(ids, [schema], data),
+      getItems: (ids, data) =>
+        denormalize(ids, [schema], data).filter(e => !e.isDeleted),
     };
 
     this.actions = {

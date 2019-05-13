@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+
 import history from "../../utils/history";
 import MaterialTable from "material-table";
 import { pull } from "lodash";
+
+import storeItemsHOC from "../StoreItemsHOC";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
@@ -13,19 +15,6 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const EmployeesAlias = ["employees"];
-const EmployeesActions = actions[EmployeesAlias];
-const EmployeesSelectors = selectors[EmployeesAlias];
-
-const PositionsAlias = ["positions"];
-const PositionsActions = actions[PositionsAlias];
-const PositionsSelectors = selectors[PositionsAlias];
-
-const BodyParamsAlias = ["bodyParams"];
-const BodyParamsActions = actions[BodyParamsAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -45,16 +34,9 @@ class EntityPage extends Component {
       createEmployee,
       updateEmployee,
       deleteEmployee,
-      employeesIds,
-      positionsIds,
-      data,
+      employeesItems,
+      positionsItems,
     } = this.props;
-
-    const employees = EmployeesSelectors.getItems(employeesIds, data);
-    const filteredEmployees = employees.filter(e => !e.isDeleted);
-
-    const positions = PositionsSelectors.getItems(positionsIds, data);
-    const filteredPositions = positions.filter(e => !e.isDeleted);
 
     return (
       <div>
@@ -99,7 +81,7 @@ class EntityPage extends Component {
                 return (
                   <FormControl component="fieldset">
                     <FormGroup>
-                      {filteredPositions.map(e => {
+                      {positionsItems.map(e => {
                         return (
                           <FormControlLabel
                             key={e.id}
@@ -140,7 +122,7 @@ class EntityPage extends Component {
               editComponent: () => "-",
             },
           ]}
-          data={filteredEmployees}
+          data={employeesItems}
           actions={[
             {
               icon: "open_in_new",
@@ -186,24 +168,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  employeesIds: lists[EmployeesAlias],
-  positionsIds: lists[PositionsAlias],
-  bodyParamsIds: lists[BodyParamsAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createEmployee: args => dispatch(EmployeesActions.create(args)),
-  readEmployees: () => dispatch(EmployeesActions.readMany()),
-  updateEmployee: (id, args) => dispatch(EmployeesActions.updateById(id, args)),
-  deleteEmployee: id => dispatch(EmployeesActions.deleteById(id)),
-
-  readPositions: () => dispatch(PositionsActions.readMany()),
-  readBodyParams: () => dispatch(BodyParamsActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);

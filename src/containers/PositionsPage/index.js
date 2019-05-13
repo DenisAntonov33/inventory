@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { pull } from "lodash";
 
@@ -7,21 +6,13 @@ import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
+import storeItemsHOC from "../StoreItemsHOC";
+
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-
-import { actions, selectors } from "../../store/modules/entities";
-
-const PositionsAlias = ["positions"];
-const PositionsActions = actions[PositionsAlias];
-const PositionsSelectors = selectors[PositionsAlias];
-
-const EntitiesAlias = ["entities"];
-const EntitiesActions = actions[EntitiesAlias];
-const EntitiesSelectors = selectors[EntitiesAlias];
 
 class EntityPage extends Component {
   componentDidMount() {
@@ -37,19 +28,12 @@ class EntityPage extends Component {
 
   render() {
     const {
-      data,
-      positionsIds,
-      entitiesIds,
+      positionsItems,
+      entitiesItems,
       createPosition,
       updatePosition,
       deletePosition,
     } = this.props;
-
-    const positions = PositionsSelectors.getItems(positionsIds, data);
-    const filteredPositions = positions.filter(e => !e.isDeleted);
-
-    const entities = EntitiesSelectors.getItems(entitiesIds, data);
-    const filteredEntities = entities.filter(e => !e.isDeleted);
 
     return (
       <div>
@@ -87,7 +71,7 @@ class EntityPage extends Component {
                 return (
                   <FormControl component="fieldset">
                     <FormGroup>
-                      {filteredEntities.map(e => {
+                      {entitiesItems.map(e => {
                         return (
                           <FormControlLabel
                             key={e.id}
@@ -117,7 +101,7 @@ class EntityPage extends Component {
               },
             },
           ]}
-          data={filteredPositions}
+          data={positionsItems}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -154,22 +138,4 @@ class EntityPage extends Component {
   }
 }
 
-const mapStateToProps = ({ lists, data }) => ({
-  data,
-  positionsIds: lists[PositionsAlias],
-  entitiesIds: lists[EntitiesAlias],
-});
-
-const mapDispatchToProps = dispatch => ({
-  createPosition: args => dispatch(PositionsActions.create(args)),
-  readPositions: () => dispatch(PositionsActions.readMany()),
-  updatePosition: (id, args) => dispatch(PositionsActions.updateById(id, args)),
-  deletePosition: id => dispatch(PositionsActions.deleteById(id)),
-
-  readEntities: () => dispatch(EntitiesActions.readMany()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntityPage);
+export default storeItemsHOC(EntityPage);
