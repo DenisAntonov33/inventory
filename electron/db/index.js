@@ -28,7 +28,7 @@ if (!isTest) {
   console.log(userDataFolder);
 
   folderPath = `${userDataFolder}/database`;
-  filePath = `${userDataFolder}/database/data.json`;
+  filePath = `${userDataFolder}/database/data-v0.0.1.json`;
 }
 
 async function getDatabase(name, adapter) {
