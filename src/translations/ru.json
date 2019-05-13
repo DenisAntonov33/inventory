@@ -28,7 +28,9 @@
   "app.refreshButton.label": "Обновить",
 
   "app.loginTitle": "Вход",
+  "app.login": "Вход",
   "app.signupTitle": "Регистрация",
+  "app.signup": "Регистрация",
 
   "app.errors.required": "Обязательное поле",
 

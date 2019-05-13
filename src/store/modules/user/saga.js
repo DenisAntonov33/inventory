@@ -1,5 +1,6 @@
 import { put, fork, takeLatest, call } from "redux-saga/effects";
 import { setToken } from "../../../utils/localStorageService";
+import history from "../../../utils/history";
 
 import {
   READ_USER_REQUEST,
@@ -16,7 +17,7 @@ function* login({ payload: { name, password } }) {
     const { token, user } = yield loginRequest({ name, password });
     setToken(token);
     yield call(() => {
-      window.location.replace("/");
+      history.replace("/");
     });
     yield put(ReadUserSuccess(user));
   } catch (error) {
@@ -30,7 +31,7 @@ function* signup({ payload: { name, password, password1 } }) {
     setToken(token);
     yield put(ReadUserSuccess(user));
     yield call(() => {
-      window.location.replace("/");
+      history.replace("/");
     });
   } catch (error) {
     yield put(ReadUserFailure(error));

@@ -21,14 +21,17 @@ let folderPath;
 let filePath;
 
 const isTest = process.env.NODE_ENV === "test";
+const isDev = process.env.NODE_ENV === "development";
+
 console.log("isTest", isTest);
 
 if (!isTest) {
   userDataFolder = app.getPath("userData");
   console.log(userDataFolder);
 
+  const fileName = isDev ? "data-v0.0.1-dev.json" : "data-v0.0.1.json";
   folderPath = `${userDataFolder}/database`;
-  filePath = `${userDataFolder}/database/data-v0.0.1.json`;
+  filePath = `${folderPath}/${fileName}`;
 }
 
 async function getDatabase(name, adapter) {
