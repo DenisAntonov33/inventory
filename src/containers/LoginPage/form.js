@@ -1,6 +1,9 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+
 import FormikInput from "../../components/FormikInput";
 
 import Button from "@material-ui/core/Button";
@@ -15,7 +18,9 @@ export const Instance = props => {
         validate={values => {
           let errors = {};
           if (!values.name) {
-            errors.name = "Required";
+            errors.name = (
+              <FormattedMessage {...commonMessages.errors.required} />
+            );
           }
           return errors;
         }}
@@ -30,15 +35,23 @@ export const Instance = props => {
       >
         {({ isSubmitting }) => (
           <Form className="form form--column">
-            <FormikInput type="text" name="name" label="Name" />
-            <FormikInput type="password" name="password" label="Password" />
+            <FormikInput
+              type="text"
+              name="name"
+              label={<FormattedMessage {...commonMessages.name} />}
+            />
+            <FormikInput
+              type="password"
+              name="password"
+              label={<FormattedMessage {...commonMessages.password} />}
+            />
             <Button
               type="submit"
               disabled={isSubmitting}
               variant="contained"
               color="primary"
             >
-              Submit
+              <FormattedMessage {...commonMessages.login} />
             </Button>
           </Form>
         )}

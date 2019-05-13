@@ -3,6 +3,10 @@ import { connect } from "react-redux";
 import history from "../../utils/history";
 import MaterialTable from "material-table";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import Button from "@material-ui/core/Button";
 
 import { actions, selectors } from "../../store/modules/entities";
@@ -36,23 +40,28 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>{bodyParamsAlias}</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
           columns={[
-            { title: "Name", field: "name" },
+            {
+              title: <FormattedMessage {...commonMessages.name} />,
+              field: "name",
+            },
 
             {
-              title: "Body Values",
+              title: <FormattedMessage {...commonMessages.bodyValues} />,
               field: "values",
               render: rowData => rowData.values.map(e => e.name).join(", "),
               editComponent: props => {
@@ -65,7 +74,7 @@ class EntityPage extends Component {
           actions={[
             {
               icon: "open_in_new",
-              tooltip: "Show User Info",
+              tooltip: <FormattedMessage {...messages.openActionTooltip} />,
               onClick: (event, rowData) => {
                 history.push(`/bodyparams/${rowData.id}`);
               },

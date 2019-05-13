@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import MaterialTable from "material-table";
 import { pullAllWith, isEqual } from "lodash";
 import Button from "@material-ui/core/Button";
@@ -79,21 +83,23 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>Requisition Page</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
           columns={[
             {
-              title: "Date",
+              title: <FormattedMessage {...commonMessages.date} />,
               field: "date",
               type: "date",
               readonly: true,
@@ -101,14 +107,14 @@ class EntityPage extends Component {
                 DateTime.fromMillis(rowData.date).toFormat("dd.LL.yyyy"),
             },
             {
-              title: "Employee",
+              title: <FormattedMessage {...commonMessages.employee} />,
               field: "employee",
               readonly: true,
               render: rowData =>
                 EmployeesSelectors.getItemById(rowData.employee, data).name,
             },
             {
-              title: "Positions",
+              title: <FormattedMessage {...commonMessages.positions} />,
               field: "positions",
               readonly: true,
               render: rowData =>
@@ -117,21 +123,21 @@ class EntityPage extends Component {
                   .join(", "),
             },
             {
-              title: "Entity",
+              title: <FormattedMessage {...commonMessages.entity} />,
               field: "entity",
               readonly: true,
               render: rowData =>
                 EntitiesSelectors.getItemById(rowData.entity, data).name,
             },
             {
-              title: "Body Value",
+              title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
               render: rowData =>
                 BodyValuesSelectors.getItemById(rowData.bodyValue, data).name,
             },
             {
-              title: "Count",
+              title: <FormattedMessage {...commonMessages.count} />,
               field: "count",
               type: "numeric",
             },

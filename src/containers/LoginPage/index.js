@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+
 import Button from "@material-ui/core/Button";
 
 import LoginForm from "./form";
@@ -20,7 +23,7 @@ class Instance extends Component {
         <LoginForm submitHandler={this.submitHandler} />
         <div className="footer">
           <Button component={Link} to="/signup">
-            Signup
+            <FormattedMessage {...commonMessages.signup} />
           </Button>
         </div>
       </div>

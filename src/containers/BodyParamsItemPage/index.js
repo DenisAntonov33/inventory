@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import { actions, selectors } from "../../store/modules/entities";
 
 const bodyParamsAlias = ["bodyParams"];
@@ -41,15 +45,21 @@ class EntityPage extends Component {
 
     return (
       <div>
-        <header>
+        <header className="page__header">
           <h1>
-            {bodyParamsAlias} {id}
+            <FormattedMessage {...messages.pageTitle} />
+            {id}
           </h1>
         </header>
 
         <MaterialTable
           title="Editable Example"
-          columns={[{ title: "Name", field: "name" }]}
+          columns={[
+            {
+              title: <FormattedMessage {...commonMessages.name} />,
+              field: "name",
+            },
+          ]}
           data={filteredBodyValues}
           editable={{
             onRowAdd: newData =>

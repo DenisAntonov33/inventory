@@ -2,12 +2,15 @@ import { createLogger } from "redux-logger";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
+import { intlReducer } from "react-intl-redux";
 
 import { reducer as userReducer } from "./modules/user/reducer";
 import { saga as userSaga } from "./modules/user/saga";
 
 import { reducer as requisitionReducer } from "./modules/requisition/reducer";
 import { saga as requisitionSaga } from "./modules/requisition/saga";
+
+import { reducer as localesReducer } from "./modules/intl";
 
 import {
   reducer as entityReducer,
@@ -22,6 +25,8 @@ const rootSaga = function* rootSaga() {
 };
 
 const rootReducer = combineReducers({
+  intl: intlReducer,
+  locales: localesReducer,
   user: userReducer,
   data: entityReducer,
   lists: entityListReducer,

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import MaterialTable from "material-table";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -51,17 +55,17 @@ class EntityPage extends Component {
 
     return (
       <div>
-        <header>
+        <header className="page__header">
           <h1>
-            {EmployeesAlias} {id}
+            <FormattedMessage {...messages.pageTitle} /> - {id}
           </h1>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
           columns={[
             {
-              title: "Body param",
+              title: <FormattedMessage {...commonMessages.bodyParam} />,
               field: "bodyParam",
               render: rowData => {
                 return rowData.bodyParam ? rowData.bodyParam.name : "";
@@ -101,7 +105,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Body Value",
+              title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               render: rowData => {
                 return rowData.bodyValue ? rowData.bodyValue.name : "";

@@ -4,6 +4,10 @@ import history from "../../utils/history";
 import MaterialTable from "material-table";
 import { pull } from "lodash";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -55,22 +59,34 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>{EmployeesAlias}</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          localization={{
+            body: {
+              emptyDataSourceMessage: (
+                <FormattedMessage {...commonMessages.emptyDataSourceMessage} />
+              ),
+            },
+          }}
+          title=""
           columns={[
-            { title: "Name", field: "name" },
             {
-              title: "Positions",
+              title: <FormattedMessage {...commonMessages.name} />,
+              field: "name",
+            },
+            {
+              title: <FormattedMessage {...commonMessages.positions} />,
               field: "positions",
               editComponent: props => {
                 const isInitial =
@@ -113,7 +129,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Body Params",
+              title: <FormattedMessage {...commonMessages.bodyParams} />,
               field: "bodyParams",
               readonly: true,
               render: rowData => {
@@ -128,7 +144,7 @@ class EntityPage extends Component {
           actions={[
             {
               icon: "open_in_new",
-              tooltip: "Show Employee Info",
+              tooltip: <FormattedMessage {...messages.openActionTooltip} />,
               onClick: (event, rowData) => {
                 history.push(`/employees/${rowData.id}`);
               },

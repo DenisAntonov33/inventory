@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 
+import { FormattedMessage } from "react-intl";
+import messages from "./messages";
+
 import Button from "@material-ui/core/Button";
 
 import { ReadUserRequest } from "../../store/modules/user/actions";
@@ -17,7 +20,9 @@ class Instance extends Component {
     return (
       <div>
         <header>
-          <h1>Home Page</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
         </header>
         <Button
           variant="contained"
@@ -25,7 +30,7 @@ class Instance extends Component {
           component={Link}
           to="/requisition"
         >
-          Create requisition
+          <FormattedMessage {...messages.createRequisitionButton.label} />
         </Button>
       </div>
     );

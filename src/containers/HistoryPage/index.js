@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import MaterialTable from "material-table";
 import { pull } from "lodash";
 
@@ -77,28 +81,37 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>{HistoryAlias}</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
+          localization={{
+            body: {
+              emptyDataSourceMessage: (
+                <FormattedMessage {...commonMessages.emptyDataSourceMessage} />
+              ),
+            },
+          }}
           columns={[
             {
-              title: "Date",
+              title: <FormattedMessage {...commonMessages.date} />,
               field: "date",
               type: "date",
               render: rowData =>
                 DateTime.fromMillis(rowData.date).toFormat("dd.LL.yyyy"),
             },
             {
-              title: "Employee",
+              title: <FormattedMessage {...commonMessages.employee} />,
               field: "employee",
               editComponent: props => {
                 return (
@@ -138,7 +151,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Positions",
+              title: <FormattedMessage {...commonMessages.positions} />,
               field: "positions",
               editComponent: props => {
                 if (!selectedEmployee) return "-";
@@ -190,7 +203,7 @@ class EntityPage extends Component {
               render: rowData => rowData.positions.join(", "),
             },
             {
-              title: "Entity",
+              title: <FormattedMessage {...commonMessages.entity} />,
               field: "entity",
               readonly: true,
               editComponent: props => {
@@ -250,7 +263,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Body Value",
+              title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
               editComponent: props => {
@@ -287,7 +300,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Count",
+              title: <FormattedMessage {...commonMessages.count} />,
               field: "count",
               type: "numeric",
             },

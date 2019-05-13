@@ -1,0 +1,61 @@
+{
+  "app.title": "Инвентаризация",
+  "app.home": "Главная",
+  "app.profile": "Профиль",
+  "app.password": "Пароль",
+  "app.repeatPassword": "Еще раз",
+
+  "app.date": "Дата",
+  "app.name": "Имя",
+  "app.count": "Количество",
+  "app.replacementPeriod": "Период замены",
+  "app.actions": "Действия",
+  "app.emptyDataSourceMessage": "Нет данных",
+
+  "app.bodyValue": "Значение параметра",
+  "app.bodyValues": "Значения параметра",
+  "app.bodyParam": "Параметр тела",
+  "app.bodyParams": "Параметры тела",
+  "app.entity": "Снаряжение",
+  "app.entities": "Снаряжение",
+  "app.position": "Должность",
+  "app.positions": "Должности",
+  "app.employee": "Работник",
+  "app.employees": "Работники",
+  "app.history": "История",
+  "app.store": "Склад",
+
+  "app.refreshButton.label": "Обновить",
+
+  "app.loginTitle": "Вход",
+  "app.signupTitle": "Регистрация",
+
+  "app.errors.required": "Обязательное поле",
+
+  "components.PrivateWrapper.title": "Рабочий стол",
+  "components.PrivateWrapper.logout": "Выход",
+
+  "containers.HomePage.pageTitle": "Главная страница",
+  "containers.HomePage.createRequisitionButton.label": "Сформировать заявку",
+
+  "containers.HistoryPage.pageTitle": "История",
+  "containers.HistoryPage.createRequisitionButton.label": "Сформироовать заявку",
+  "containers.EmployeesPage.pageTitle": "Работники",
+  "containers.EmployeesPage.openActionTooltip": "Открыть работника",
+  "containers.EmployeesItemPage.pageTitle": "Работник",
+
+  "containers.BodyParamsPage.pageTitle": "Параметры тела",
+  "containers.BodyParamsPage.openActionTooltip": "Открыть параметр",
+
+  "containers.BodyParamsItemPage.pageTitle": "Параметр тела",
+
+  "containers.PositionsPage.pageTitle": "Должности",
+
+  "containers.EntitiesPage.pageTitle": "Снаряжение",
+
+  "containers.ProfilePage.pageTitle": "Профиль",
+  "containers.ProfilePage.languageSelect": "Язык",
+
+  "containers.StorePage.pageTitle": "Склад",
+  "containers.RequisitionPage.pageTitle": "Заявка"
+}

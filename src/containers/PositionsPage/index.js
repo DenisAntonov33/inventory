@@ -3,6 +3,10 @@ import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { pull } from "lodash";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -50,22 +54,27 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>{PositionsAlias}</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
           columns={[
-            { title: "Name", field: "name" },
             {
-              title: "Entities",
+              title: <FormattedMessage {...commonMessages.name} />,
+              field: "name",
+            },
+            {
+              title: <FormattedMessage {...commonMessages.entities} />,
               field: "entities",
               editComponent: props => {
                 const isInitial =

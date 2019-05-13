@@ -1,6 +1,9 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+
 import FormikInput from "../../components/FormikInput";
 
 import Button from "@material-ui/core/Button";
@@ -15,12 +18,18 @@ export const Instance = props => {
         validate={values => {
           let errors = {};
           if (!values.name) {
-            errors.name = "Required";
+            // errors.name = (
+            //   <FormattedMessage {...commonMessages.errors.required} />
+            // );
           }
           if (!values.password) {
-            errors.password = "Required";
+            // errors.password = (
+            //   <FormattedMessage {...commonMessages.errors.required} />
+            // );
           } else if (values.password !== values.password1) {
-            errors.password = "Passwords should be the same";
+            // errors.password = (
+            //   <FormattedMessage {...commonMessages.errors.samePassword} />
+            // );
           }
           return errors;
         }}
@@ -35,15 +44,23 @@ export const Instance = props => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <FormikInput type="text" name="name" label="Name" />
-            <FormikInput type="password" name="password" label="Password" />
+            <FormikInput
+              type="text"
+              name="name"
+              label={<FormattedMessage {...commonMessages.name} />}
+            />
+            <FormikInput
+              type="password"
+              name="password"
+              label={<FormattedMessage {...commonMessages.password} />}
+            />
             <FormikInput
               type="password"
               name="password1"
-              label="Repeat password"
+              label={<FormattedMessage {...commonMessages.repeatPassword} />}
             />
             <Button type="submit" disabled={isSubmitting} variant="contained">
-              Submit
+              <FormattedMessage {...commonMessages.signup} />
             </Button>
           </Form>
         )}

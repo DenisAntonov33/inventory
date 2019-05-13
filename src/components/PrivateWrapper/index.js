@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 
+import { FormattedMessage } from "react-intl";
+import messages from "./messages";
+import commonMessages from "../../common/messages";
+
 import { removeToken } from "../../utils/localStorageService";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -101,14 +105,46 @@ const styles = theme => ({
 
 class Instance extends React.Component {
   toolbarLinks = [
-    { text: "Dashboard", link: "/", icon: HomeIcon },
-    { text: "History", link: "/history", icon: HistoryIcon },
-    { text: "Employees", link: "/employees", icon: GroupIcon },
-    { text: "Body params", link: "/bodyparams", icon: VerticalAlignCenterIcon },
-    { text: "Positions", link: "/positions", icon: ListAltIcon },
-    { text: "Entities", link: "/entities", icon: PanToolIcon },
-    { text: "Store", link: "/store", icon: AllInboxIcon },
-    { text: "Profile", link: "/profile", icon: AccountCircleIcon },
+    {
+      text: <FormattedMessage {...commonMessages.home} />,
+      link: "/",
+      icon: HomeIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.history} />,
+      link: "/history",
+      icon: HistoryIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.employees} />,
+      link: "/employees",
+      icon: GroupIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.bodyParams} />,
+      link: "/bodyparams",
+      icon: VerticalAlignCenterIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.positions} />,
+      link: "/positions",
+      icon: ListAltIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.entities} />,
+      link: "/entities",
+      icon: PanToolIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.store} />,
+      link: "/store",
+      icon: AllInboxIcon,
+    },
+    {
+      text: <FormattedMessage {...commonMessages.profile} />,
+      link: "/profile",
+      icon: AccountCircleIcon,
+    },
   ];
 
   state = {
@@ -159,14 +195,14 @@ class Instance extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Dashboard
+              <FormattedMessage {...commonMessages.title} />
             </Typography>
             <Button
               color="inherit"
               className={classes.logoutButton}
               onClick={this.handleLogout}
             >
-              Logout
+              <FormattedMessage {...messages.logout} />
             </Button>
           </Toolbar>
         </AppBar>
@@ -192,7 +228,7 @@ class Instance extends React.Component {
           <Divider />
           <List>
             {this.toolbarLinks.map(e => (
-              <Link key={e.text} to={e.link}>
+              <Link key={e.link} to={e.link}>
                 <ListItem button>
                   <ListItemIcon>{<e.icon />}</ListItemIcon>
                   <ListItemText primary={e.text} />

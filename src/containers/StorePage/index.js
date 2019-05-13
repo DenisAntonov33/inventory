@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 
+import { FormattedMessage } from "react-intl";
+import commonMessages from "../../common/messages";
+import messages from "./messages";
+
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -57,21 +61,23 @@ class EntityPage extends Component {
     return (
       <div>
         <header className="page__header">
-          <h1>{StoreAlias}</h1>
+          <h1>
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
           <Button
             variant="contained"
             color="primary"
             onClick={this.refreshData}
           >
-            Refresh
+            <FormattedMessage {...commonMessages.refreshButton.label} />
           </Button>
         </header>
 
         <MaterialTable
-          title="Editable Example"
+          title=""
           columns={[
             {
-              title: "Entity",
+              title: <FormattedMessage {...commonMessages.entity} />,
               field: "entity",
               readonly: true,
               render: rowData => {
@@ -117,7 +123,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Body Value",
+              title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
               render: rowData => {
@@ -165,7 +171,7 @@ class EntityPage extends Component {
               },
             },
             {
-              title: "Count",
+              title: <FormattedMessage {...commonMessages.count} />,
               field: "count",
               type: "numeric",
             },
