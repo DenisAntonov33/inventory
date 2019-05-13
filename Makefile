@@ -7,7 +7,7 @@ electron:
 	yarn electron-start
 
 clean-db:
-	rm /Users/sergey/Library/Application\ Support/inventory/database/data.json
+	rm /Users/sergey/Library/Application\ Support/inventory/database/data-v0.0.1.json
 
 dist:
 	yarn react-build && yarn electron-dist
