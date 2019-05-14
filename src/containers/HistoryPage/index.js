@@ -41,8 +41,11 @@ class EntityPage extends Component {
 
   render() {
     const {
+      getBodyValuesItem,
+      getEmployeesItem,
       getPositionsItem,
       getEntitiesItem,
+
       createHistoryItem,
       deleteHistoryItem,
       historyItems,
@@ -124,6 +127,7 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+              render: rowData => getEmployeesItem(rowData.employee).name,
             },
             {
               title: <FormattedMessage {...commonMessages.positions} />,
@@ -175,7 +179,9 @@ class EntityPage extends Component {
                   </FormControl>
                 );
               },
-              render: rowData => rowData.positions.join(", "),
+
+              render: rowData =>
+                rowData.positions.map(e => getPositionsItem(e).name).join(", "),
             },
             {
               title: <FormattedMessage {...commonMessages.entity} />,
@@ -233,6 +239,7 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+              render: rowData => getEntitiesItem(rowData.entity).name,
             },
             {
               title: <FormattedMessage {...commonMessages.bodyValue} />,
@@ -270,6 +277,7 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
+              render: rowData => getBodyValuesItem(rowData.bodyValue).name,
             },
             {
               title: <FormattedMessage {...commonMessages.count} />,
