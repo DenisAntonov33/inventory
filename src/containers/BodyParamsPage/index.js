@@ -67,7 +67,7 @@ class Page extends Component {
               icon: "open_in_new",
               tooltip: <FormattedMessage {...messages.openActionTooltip} />,
               onClick: (event, rowData) => {
-                history.replace(`bodyparams/${rowData.id}`);
+                history.replace(`/bodyparams/${rowData.id}`);
               },
             },
           ]}

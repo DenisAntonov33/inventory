@@ -42,13 +42,6 @@ const mapStateToProps = ({ lists, data, requisition }) => ({
   historyItems: HistorySelectors.getItems(lists[HistoryAlias], data),
 
   requisition: requisition.data,
-
-  BodyValuesSelectors,
-  BodyParamsAlias,
-  BodyParamsSelectors,
-  EntitiesSelectors,
-  PositionsSelectors,
-  EmployeesSelectors,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,7 +96,6 @@ const storeItemsHOC = WrappedComponent => {
         getPositionsItem: id => PositionsSelectors.getItemById(id, data),
         getEmployeesItem: id => EmployeesSelectors.getItemById(id, data),
       };
-      console.log(this.props);
       return <WrappedComponent {...this.props} {...props} />;
     }
   }

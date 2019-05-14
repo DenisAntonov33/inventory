@@ -39,8 +39,8 @@ class EntityPage extends Component {
       <div>
         <header className="page__header">
           <h1>
-            <FormattedMessage {...messages.pageTitle} />
-            {id}
+            <FormattedMessage {...messages.pageTitle} /> -{" "}
+            {bodyParam && bodyParam.name}
           </h1>
         </header>
 
