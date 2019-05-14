@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import ReactToPrint from "react-to-print";
 
 import { FormattedMessage } from "react-intl";
 import commonMessages from "../../common/messages";
 import messages from "./messages";
 
 import storeItemsHOC from "../StoreItemsHOC";
+import CartToPrint from "./CartToPrint";
 
 import MaterialTable from "material-table";
 import Select from "@material-ui/core/Select";
@@ -18,10 +20,12 @@ class EntityPage extends Component {
       },
       readEmployee,
       readBodyParams,
+      readHistory,
     } = this.props;
 
     readEmployee(id);
     readBodyParams();
+    readHistory();
   }
 
   render() {
@@ -33,6 +37,7 @@ class EntityPage extends Component {
       getEmployeesItem,
       getBodyParamsItem,
       updateEmployee,
+      historyItems,
     } = this.props;
 
     const employee = getEmployeesItem(id);
@@ -40,15 +45,31 @@ class EntityPage extends Component {
       ? employee.bodyParams.filter(e => !e.isDeleted)
       : [];
 
+    console.log(historyItems);
+
+    const employeeHistoryItems = historyItems.filter(
+      e => e.employee === employee.id
+    );
+    console.log(employeeHistoryItems);
+
     let selectedBodyParam = "";
 
     return (
       <div>
         <header className="page__header">
           <h1>
-            <FormattedMessage {...messages.pageTitle} /> - {id}
+            <FormattedMessage {...messages.pageTitle} /> -{" "}
+            {employee && employee.name}
           </h1>
         </header>
+
+        <ReactToPrint
+          trigger={() => <div>Print this out!</div>}
+          content={() => this.componentRef}
+        />
+        <div className="to-print">
+          <CartToPrint ref={el => (this.componentRef = el)} />
+        </div>
 
         <MaterialTable
           title=""
