@@ -50,7 +50,7 @@ class History extends Entity {
       if (!_employee) throw new Error("invalid employee");
 
       const _positions = args.positions.map(
-        position => normalizedPositionsList[position].name
+        position => normalizedPositionsList[position].id
       );
       if (!_positions.length) throw new Error("invalid positions");
 
@@ -84,10 +84,10 @@ class History extends Entity {
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),
         date: args.date,
-        employee: _employee.name,
+        employee: _employee.id,
         positions: _positions,
-        entity: _entity.name,
-        bodyValue: _bodyValue.name,
+        entity: _entity.id,
+        bodyValue: _bodyValue.id,
         count: args.count,
       });
 

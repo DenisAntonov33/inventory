@@ -191,18 +191,23 @@
         },
         "date": { "type": "number" },
         "employee": {
+          "ref": "employee",
           "type": "string"
         },
         "positions": {
           "type": "array",
+          "ref": "positions",
+          "default": [],
           "items": {
             "type": "string"
           }
         },
         "entity": {
+          "ref": "entity",
           "type": "string"
         },
         "bodyValue": {
+          "ref": "bodyValue",
           "type": "string"
         },
         "count": {
