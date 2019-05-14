@@ -43,12 +43,14 @@ class Requisition extends Entity {
 
       const data = employeesList.reduce((employeeAcc, employeeCurr) => {
         employeeCurr.positions.forEach(employeePosition => {
-          employeePosition.entities.forEach(employeeEntity => {
+          for (let employeeEntity of employeePosition.entities) {
             const entityBodyParam = employeeEntity.bodyParam;
 
             const employeeBodyParam = employeeCurr.bodyParams.find(
               e => e.bodyParam.id === entityBodyParam.id
             );
+
+            if (!employeeBodyParam) continue;
 
             const employeeBodyValue = employeeBodyParam.bodyValue;
 
@@ -83,7 +85,7 @@ class Requisition extends Entity {
               bodyValue: employeeBodyValue.id,
               count,
             });
-          });
+          }
         });
         return employeeAcc;
       }, []);
