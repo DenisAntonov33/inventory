@@ -64,10 +64,8 @@ class History extends Entity {
       const storeCollection = db[store.collection.name];
       const storeItem = await storeCollection
         .findOne({
-          $and: [
-            { entity: { $eq: _entity.id } },
-            { bodyValue: { $eq: _bodyValue.id } },
-          ],
+          entity: { $eq: _entity.id },
+          bodyValue: { $eq: _bodyValue.id },
         })
         .exec();
 

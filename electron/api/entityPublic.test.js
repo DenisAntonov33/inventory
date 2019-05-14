@@ -31,7 +31,7 @@ const store = new Store(StoreCollection);
 const requisition = new Requisition();
 
 describe("Public", () => {
-  let token1, bodyParam1, entity1, position1, employee1;
+  let token1, bodyParam1, entity1, position1, employee1, employee2;
 
   beforeEach(async () => {
     try {
@@ -169,6 +169,39 @@ describe("Public", () => {
 
       employee1 = __employee1;
 
+      const employeeData2 = {
+        name: "employee2",
+      };
+
+      const {
+        returnValue: {
+          data: { item: _employee2 },
+        },
+      } = await employees.create({}, { token: token1, args: employeeData2 });
+
+      const {
+        returnValue: {
+          data: { item: __employee2 },
+        },
+      } = await employees.updateById(
+        {},
+        {
+          token: token1,
+          id: _employee2.id,
+          args: {
+            $push: {
+              positions: position1.id,
+              bodyParams: {
+                bodyParam: bodyParam1.id,
+                bodyValue: bodyParam1.values[0].id,
+              },
+            },
+          },
+        }
+      );
+
+      employee2 = __employee2;
+
       const storeItemData1 = {
         entity: entity1.id,
         bodyValue: bodyParam1.values[0].id,
@@ -242,6 +275,44 @@ describe("Public", () => {
     expect(newStoreItem.count).toBe(19);
 
     expect.assertions(2);
+  });
+
+  test("Check employee history work", async () => {
+    const historyItemData1 = {
+      date: 1,
+      employee: employee1.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: bodyParam1.values[0].id,
+      count: 1,
+    };
+
+    const historyItemData2 = {
+      date: 1,
+      employee: employee2.id,
+      positions: [position1.id],
+      entity: entity1.id,
+      bodyValue: bodyParam1.values[0].id,
+      count: 1,
+    };
+
+    await history.create({}, { token: token1, args: historyItemData2 });
+
+    await history.create({}, { token: token1, args: historyItemData1 });
+    await history.create({}, { token: token1, args: historyItemData1 });
+    await history.create({}, { token: token1, args: historyItemData1 });
+
+    const {
+      returnValue: {
+        data: { items },
+      },
+    } = await history.readMany(
+      {},
+      { token: token1, args: { employee: employee1.id } }
+    );
+
+    expect(items.every(e => e.employee === employee1.id)).toBeTruthy();
+    expect.assertions(1);
   });
 
   test("Check history work error - 0 items", async () => {
