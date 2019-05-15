@@ -3,7 +3,7 @@ import { defineMessages } from "react-intl";
 export const scope = "app";
 
 export default defineMessages({
-  title: { id: `${scope}.title`, defaultMessage: "Inventory App" },
+  title: { id: `${scope}.title`, defaultMessage: "PRO PPE" },
 
   /* Buttons */
   refreshButton: {
