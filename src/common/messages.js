@@ -15,6 +15,7 @@ export default defineMessages({
 
   /* Common words */
   actions: { id: `${scope}.actions`, defaultMessage: "Actions" },
+  approve: { id: `${scope}.approve`, defaultMessage: "Approve" },
   count: { id: `${scope}.count`, defaultMessage: "Count" },
   date: { id: `${scope}.date`, defaultMessage: "Date" },
   emptyDataSourceMessage: {

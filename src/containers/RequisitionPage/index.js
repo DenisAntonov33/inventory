@@ -163,7 +163,7 @@ class EntityPage extends Component {
             color="primary"
             onClick={this.pushHistory}
           >
-            Approve
+            <FormattedMessage {...commonMessages.approve} />
           </Button>
         </div>
       </div>

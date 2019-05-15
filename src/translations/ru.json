@@ -2,6 +2,7 @@
   "app.title": "PRO СИЗ",
 
   "app.actions": "Действия",
+  "app.approve": "Подтвердить",
   "app.count": "Количество",
   "app.date": "Дата",
   "app.emptyDataSourceMessage": "Нет данных",
