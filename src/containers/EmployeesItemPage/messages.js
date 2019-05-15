@@ -7,4 +7,8 @@ export default defineMessages({
     id: `${scope}.pageTitle`,
     defaultMessage: "Employee Item Page",
   },
+  historyTitle: {
+    id: `${scope}.historyTitle`,
+    defaultMessage: "Employee history",
+  },
 });

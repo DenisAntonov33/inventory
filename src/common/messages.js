@@ -4,36 +4,56 @@ export const scope = "app";
 
 export default defineMessages({
   title: { id: `${scope}.title`, defaultMessage: "Inventory App" },
+
+  /* Buttons */
   refreshButton: {
     label: { id: `${scope}.refreshButton.label`, defaultMessage: "Refresh" },
   },
+  printButton: {
+    label: { id: `${scope}.printButton.label`, defaultMessage: "Print" },
+  },
 
+  /* Common words */
   actions: { id: `${scope}.actions`, defaultMessage: "Actions" },
+  count: { id: `${scope}.count`, defaultMessage: "Count" },
+  date: { id: `${scope}.date`, defaultMessage: "Date" },
   emptyDataSourceMessage: {
     id: `${scope}.emptyDataSourceMessage`,
     defaultMessage: "Empty data source",
   },
-  date: { id: `${scope}.date`, defaultMessage: "Date" },
+  home: { id: `${scope}.home`, defaultMessage: "Home" },
   name: { id: `${scope}.name`, defaultMessage: "Name" },
+  PPEAcceptedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
+  PPEGetSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
+  PPEPassedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
+  PPEName: {
+    id: `${scope}.PPEName`,
+    defaultMessage: "PPE Name",
+  },
+  certificateNumber: {
+    id: `${scope}.certificateNumber`,
+    defaultMessage: "certificateNumber",
+  },
+  issuedBy: { id: `${scope}.issuedBy`, defaultMessage: "Issued By" },
+  returned: { id: `${scope}.returned`, defaultMessage: "Returned" },
   password: { id: `${scope}.password`, defaultMessage: "Password" },
+  profile: { id: `${scope}.profile`, defaultMessage: "Profile" },
   repeatPassword: {
     id: `${scope}.repeatPassword`,
     defaultMessage: "Repeat password",
   },
-  count: { id: `${scope}.count`, defaultMessage: "Count" },
   replacementPeriod: {
     id: `${scope}.replacementPeriod`,
     defaultMessage: "replacementPeriod",
   },
-
-  home: { id: `${scope}.home`, defaultMessage: "Home" },
-  profile: { id: `${scope}.profile`, defaultMessage: "Profile" },
+  wear: { id: `${scope}.wear`, defaultMessage: "wear" },
 
   loginTitle: { id: `${scope}.loginTitle`, defaultMessage: "Login" },
   signupTitle: { id: `${scope}.signupTitle`, defaultMessage: "Signup" },
   signup: { id: `${scope}.signup`, defaultMessage: "Зарегистрироваться" },
   login: { id: `${scope}.login`, defaultMessage: "Войти" },
 
+  /* Items */
   bodyValue: { id: `${scope}.bodyValue`, defaultMessage: "bodyValue" },
   bodyValues: { id: `${scope}.bodyValues`, defaultMessage: "bodyValues" },
   bodyParam: { id: `${scope}.bodyParam`, defaultMessage: "bodyParam" },
@@ -47,6 +67,7 @@ export default defineMessages({
   history: { id: `${scope}.history`, defaultMessage: "History" },
   store: { id: `${scope}.store`, defaultMessage: "Store" },
 
+  /* Errors */
   errors: {
     required: {
       id: `${scope}.errors.required`,

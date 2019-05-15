@@ -1,16 +1,24 @@
 {
   "app.title": "Инвентаризация",
-  "app.home": "Главная",
-  "app.profile": "Профиль",
-  "app.password": "Пароль",
-  "app.repeatPassword": "Еще раз",
 
-  "app.date": "Дата",
-  "app.name": "Имя",
-  "app.count": "Количество",
-  "app.replacementPeriod": "Период замены",
   "app.actions": "Действия",
+  "app.count": "Количество",
+  "app.date": "Дата",
   "app.emptyDataSourceMessage": "Нет данных",
+  "app.home": "Главная",
+  "app.name": "Имя",
+  "app.PPEAcceptedSign": "Подпись принявшего СИЗ",
+  "app.PPEGetSign": "Подпись получившего СИЗ",
+  "app.PPEPassedSign": "Подпись сдавшего СИЗ",
+  "app.PPEName": "Наименование СИЗ",
+  "app.replacementPeriod": "Период замены",
+  "app.certificateNumber": "№ сертификата",
+  "app.issuedBy": "Выдано",
+  "app.returned": "Возвращено",
+  "app.password": "Пароль",
+  "app.profile": "Профиль",
+  "app.repeatPassword": "Еще раз",
+  "app.wear": "Износ",
 
   "app.bodyValue": "Значение параметра",
   "app.bodyValues": "Значения параметра",
@@ -26,6 +34,7 @@
   "app.store": "Склад",
 
   "app.refreshButton.label": "Обновить",
+  "app.printButton.label": "Распечатать",
 
   "app.loginTitle": "Вход",
   "app.login": "Вход",
@@ -45,6 +54,7 @@
   "containers.EmployeesPage.pageTitle": "Работники",
   "containers.EmployeesPage.openActionTooltip": "Открыть работника",
   "containers.EmployeesItemPage.pageTitle": "Работник",
+  "containers.EmployeesItemPage.historyTitle": "История работника",
 
   "containers.BodyParamsPage.pageTitle": "Параметры тела",
   "containers.BodyParamsPage.openActionTooltip": "Открыть параметр",

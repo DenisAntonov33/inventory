@@ -28,7 +28,12 @@ employeesSchema.define({
   bodyParams: [{ bodyParam: bodyParamsSchema, bodyValue: bodyValuesSchema }],
 });
 
-historySchema.define({});
+historySchema.define({
+  bodyValue: bodyValuesSchema,
+  employee: employeesSchema,
+  entity: entitiesSchema,
+  positions: [positionsSchema],
+});
 
 storeSchema.define({
   entity: entitiesSchema,
