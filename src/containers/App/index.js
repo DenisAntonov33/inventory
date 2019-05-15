@@ -10,6 +10,8 @@ import { store } from "../../store";
 import { updateLocaleFromLocalStorage } from "../../store/modules/intl";
 import { getToken } from "../../utils/localStorageService";
 
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import orange from "@material-ui/core/colors/orange";
 import PublicWrapper from "../../components/PublicWrapper";
 import PrivateWrapper from "../../components/PrivateWrapper";
 import LoginPage from "../LoginPage";
@@ -58,6 +60,12 @@ function PrivateRoute({ component: Component, ...rest }) {
   );
 }
 
+const theme = createMuiTheme({
+  palette: {
+    primary: orange,
+  },
+});
+
 class App extends Component {
   render() {
     store.dispatch(updateLocaleFromLocalStorage());
@@ -65,47 +73,57 @@ class App extends Component {
     return (
       <Provider store={store}>
         <IntlProvider>
-          <HashRouter>
-            <Switch>
-              <PrivateRoute exact path="/" component={HomePage} />
-              <PrivateRoute path="/profile" component={ProfilePage} />
-              <PrivateRoute
-                path="/bodyparams/:id"
-                component={BodyParamsItemPage}
-              />
-              <PrivateRoute
-                exact
-                path="/bodyparams"
-                component={BodyParamsPage}
-              />
-              <PrivateRoute exact path="/entities" component={EntitiesPage} />
-              <PrivateRoute exact path="/positions" component={PositionsPage} />
-              <PrivateRoute
-                exact
-                path="/employees/:id"
-                component={EmployeesItemPage}
-              />
-              <PrivateRoute exact path="/employees" component={EmployeesPage} />
-              <PrivateRoute exact path="/history" component={HistoryPage} />
-              <PrivateRoute exact path="/store" component={StorePage} />
-              <PrivateRoute
-                exact
-                path="/requisition"
-                component={RequisitionPage}
-              />
-              <PublicRoute
-                path="/login"
-                title={<FormattedMessage {...commonMessages.loginTitle} />}
-                component={LoginPage}
-              />
-              <PublicRoute
-                path="/signup"
-                title={<FormattedMessage {...commonMessages.signupTitle} />}
-                component={SignupPage}
-              />
-              <Route to="*" component={() => <Redirect to="/" />} />
-            </Switch>
-          </HashRouter>
+          <MuiThemeProvider theme={theme}>
+            <HashRouter>
+              <Switch>
+                <PrivateRoute exact path="/" component={HomePage} />
+                <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute
+                  path="/bodyparams/:id"
+                  component={BodyParamsItemPage}
+                />
+                <PrivateRoute
+                  exact
+                  path="/bodyparams"
+                  component={BodyParamsPage}
+                />
+                <PrivateRoute exact path="/entities" component={EntitiesPage} />
+                <PrivateRoute
+                  exact
+                  path="/positions"
+                  component={PositionsPage}
+                />
+                <PrivateRoute
+                  exact
+                  path="/employees/:id"
+                  component={EmployeesItemPage}
+                />
+                <PrivateRoute
+                  exact
+                  path="/employees"
+                  component={EmployeesPage}
+                />
+                <PrivateRoute exact path="/history" component={HistoryPage} />
+                <PrivateRoute exact path="/store" component={StorePage} />
+                <PrivateRoute
+                  exact
+                  path="/requisition"
+                  component={RequisitionPage}
+                />
+                <PublicRoute
+                  path="/login"
+                  title={<FormattedMessage {...commonMessages.loginTitle} />}
+                  component={LoginPage}
+                />
+                <PublicRoute
+                  path="/signup"
+                  title={<FormattedMessage {...commonMessages.signupTitle} />}
+                  component={SignupPage}
+                />
+                <Route to="*" component={() => <Redirect to="/" />} />
+              </Switch>
+            </HashRouter>
+          </MuiThemeProvider>
         </IntlProvider>
       </Provider>
     );
