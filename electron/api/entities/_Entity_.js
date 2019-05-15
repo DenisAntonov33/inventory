@@ -103,6 +103,7 @@ class Entity {
   async readMany(event, _args) {
     try {
       const { token, ids, args } = _args;
+
       const user = await this._authentification(token);
       const _user = user.toJSON();
       await this._authorization(user, ids || []);
@@ -110,7 +111,7 @@ class Entity {
       const userIds = _user.data[this.collection.link];
       const availableIds = ids ? _intersection(userIds, ids) : userIds;
 
-      const items = await this._readMany(availableIds, args);
+      const items = await this._readMany(availableIds, args || {});
       event.returnValue = this.res.success({ items });
       return event;
     } catch (err) {
@@ -182,11 +183,11 @@ class Entity {
     }
   }
 
-  async _readMany(ids) {
+  async _readMany(ids, args = {}) {
     try {
       const db = await this.getDatabase();
       const collection = db[this.collection.name];
-      const items = await collection.find({ id: { $in: ids } }).exec();
+      const items = await collection.find({ id: { $in: ids }, ...args }).exec();
 
       const expandedItems = await this._expandList(items);
       return expandedItems;

@@ -81,7 +81,7 @@ const mapDispatchToProps = dispatch => ({
   deleteStoreItem: id => dispatch(StoreActions.deleteById(id)),
 
   createHistoryItem: args => dispatch(HistoryActions.create(args)),
-  readHistory: () => dispatch(HistoryActions.readMany()),
+  readHistory: args => dispatch(HistoryActions.readMany(args)),
   deleteHistoryItem: id => dispatch(HistoryActions.deleteById(id)),
 });
 

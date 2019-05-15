@@ -1,0 +1,19 @@
+@media print { 
+    @page { margin: 1cm; }
+}
+
+.to-print {
+    // display: none;
+    
+    table {
+        border-collapse: collapse;
+
+        td, th {
+            border: 1px solid black
+        }
+
+        .row {
+            height: 50px;
+        }
+    }
+}
