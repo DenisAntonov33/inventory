@@ -57,9 +57,9 @@ class Requisition extends Entity {
             const lastHistoryItems = historyList
               .filter(
                 e =>
-                  e.employee === employeeCurr.name &&
-                  e.entity === employeeEntity.name &&
-                  e.bodyValue === employeeBodyValue.name
+                  e.employee === employeeCurr.id &&
+                  e.entity === employeeEntity.id &&
+                  e.bodyValue === employeeBodyValue.id
               )
               .sort((a, b) => b.date - a.date);
 
