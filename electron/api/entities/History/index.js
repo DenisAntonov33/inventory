@@ -1,11 +1,14 @@
-const { getId } = require("../../services/id");
-const { normalize } = require("../../utils");
+const { getId } = require("../../../services/id");
+const { normalize } = require("../../../utils");
 
-const { Entity } = require("./_Entity_");
-const { Employees } = require("./Employees");
-const { Store } = require("./Store");
+const { Entity } = require("../_Entity_");
+const { Employees } = require("../Employees");
+const { Store } = require("../Store");
 
-const { EmployeeCollection, StoreCollection } = require("../../db/collections");
+const {
+  EmployeeCollection,
+  StoreCollection,
+} = require("../../../db/collections");
 
 const employees = new Employees(EmployeeCollection);
 const store = new Store(StoreCollection);

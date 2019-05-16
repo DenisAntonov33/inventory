@@ -1,14 +1,14 @@
-const { getId } = require("../../services/id");
-const { normalize } = require("../../utils");
+const { getId } = require("../../../services/id");
+const { normalize } = require("../../../utils");
 
-const { Entity } = require("./_Entity_");
-const { Entities } = require("./Entities");
-const { BodyValues } = require("./BodyValues");
+const { Entity } = require("../_Entity_");
+const { Entities } = require("../Entities");
+const { BodyValues } = require("../BodyValues");
 
 const {
   BodyValueCollection,
   EntityCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const bodyValues = new BodyValues(BodyValueCollection);
 const entities = new Entities(EntityCollection);

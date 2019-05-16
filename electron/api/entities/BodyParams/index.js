@@ -1,9 +1,9 @@
 const { union } = require("lodash");
-const { normalize } = require("../../utils");
+const { normalize } = require("../../../utils");
 
-const { Entity } = require("./_Entity_");
-const { BodyValues } = require("./BodyValues");
-const { BodyValueCollection } = require("../../db/collections");
+const { Entity } = require("../_Entity_");
+const { BodyValues } = require("../BodyValues");
+const { BodyValueCollection } = require("../../../db/collections");
 
 const bodyValues = new BodyValues(BodyValueCollection);
 

@@ -1,10 +1,10 @@
-const { getDatabase } = require("../../db/index");
-const { Entities } = require("./Entities");
-const { BodyParams } = require("./BodyParams");
-const { Positions } = require("./Positions");
-const { Employees } = require("./Employees");
-const { Store } = require("./Store");
-const { History } = require("./History");
+const { database } = require("../../../db");
+const { Entities } = require("../Entities");
+const { BodyParams } = require("../BodyParams");
+const { Positions } = require("../Positions");
+const { Employees } = require("../Employees");
+const { Store } = require("../Store");
+const { History } = require("../History");
 
 const {
   BodyParamCollection,
@@ -13,7 +13,7 @@ const {
   EmployeeCollection,
   StoreCollection,
   HistoryCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const entities = new Entities(EntityCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
@@ -23,10 +23,10 @@ const store = new Store(StoreCollection);
 const history = new History(HistoryCollection);
 
 describe("History", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     try {
       const dbSuffix = new Date().getTime();
-      await getDatabase(`test${dbSuffix}`, "memory");
+      await database.createInstance(`test${dbSuffix}`);
     } catch (err) {
       console.log(err);
     }

@@ -1,12 +1,12 @@
 const { DateTime } = require("luxon");
-const { getDatabase } = require("../../db/index");
-const { Entities } = require("./Entities");
-const { BodyParams } = require("./BodyParams");
-const { Positions } = require("./Positions");
-const { Employees } = require("./Employees");
-const { Store } = require("./Store");
-const { History } = require("./History");
-const { Requisition } = require("./Requisition");
+const { database } = require("../../../db");
+const { Entities } = require("../Entities");
+const { BodyParams } = require("../BodyParams");
+const { Positions } = require("../Positions");
+const { Employees } = require("../Employees");
+const { Store } = require("../Store");
+const { History } = require("../History");
+const { Requisition } = require("../Requisition");
 
 const {
   BodyParamCollection,
@@ -15,7 +15,7 @@ const {
   EmployeeCollection,
   StoreCollection,
   HistoryCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const entities = new Entities(EntityCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
@@ -27,8 +27,12 @@ const requisition = new Requisition();
 
 describe("Requisition", () => {
   beforeAll(async () => {
-    const dbSuffix = new Date().getTime();
-    await getDatabase(`test${dbSuffix}`, "memory");
+    try {
+      const dbSuffix = new Date().getTime();
+      await database.createInstance(`test${dbSuffix}`);
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   test("Create", async () => {

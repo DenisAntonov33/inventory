@@ -1,11 +1,11 @@
-const { getDatabase } = require("../db/index");
+const { database } = require("../db");
 const { login, signup } = require("./auth");
 
 describe("Auth", () => {
   beforeAll(async () => {
     try {
       const dbSuffix = new Date().getTime();
-      await getDatabase(`test${dbSuffix}`, "memory");
+      await database.createInstance(`test${dbSuffix}`);
     } catch (err) {
       console.log(err);
     }
@@ -13,8 +13,6 @@ describe("Auth", () => {
 
   describe("Signup", () => {
     test("User signup success", async () => {
-      expect.assertions(2);
-
       const userData = {
         name: `user${new Date().getTime()}`,
         password: "test",
@@ -27,6 +25,8 @@ describe("Auth", () => {
 
       expect(status).toBe(200);
       expect(data).toBeDefined();
+
+      expect.assertions(2);
     });
 
     test("User signup same password fail", async () => {
@@ -55,7 +55,7 @@ describe("Auth", () => {
         returnValue: { status, message },
       } = await signup({}, userData);
       expect(status).toBe(500);
-      expect(message).toBe("Error: Duplicate key for property username");
+      expect(message).toBe("Duplicate key for property username");
     });
   });
 

@@ -1,4 +1,4 @@
-const { Entity } = require("./_Entity_");
+const { Entity } = require("../_Entity_");
 
 class BodyValues extends Entity {
   constructor(collection) {

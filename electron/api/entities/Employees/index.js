@@ -1,12 +1,12 @@
-const { normalize } = require("../../utils");
-const { Entity } = require("./_Entity_");
-const { BodyParams } = require("./BodyParams");
-const { Positions } = require("./Positions");
+const { normalize } = require("../../../utils");
+const { Entity } = require("../_Entity_");
+const { BodyParams } = require("../BodyParams");
+const { Positions } = require("../Positions");
 
 const {
   BodyParamCollection,
   PositionCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const bodyParams = new BodyParams(BodyParamCollection);
 const positions = new Positions(PositionCollection);

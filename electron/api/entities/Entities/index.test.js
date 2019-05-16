@@ -1,20 +1,20 @@
-const { getDatabase } = require("../../db/index");
-const { Entities } = require("./Entities");
-const { BodyParams } = require("./BodyParams");
+const { database } = require("../../../db");
+const { Entities } = require("../Entities");
+const { BodyParams } = require("../BodyParams");
 
 const {
   BodyParamCollection,
   EntityCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const entities = new Entities(EntityCollection);
 const bodyParams = new BodyParams(BodyParamCollection);
 
 describe("Entities", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     try {
       const dbSuffix = new Date().getTime();
-      await getDatabase(`test${dbSuffix}`, "memory");
+      await database.createInstance(`test${dbSuffix}`);
     } catch (err) {
       console.log(err);
     }

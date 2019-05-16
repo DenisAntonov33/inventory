@@ -2,7 +2,7 @@ const { res } = require("../services/response");
 const { tokenService } = require("../services/token");
 const { getId } = require("../services/id");
 const { passwordService } = require("../services/password");
-const { getDatabase, saveDatabase } = require("../db");
+const { database } = require("../db");
 const { UserCollection } = require("../db/collections");
 
 exports.signup = async function(event, arg) {
@@ -14,7 +14,7 @@ exports.signup = async function(event, arg) {
     if (password !== password1) throw new Error("Password should be the same");
 
     const hash = passwordService.generateHash(password);
-    const db = await getDatabase();
+    const db = await database.getInstance();
     const userCollection = db[UserCollection.name];
 
     const user = await userCollection.insert({
@@ -33,7 +33,7 @@ exports.signup = async function(event, arg) {
       },
     });
 
-    await saveDatabase();
+    await database.save();
 
     const token = tokenService.sign({ id: user.get("id") });
 
@@ -49,7 +49,7 @@ exports.login = async function(event, arg) {
   try {
     const { name, password } = arg;
 
-    const db = await getDatabase();
+    const db = await database.getInstance();
     const userCollection = db[UserCollection.name];
     const user = await userCollection
       .findOne()
@@ -81,7 +81,7 @@ exports.me = async function(event, args) {
     if (!token) throw new Error("Token is required");
     const { id } = tokenService.verify(token);
 
-    const db = await getDatabase();
+    const db = await database.getInstance();
     const userCollection = db[UserCollection.name];
     const user = await userCollection
       .findOne()

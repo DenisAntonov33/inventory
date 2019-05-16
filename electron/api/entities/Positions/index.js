@@ -1,9 +1,9 @@
-const { normalize } = require("../../utils");
+const { normalize } = require("../../../utils");
 
-const { Entity } = require("./_Entity_");
-const { Entities } = require("./Entities");
+const { Entity } = require("../_Entity_");
+const { Entities } = require("../Entities");
 
-const { EntityCollection } = require("../../db/collections");
+const { EntityCollection } = require("../../../db/collections");
 
 const entities = new Entities(EntityCollection);
 

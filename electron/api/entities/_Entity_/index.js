@@ -1,14 +1,14 @@
 const { intersection: _intersection } = require("lodash");
-const { res } = require("../../services/response");
-const { getDatabase, saveDatabase } = require("../../db/index");
-const { getId } = require("../../services/id");
-const { tokenService } = require("../../services/token");
-const { UserCollection } = require("../../db/collections");
+const { res } = require("../../../services/response");
+const { database } = require("../../../db/index");
+const { getId } = require("../../../services/id");
+const { tokenService } = require("../../../services/token");
+const { UserCollection } = require("../../../db/collections");
 
 class Entity {
   constructor(collection) {
-    this.getDatabase = getDatabase;
-    this.saveDatabase = saveDatabase;
+    this.getDatabase = database.getInstance.bind(database);
+    this.saveDatabase = database.save.bind(database);
     this.collection = collection;
     this.userCollection = UserCollection;
     this.res = res;

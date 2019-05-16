@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
 const { initApi } = require("./api");
-const { getDatabase } = require("./db");
+const { database } = require("./db");
 
 let mainWindow;
 
@@ -32,7 +32,7 @@ function createWindow() {
 
 app.on("ready", async () => {
   try {
-    await getDatabase("inventory_db", "memory");
+    await database.createInstance("inventory_db");
     initApi();
     createWindow();
   } catch (err) {

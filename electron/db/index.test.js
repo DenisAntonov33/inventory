@@ -1,4 +1,4 @@
-const { getDatabase } = require("../db/index");
+const { database } = require("../db/index");
 const {
   BodyValueCollection,
   BodyParamCollection,
@@ -17,7 +17,7 @@ describe("DB", () => {
     expect.assertions(1);
     try {
       const dbSuffix = new Date().getTime();
-      db = await getDatabase(`test${dbSuffix}`, "memory");
+      db = await database.getInstance(`test${dbSuffix}`);
     } catch (err) {
       console.log(err);
     }

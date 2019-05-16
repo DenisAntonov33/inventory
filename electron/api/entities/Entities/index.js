@@ -1,9 +1,9 @@
-const { normalize } = require("../../utils");
+const { normalize } = require("../../../utils");
 
-const { Entity } = require("./_Entity_");
-const { BodyParams } = require("./BodyParams");
+const { Entity } = require("../_Entity_");
+const { BodyParams } = require("../BodyParams");
 
-const { BodyParamCollection } = require("../../db/collections");
+const { BodyParamCollection } = require("../../../db/collections");
 
 const bodyParams = new BodyParams(BodyParamCollection);
 

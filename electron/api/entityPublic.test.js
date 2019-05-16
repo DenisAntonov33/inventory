@@ -1,4 +1,4 @@
-const { getDatabase } = require("../db/index");
+const { database } = require("../db/index");
 
 const { signup, me } = require("./auth");
 
@@ -33,10 +33,10 @@ const requisition = new Requisition();
 describe("Public", () => {
   let token1, bodyParam1, entity1, position1, employee1, employee2;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     try {
       const dbSuffix = new Date().getTime();
-      await getDatabase(`test${dbSuffix}`, "memory");
+      await database.createInstance(`test${dbSuffix}`, "memory");
 
       const userData1 = {
         name: `user${new Date().getTime()}`,

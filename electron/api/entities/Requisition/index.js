@@ -1,12 +1,12 @@
 const { DateTime } = require("luxon");
-const { Entity } = require("./_Entity_");
-const { Employees } = require("./Employees");
-const { History } = require("./History");
+const { Entity } = require("../_Entity_");
+const { Employees } = require("../Employees");
+const { History } = require("../History");
 
 const {
   EmployeeCollection,
   HistoryCollection,
-} = require("../../db/collections");
+} = require("../../../db/collections");
 
 const employees = new Employees(EmployeeCollection);
 const history = new History(HistoryCollection);
