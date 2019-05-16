@@ -1,16 +1,16 @@
 const RxDB = require("rxdb");
 RxDB.plugin(require("pouchdb-adapter-memory"));
 
-const {
-  BodyValueCollection,
-  BodyParamCollection,
-  EntityCollection,
-  PositionCollection,
-  EmployeeCollection,
-  HistoryCollection,
-  StoreCollection,
-  UserCollection,
-} = require("./collections");
+const collections = require("./collections");
+
+const BodyValueCollection = collections["BodyValueCollection"];
+const BodyParamCollection = collections["BodyParamCollection"];
+const EntityCollection = collections["EntityCollection"];
+const PositionCollection = collections["PositionCollection"];
+const EmployeeCollection = collections["EmployeeCollection"];
+const HistoryCollection = collections["HistoryCollection"];
+const StoreCollection = collections["StoreCollection"];
+const UserCollection = collections["UserCollection"];
 
 class Database {
   constructor() {
