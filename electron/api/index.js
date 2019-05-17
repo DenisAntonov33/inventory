@@ -9,6 +9,7 @@ const { Employees } = require("./entities/Employees");
 const { History } = require("./entities/History");
 const { Store } = require("./entities/Store");
 const { Requisition } = require("./entities/Requisition");
+const { RequisitionStore } = require("./entities/RequisitionStore");
 
 const {
   BodyValueCollection,
@@ -31,12 +32,17 @@ const entities = [
 ];
 
 const requisition = new Requisition();
+const requisitionStore = new RequisitionStore();
 
 exports.initApi = function() {
   ipcMain.on("login", login);
   ipcMain.on("signup", signup);
   ipcMain.on("me", me);
   ipcMain.on("requisition_create", requisition.create.bind(requisition));
+  ipcMain.on(
+    "requisitionStore_create",
+    requisitionStore.create.bind(requisitionStore)
+  );
 
   entities.forEach(entity => {
     const methods = entity.getMethods();
