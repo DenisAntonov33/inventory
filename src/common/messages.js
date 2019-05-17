@@ -3,7 +3,10 @@ import { defineMessages } from "react-intl";
 export const scope = "app";
 
 export default defineMessages({
-  title: { id: `${scope}.title`, defaultMessage: "PRO PPE" },
+  applicationTitle: {
+    id: `${scope}.applicationTitle`,
+    defaultMessage: "PRO PPE",
+  },
 
   /* Buttons */
   refreshButton: {
@@ -15,15 +18,26 @@ export default defineMessages({
 
   /* Common words */
   actions: { id: `${scope}.actions`, defaultMessage: "Actions" },
+  actualCount: { id: `${scope}.actualCount`, defaultMessage: "Actual Count" },
   approve: { id: `${scope}.approve`, defaultMessage: "Approve" },
+  certificateNumber: {
+    id: `${scope}.certificateNumber`,
+    defaultMessage: "certificateNumber",
+  },
   count: { id: `${scope}.count`, defaultMessage: "Count" },
   date: { id: `${scope}.date`, defaultMessage: "Date" },
   emptyDataSourceMessage: {
     id: `${scope}.emptyDataSourceMessage`,
     defaultMessage: "Empty data source",
   },
+  fullName: { id: `${scope}.fullName`, defaultMessage: "Full Name" },
   home: { id: `${scope}.home`, defaultMessage: "Home" },
+  issuedBy: { id: `${scope}.issuedBy`, defaultMessage: "Issued By" },
   name: { id: `${scope}.name`, defaultMessage: "Name" },
+  nessesaryCount: {
+    id: `${scope}.nessesaryCount`,
+    defaultMessage: "Nessesary Count",
+  },
   PPEAcceptedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
   PPEGetSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
   PPEPassedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
@@ -31,13 +45,12 @@ export default defineMessages({
     id: `${scope}.PPEName`,
     defaultMessage: "PPE Name",
   },
-  certificateNumber: {
-    id: `${scope}.certificateNumber`,
-    defaultMessage: "certificateNumber",
-  },
-  issuedBy: { id: `${scope}.issuedBy`, defaultMessage: "Issued By" },
   returned: { id: `${scope}.returned`, defaultMessage: "Returned" },
   password: { id: `${scope}.password`, defaultMessage: "Password" },
+  personalNumber: {
+    id: `${scope}.personalNumber`,
+    defaultMessage: "Personal Number",
+  },
   profile: { id: `${scope}.profile`, defaultMessage: "Profile" },
   repeatPassword: {
     id: `${scope}.repeatPassword`,
@@ -47,6 +60,8 @@ export default defineMessages({
     id: `${scope}.replacementPeriod`,
     defaultMessage: "replacementPeriod",
   },
+  sign: { id: `${scope}.sign`, defaultMessage: "Sign" },
+  title: { id: `${scope}.title`, defaultMessage: "Название" },
   wear: { id: `${scope}.wear`, defaultMessage: "wear" },
 
   loginTitle: { id: `${scope}.loginTitle`, defaultMessage: "Login" },

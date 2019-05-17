@@ -1,0 +1,30 @@
+.row {
+    display: flex;
+    align-items: center;
+
+    padding: 11px 0;
+}
+
+.row--end {
+    justify-content: flex-end;
+}
+
+.row--buttons {
+    & > button {
+        margin-right: 16px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.row--links {
+    & > a {
+        margin-right: 16px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

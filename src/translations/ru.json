@@ -1,24 +1,30 @@
 {
-  "app.title": "PRO СИЗ",
+  "app.applicationTitle": "PRO СИЗ",
 
   "app.actions": "Действия",
+  "app.actualCount": "Фактическое количество",
   "app.approve": "Подтвердить",
+  "app.certificateNumber": "№ сертификата",
   "app.count": "Количество",
   "app.date": "Дата",
   "app.emptyDataSourceMessage": "Нет данных",
+  "app.fullName": "Ф.И.О",
   "app.home": "Главная",
+  "app.issuedBy": "Выдано",
   "app.name": "Имя",
+  "app.nessesaryCount": "Необходимое количество",
   "app.PPEAcceptedSign": "Подпись принявшего СИЗ",
   "app.PPEGetSign": "Подпись получившего СИЗ",
   "app.PPEPassedSign": "Подпись сдавшего СИЗ",
   "app.PPEName": "Наименование СИЗ",
   "app.replacementPeriod": "Период замены",
-  "app.certificateNumber": "№ сертификата",
-  "app.issuedBy": "Выдано",
   "app.returned": "Возвращено",
   "app.password": "Пароль",
+  "app.personalNumber": "Табельный номер",
   "app.profile": "Профиль",
   "app.repeatPassword": "Еще раз",
+  "app.sign": "Подпись",
+  "app.title": "Название",
   "app.wear": "Износ",
 
   "app.bodyValue": "Значение параметра",
@@ -49,6 +55,7 @@
 
   "containers.HomePage.pageTitle": "Главная страница",
   "containers.HomePage.createRequisitionButton.label": "Сформировать заявку",
+  "containers.HomePage.createRequisitionStoreButton.label": "Сформировать заявку на склад",
 
   "containers.HistoryPage.pageTitle": "История",
   "containers.HistoryPage.createRequisitionButton.label": "Сформироовать заявку",
@@ -70,5 +77,6 @@
   "containers.ProfilePage.languageSelect": "Язык",
 
   "containers.StorePage.pageTitle": "Склад",
-  "containers.RequisitionPage.pageTitle": "Заявка"
+  "containers.RequisitionPage.pageTitle": "Заявка",
+  "containers.RequisitionStorePage.pageTitle": "Заявка на склад"
 }

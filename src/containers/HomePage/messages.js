@@ -13,4 +13,10 @@ export default defineMessages({
       defaultMessage: "Create Requisition",
     },
   },
+  createRequisitionStoreButton: {
+    label: {
+      id: `${scope}.createRequisitionStoreButton.label`,
+      defaultMessage: "Create Store Requisition",
+    },
+  },
 });

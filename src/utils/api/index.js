@@ -58,3 +58,8 @@ export const entityQueries = collections.reduce((acc, collection) => {
 
 export const createRequisitionRequest = args =>
   responseHandler(ipcRenderer.sendSync("requisition_create", withToken(args)));
+
+export const createRequisitionStoreRequest = args =>
+  responseHandler(
+    ipcRenderer.sendSync("requisitionStore_create", withToken(args))
+  );

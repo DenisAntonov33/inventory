@@ -195,7 +195,7 @@ class Instance extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              <FormattedMessage {...commonMessages.title} />
+              <FormattedMessage {...commonMessages.applicationTitle} />
             </Typography>
             <Button
               color="inherit"

@@ -27,6 +27,7 @@ import EmployeesItemPage from "../EmployeesItemPage";
 import HistoryPage from "../HistoryPage";
 import StorePage from "../StorePage";
 import RequisitionPage from "../RequisitionPage";
+import RequisitionStorePage from "../RequisitionStorePage";
 
 function PublicRoute({ component: Component, ...rest }) {
   return (
@@ -109,6 +110,11 @@ class App extends Component {
                   exact
                   path="/requisition"
                   component={RequisitionPage}
+                />
+                <PrivateRoute
+                  exact
+                  path="/requisition-store"
+                  component={RequisitionStorePage}
                 />
                 <PublicRoute
                   path="/login"

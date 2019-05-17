@@ -24,14 +24,27 @@ class Instance extends Component {
             <FormattedMessage {...messages.pageTitle} />
           </h1>
         </header>
-        <Button
-          variant="contained"
-          color="primary"
-          component={Link}
-          to="/requisition"
-        >
-          <FormattedMessage {...messages.createRequisitionButton.label} />
-        </Button>
+
+        <div className="row row--links">
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/requisition"
+          >
+            <FormattedMessage {...messages.createRequisitionButton.label} />
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/requisition-store"
+          >
+            <FormattedMessage
+              {...messages.createRequisitionStoreButton.label}
+            />
+          </Button>
+        </div>
       </div>
     );
   }

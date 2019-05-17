@@ -31,7 +31,7 @@ const HistoryAlias = ["history"];
 const HistoryActions = actions[HistoryAlias];
 const HistorySelectors = selectors[HistoryAlias];
 
-const mapStateToProps = ({ lists, data, requisition }) => ({
+const mapStateToProps = ({ lists, data, requisition, requisitionStore }) => ({
   data,
 
   bodyParamsItems: BodyParamsSelectors.getItems(lists[BodyParamsAlias], data),
@@ -42,6 +42,7 @@ const mapStateToProps = ({ lists, data, requisition }) => ({
   historyItems: HistorySelectors.getItems(lists[HistoryAlias], data),
 
   requisition: requisition.data,
+  requisitionStore: requisitionStore.data,
 });
 
 const mapDispatchToProps = dispatch => ({

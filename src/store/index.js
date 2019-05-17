@@ -10,6 +10,9 @@ import { saga as userSaga } from "./modules/user/saga";
 import { reducer as requisitionReducer } from "./modules/requisition/reducer";
 import { saga as requisitionSaga } from "./modules/requisition/saga";
 
+import { reducer as requisitionStoreReducer } from "./modules/requisition-store/reducer";
+import { saga as requisitionStoreSaga } from "./modules/requisition-store/saga";
+
 import { reducer as localesReducer } from "./modules/intl";
 
 import {
@@ -21,7 +24,12 @@ import {
 const isTest = process.env.NODE_ENV === "test";
 
 const rootSaga = function* rootSaga() {
-  yield all([...userSaga, ...requisitionSaga, ...entitySagas]);
+  yield all([
+    ...userSaga,
+    ...requisitionSaga,
+    ...requisitionStoreSaga,
+    ...entitySagas,
+  ]);
 };
 
 const rootReducer = combineReducers({
@@ -31,6 +39,7 @@ const rootReducer = combineReducers({
   data: entityReducer,
   lists: entityListReducer,
   requisition: requisitionReducer,
+  requisitionStore: requisitionStoreReducer,
 });
 
 const loggerMiddleware = isTest ? () => {} : createLogger();
