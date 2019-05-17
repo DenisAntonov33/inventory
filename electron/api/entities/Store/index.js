@@ -1,4 +1,3 @@
-const { getId } = require("../../../services/id");
 const { normalize } = require("../../../utils");
 
 const { Entity } = require("../_Entity_");
@@ -18,6 +17,39 @@ class Store extends Entity {
     super(collection);
   }
 
+  async create(event, _args) {
+    try {
+      const { token, args } = _args;
+      const user = await this._authentification(token);
+
+      const id = `${args.entity}_${args.bodyValue}_id`;
+      const isItemExist = !!user.data[this.collection.link].find(
+        e => e.id === id
+      );
+
+      const item = isItemExist
+        ? await this._updateById(id, { $inc: { count: args.count } })
+        : await this._create(args);
+
+      const changeFunction = oldData => {
+        oldData.data[this.collection.link] = [
+          ...oldData.data[this.collection.link],
+          item.id,
+        ];
+        return oldData;
+      };
+
+      await user.atomicUpdate(changeFunction);
+      await this.saveDatabase();
+
+      event.returnValue = this.res.success({ item });
+      return event;
+    } catch (err) {
+      event.returnValue = this.res.error(500, err.message);
+      return event;
+    }
+  }
+
   async _create(args) {
     try {
       const db = await this.getDatabase();
@@ -35,11 +67,11 @@ class Store extends Entity {
       if (!storeBodyValue) throw new Error("invalid body value");
 
       const item = await collection.insert({
-        id: getId(),
+        id: `${storeEntity.id}_${storeBodyValue.id}_id`,
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),
         entity: storeEntity.id,
-        bodyValue: args.bodyValue,
+        bodyValue: storeBodyValue.id,
         count: args.count,
       });
 
