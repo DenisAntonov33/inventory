@@ -5,7 +5,6 @@ import Header from "./header";
 class SRCardToPrint extends Component {
   render() {
     const { data } = this.props;
-    if (!data) return;
 
     return (
       <div className="to-print">
