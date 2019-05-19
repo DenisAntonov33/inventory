@@ -17,3 +17,6 @@ dist:
 
 test:
 	yarn electron-test-w
+
+secrets:
+	cp ./electron/secrets.example.json ./electron/secrets.json
