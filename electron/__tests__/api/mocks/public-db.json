@@ -1,0 +1,240 @@
+{
+  "name": "inventory_db",
+  "instanceToken": "xocum8ck0q",
+  "encrypted": false,
+  "passwordHash": null,
+  "collections": [
+    {
+      "name": "body_value",
+      "schemaHash": "bd36b5eb57ce93b2b4c4acd509c8f306",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "param1_value1_",
+          "id": "param1_value1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "value2_param1",
+          "id": "param1_value2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "value1_param2",
+          "id": "param2_value1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "value2_param2",
+          "id": "param2_value2_id"
+        }
+      ]
+    },
+    {
+      "name": "body_param",
+      "schemaHash": "d76310eab4c9b4db5f95c0a8aadd3572",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "param1",
+          "values": ["param1_value1_id", "param1_value2_id"],
+          "id": "param1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "param2",
+          "values": ["param2_value1_id", "param2_value2_id"],
+          "id": "param2_id"
+        }
+      ]
+    },
+    {
+      "name": "entity",
+      "schemaHash": "446a98d304af00cb9034d093f4e0e7b9",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "bodyParam": "param1_id",
+          "name": "entity1",
+          "replacementPeriod": 1,
+          "id": "entity1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "bodyParam": "param2_id",
+          "name": "entity2",
+          "replacementPeriod": 1,
+          "id": "entity2_id"
+        }
+      ]
+    },
+    {
+      "name": "position",
+      "schemaHash": "32b89c1d29805b5bd9afc8fb6520e229",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entities": ["entity1_id", "entity2_id"],
+          "name": "position1",
+          "id": "position1_id"
+        }
+      ]
+    },
+    {
+      "name": "employee",
+      "schemaHash": "7036704caaea8128a26532e96ba18182",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "employee1",
+          "positions": ["position1_id"],
+          "bodyParams": [
+            {
+              "bodyParam": "param1_id",
+              "bodyValue": "param1_value1_id"
+            },
+            {
+              "bodyParam": "param2_id",
+              "bodyValue": "param2_value1_id"
+            }
+          ],
+          "id": "employee1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "employee2",
+          "positions": ["position1_id"],
+          "bodyParams": [
+            {
+              "bodyParam": "param1_id",
+              "bodyValue": "param1_value2_id"
+            },
+            {
+              "bodyParam": "param2_id",
+              "bodyValue": "param2_value2_id"
+            }
+          ],
+          "id": "employee2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "employee3",
+          "positions": ["position1_id"],
+          "bodyParams": [
+            {
+              "bodyParam": "param1_id",
+              "bodyValue": "param1_value2_id"
+            },
+            {
+              "bodyParam": "param2_id",
+              "bodyValue": "param2_value2_id"
+            }
+          ],
+          "id": "employee3_id"
+        }
+      ]
+    },
+    {
+      "name": "history",
+      "schemaHash": "b286c90b8810abe73dde20f471c20c26",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": []
+    },
+    {
+      "name": "store",
+      "schemaHash": "b56d2d5589ac70b8e82905ec57ca0349",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity1_id",
+          "bodyValue": "param1_value1_id",
+          "count": 5,
+          "id": "entity1_param1_value1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity1_id",
+          "bodyValue": "param1_value2_id",
+          "count": 10,
+          "id": "entity1_param1_value2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity2_id",
+          "bodyValue": "param2_value1_id",
+          "count": 15,
+          "id": "entity2_param2_value1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity2_id",
+          "bodyValue": "param2_value2_id",
+          "count": 20,
+          "id": "entity2_param2_value2_id"
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "schemaHash": "51e3af906685bed0b1ac6ee684878866",
+      "encrypted": false,
+      "passwordHash": null,
+      "docs": [
+        {
+          "name": "root",
+          "password": "4ddfb6c26e4de987e988471e48d64bd669d77b9d",
+          "createdAt": 1557768763110,
+          "data": {
+            "bodyValues": [
+              "param1_value1_id",
+              "param1_value2_id",
+              "param2_value1_id",
+              "param2_value2_id"
+            ],
+            "bodyParams": ["param1_id", "param2_id"],
+            "entities": ["entity1_id", "entity2_id"],
+            "positions": ["position1_id", "position2_id"],
+            "employees": ["employee1_id", "employee2_id"],
+            "store": [
+              "entity1_param1_value1_id",
+              "entity1_param1_value2_id",
+              "entity2_param2_value1_id",
+              "entity2_param2_value2_id"
+            ],
+            "history": ["employee1_entity1_param1_value1_id"]
+          },
+          "id": "user1"
+        }
+      ]
+    }
+  ]
+}

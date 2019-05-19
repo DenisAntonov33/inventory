@@ -1,8 +1,8 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-const { initApi } = require("./api");
-const { database } = require("./db");
+const { Api } = require("./api");
+const { PersistentDatabase } = require("./db/PersistentDatabase");
 
 let mainWindow;
 
@@ -32,8 +32,12 @@ function createWindow() {
 
 app.on("ready", async () => {
   try {
-    await database.createInstance("inventory_db");
-    initApi();
+    const db = new PersistentDatabase();
+    await db.createInstance("db");
+
+    const api = new Api(db);
+    api.publish();
+
     createWindow();
   } catch (err) {
     console.log(err);

@@ -17,8 +17,10 @@ class PersistentDatabase extends Database {
 
   async createInstance(name) {
     try {
-      await this._createInstance(name);
+      this.instance = await this._createInstance(name);
       await this.import();
+
+      return this.instance;
     } catch (err) {
       throw new Error(err);
     }

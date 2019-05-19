@@ -1,3 +1,4 @@
+const { cloneDeep } = require("lodash");
 const RxDB = require("rxdb");
 RxDB.plugin(require("pouchdb-adapter-memory"));
 
@@ -19,7 +20,7 @@ class Database {
 
   async getInstance(name) {
     try {
-      if (!this.instance) await this._createInstance(name);
+      if (!this.instance) this.instance = await this._createInstance(name);
       return this.instance;
     } catch (err) {
       throw new Error(err.message);
@@ -28,7 +29,8 @@ class Database {
 
   async createInstance(name) {
     try {
-      await this._createInstance(name);
+      this.instance = await this._createInstance(name);
+      return this.instance;
     } catch (err) {
       throw new Error(err.message);
     }
@@ -36,15 +38,15 @@ class Database {
 
   async _withCollections(db) {
     try {
-      await db.collection(BodyValueCollection);
-      await db.collection(BodyParamCollection);
-      await db.collection(EntityCollection);
-      await db.collection(PositionCollection);
-      await db.collection(EmployeeCollection);
-      await db.collection(HistoryCollection);
-      await db.collection(StoreCollection);
+      await db.collection(cloneDeep(BodyValueCollection));
+      await db.collection(cloneDeep(BodyParamCollection));
+      await db.collection(cloneDeep(EntityCollection));
+      await db.collection(cloneDeep(PositionCollection));
+      await db.collection(cloneDeep(EmployeeCollection));
+      await db.collection(cloneDeep(HistoryCollection));
+      await db.collection(cloneDeep(StoreCollection));
 
-      const userCollection = await db.collection(UserCollection);
+      const userCollection = await db.collection({ ...UserCollection });
       userCollection.preInsert(async plainData => {
         try {
           const { name } = plainData;
@@ -74,7 +76,7 @@ class Database {
         adapter: "memory",
       });
 
-      this.instance = await this._withCollections(db);
+      return await this._withCollections(db);
     } catch (err) {
       throw new Error(err.message);
     }
