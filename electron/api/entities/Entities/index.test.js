@@ -1,82 +1,72 @@
 const { database } = require("../../../db");
-const { Entities } = require("../Entities");
-const { BodyParams } = require("../BodyParams");
+const mockedDatabase = require("./mocks/database.json");
 
-const {
-  BodyParamCollection,
-  EntityCollection,
-} = require("../../../db/collections");
+const { Entities } = require("../Entities");
+const { EntityCollection } = require("../../../db/collections");
 
 const entities = new Entities(EntityCollection);
-const bodyParams = new BodyParams(BodyParamCollection);
 
 describe("Entities", () => {
   beforeAll(async () => {
     try {
       const dbSuffix = new Date().getTime();
       await database.createInstance(`test${dbSuffix}`);
+      await database.load(mockedDatabase);
     } catch (err) {
       console.log(err);
     }
   });
 
   test("Creating", async () => {
-    const bodyParamData1 = { name: "param1" };
-    const param1 = await bodyParams._create(bodyParamData1);
-
     const entityData1 = {
-      name: "param1",
+      name: "entity1",
       replacementPeriod: 1,
-      bodyParam: param1.id,
+      bodyParam: "param1_id",
     };
     const entity1 = await entities._create(entityData1);
 
     expect(entity1.name).toBe(entityData1.name);
-    expect(entity1.bodyParam.name).toBe(param1.name);
+    expect(entity1.bodyParam.name).toBe("param1");
+
+    expect.assertions(2);
+  });
+
+  test("Creating without param", async () => {
+    const entityData = {
+      name: "entity-without-param",
+      replacementPeriod: 1,
+    };
+
+    const entity = await entities._create(entityData);
+
+    expect(entity.name).toBe(entityData.name);
+    expect(entity.bodyParam).toBeUndefined();
 
     expect.assertions(2);
   });
 
   test("Adding and removing params", async () => {
-    const bodyParamData1 = { name: "param1" };
-    const bodyParamData2 = { name: "param2" };
-    const param1 = await bodyParams._create(bodyParamData1);
-    const param2 = await bodyParams._create(bodyParamData2);
-
-    const entityData1 = { name: "param1", replacementPeriod: 1 };
+    const entityData1 = { name: "entity1", replacementPeriod: 1 };
     let entity1 = await entities._create(entityData1);
-    expect(entity1.name).toBe(entityData1.name);
 
     entity1 = await entities._updateById(entity1.id, {
-      $set: { bodyParam: param1.id },
+      $set: { bodyParam: "param1_id" },
     });
-    expect(entity1.bodyParam.name).toBe(param1.name);
+    expect(entity1.bodyParam.name).toBe("param1");
 
     entity1 = await entities._updateById(entity1.id, {
-      $set: { bodyParam: param2.id },
+      $set: { bodyParam: "param2_id" },
     });
-    expect(entity1.bodyParam.name).toBe(param2.name);
+    expect(entity1.bodyParam.name).toBe("param2");
 
-    expect.assertions(3);
+    expect.assertions(2);
   });
 
   test("Expand item", async () => {
-    const bodyValueData1 = { name: "value1" };
-
-    const bodyParamData1 = { name: "param1" };
-    const bodyParamData2 = { name: "param2" };
-
-    let param1 = await bodyParams._create(bodyParamData1);
-    let param2 = await bodyParams._create(bodyParamData2);
-
-    param1 = await bodyParams._updateById(param2.id, {
-      $create: { values: bodyValueData1 },
-    });
-
     const entityData1 = {
-      name: "param1",
+      name: "entity1",
       replacementPeriod: 1,
-      bodyParam: param1.id,
+      bodyParam: "param1_id",
     };
     const entity1 = await entities._create(entityData1);
 
@@ -87,19 +77,10 @@ describe("Entities", () => {
   });
 
   test("Expand list", async () => {
-    const bodyValueData1 = { name: "value1" };
-
-    const bodyParamData1 = { name: "param1" };
-
-    let param1 = await bodyParams._create(bodyParamData1);
-    param1 = await bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData1 },
-    });
-
     const entityData1 = {
       name: "entity1",
       replacementPeriod: 1,
-      bodyParam: param1.id,
+      bodyParam: "param1_id",
     };
     const entity1 = await entities._create(entityData1);
 
@@ -110,5 +91,19 @@ describe("Entities", () => {
     expect(typeof entitiyItem.bodyParam.values[0]).toBe("object");
 
     expect.assertions(2);
+  });
+
+  test("Expand list - entity without param", async () => {
+    const entityData1 = {
+      name: "expanded-entity-without-param",
+      replacementPeriod: 1,
+    };
+    const entity1 = await entities._create(entityData1);
+
+    const entitiesList = await entities._readMany();
+    const entitiyItem = entitiesList.find(e => e.id === entity1.id);
+
+    expect(typeof entitiyItem.bodyParam).toBe("undefined");
+    expect.assertions(1);
   });
 });

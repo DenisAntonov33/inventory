@@ -10,6 +10,8 @@ const bodyParams = new BodyParams(BodyParamCollection);
 class Entities extends Entity {
   async _expand(item) {
     try {
+      if (!item.bodyParam) return item.toJSON();
+
       const bodyParam = await item.bodyParam_;
       const expandedBodyParam = await bodyParams._expand(bodyParam);
 
