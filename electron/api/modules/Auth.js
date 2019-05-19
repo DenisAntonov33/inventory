@@ -45,8 +45,6 @@ class Auth {
 
       const token = tokenService.sign({ id: user.get("id") });
 
-      console.log(token);
-
       event.returnValue = res.success({ token });
       return event;
     } catch (err) {
