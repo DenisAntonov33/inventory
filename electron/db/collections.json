@@ -81,7 +81,8 @@
           "type": "number"
         },
         "certificate": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "bodyParam": {
           "ref": "body_param",
