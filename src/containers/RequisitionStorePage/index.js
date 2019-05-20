@@ -59,6 +59,8 @@ class EntityPage extends Component {
       setRequisitionStoreItems,
       getBodyValuesItem,
       getEntitiesItem,
+
+      user,
     } = this.props;
 
     return (
@@ -171,6 +173,7 @@ class EntityPage extends Component {
             bodyValue: getBodyValuesItem(e.bodyValue),
             entity: getEntitiesItem(e.entity),
           }))}
+          user={user}
         />
       </div>
     );

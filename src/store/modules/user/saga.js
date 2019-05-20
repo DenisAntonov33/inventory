@@ -58,8 +58,8 @@ function* getUser() {
 
 function* updateUser({ payload }) {
   try {
-    const { user } = yield updateUserRequest(payload);
-    yield put(UpdateUserSuccess(user));
+    const { item } = yield updateUserRequest(payload);
+    yield put(UpdateUserSuccess(item));
   } catch (err) {
     yield put(UpdateUserFailure(err));
   }

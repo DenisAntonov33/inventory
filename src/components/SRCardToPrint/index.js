@@ -4,7 +4,7 @@ import Header from "./header";
 
 class SRCardToPrint extends Component {
   render() {
-    const { data } = this.props;
+    const { data, user } = this.props;
 
     return (
       <div className="to-print">
@@ -15,8 +15,8 @@ class SRCardToPrint extends Component {
             {data.length &&
               data.map(e => (
                 <tr key={`${e.entity}${e.bodyValue}`}>
-                  <td>1234567890</td>
-                  <td>Алексенцев Е.Н.</td>
+                  <td>{user.personalNumber}</td>
+                  <td>{user.fullName}</td>
                   <td>{e.entity.name}</td>
                   <td>{e.bodyValue ? e.bodyValue.name : ""}</td>
                   <td>{e.nessesaryCount}</td>

@@ -56,7 +56,14 @@ class User {
 
       if (!item) throw new Error("Item not found");
 
-      event.returnValue = this.res.success({ item });
+      const filteredItem = {
+        name: item.name,
+        fullName: item.fullName,
+        area: item.area,
+        personalNumber: item.personalNumber,
+      };
+
+      event.returnValue = this.res.success({ item: filteredItem });
       return event;
     } catch (err) {
       event.returnValue = this.res.error(500, err.message);
