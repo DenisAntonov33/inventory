@@ -18,7 +18,7 @@ class SRCardToPrint extends Component {
                   <td>1234567890</td>
                   <td>Алексенцев Е.Н.</td>
                   <td>{e.entity.name}</td>
-                  <td>{e.bodyValue.name}</td>
+                  <td>{e.bodyValue ? e.bodyValue.name : ""}</td>
                   <td>{e.nessesaryCount}</td>
                   <td />
                   <td />

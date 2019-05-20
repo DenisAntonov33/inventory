@@ -114,7 +114,10 @@ class EntityPage extends Component {
               title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
-              render: rowData => getBodyValuesItem(rowData.bodyValue).name,
+              render: rowData =>
+                rowData.bodyValue
+                  ? getBodyValuesItem(rowData.bodyValue).name
+                  : "-",
             },
             {
               title: <FormattedMessage {...commonMessages.count} />,

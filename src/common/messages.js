@@ -33,12 +33,18 @@ export default defineMessages({
   fullName: { id: `${scope}.fullName`, defaultMessage: "Full Name" },
   home: { id: `${scope}.home`, defaultMessage: "Home" },
   issuedBy: { id: `${scope}.issuedBy`, defaultMessage: "Issued By" },
+  issueMethod: { id: `${scope}.issueMethod`, defaultMessage: "Issue Method" },
   name: { id: `${scope}.name`, defaultMessage: "Name" },
   nessesaryCount: {
     id: `${scope}.nessesaryCount`,
     defaultMessage: "Nessesary Count",
   },
-  PPEAcceptedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
+
+  PPE: { id: `${scope}.PPE`, defaultMessage: "PPE" },
+  PPEAcceptedSign: {
+    id: `${scope}.PPEAcceptedSign`,
+    defaultMessage: "PPEAcceptedSign",
+  },
   PPEGetSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
   PPEPassedSign: { id: `${scope}.PPEGetSign`, defaultMessage: "PPEGetSign" },
   PPEName: {
@@ -60,9 +66,13 @@ export default defineMessages({
     id: `${scope}.replacementPeriod`,
     defaultMessage: "replacementPeriod",
   },
+  receiptSign: { id: `${scope}.receiptSign`, defaultMessage: "Receipt Sign" },
   sign: { id: `${scope}.sign`, defaultMessage: "Sign" },
   title: { id: `${scope}.title`, defaultMessage: "Название" },
   wear: { id: `${scope}.wear`, defaultMessage: "wear" },
+  WNA: { id: `${scope}.WNA`, defaultMessage: "WNA" },
+  WNAType: { id: `${scope}.WNAType`, defaultMessage: "WNA Type" },
+  WNAGetSign: { id: `${scope}.WNAGetSign`, defaultMessage: "WNA Get Sign" },
 
   loginTitle: { id: `${scope}.loginTitle`, defaultMessage: "Login" },
   signupTitle: { id: `${scope}.signupTitle`, defaultMessage: "Signup" },

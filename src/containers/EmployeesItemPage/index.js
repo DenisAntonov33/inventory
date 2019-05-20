@@ -8,6 +8,7 @@ import messages from "./messages";
 
 import storeItemsHOC from "../StoreItemsHOC";
 import PPECardToPrint from "../../components/PPECardToPrint";
+import WNACardToPrint from "../../components/WNACardToPrint";
 
 import MaterialTable from "material-table";
 import Select from "@material-ui/core/Select";
@@ -190,7 +191,7 @@ class EntityPage extends Component {
 
         <header className="page__header">
           <h1>
-            <FormattedMessage {...messages.historyTitle} />
+            <FormattedMessage {...commonMessages.PPE} />
           </h1>
 
           <ReactToPrint
@@ -199,13 +200,33 @@ class EntityPage extends Component {
                 <FormattedMessage {...commonMessages.printButton.label} />
               </Button>
             )}
-            content={() => this.componentRef}
+            content={() => this.ppeComponentRef}
           />
         </header>
 
         <PPECardToPrint
-          ref={el => (this.componentRef = el)}
-          data={employeeHistoryItems}
+          ref={el => (this.ppeComponentRef = el)}
+          data={employeeHistoryItems.filter(e => e.entity.bodyParam)}
+        />
+
+        <header className="page__header">
+          <h1>
+            <FormattedMessage {...commonMessages.WNA} />
+          </h1>
+
+          <ReactToPrint
+            trigger={() => (
+              <Button variant="contained" color="primary">
+                <FormattedMessage {...commonMessages.printButton.label} />
+              </Button>
+            )}
+            content={() => this.wnaComponentRef}
+          />
+        </header>
+
+        <WNACardToPrint
+          ref={el => (this.wnaComponentRef = el)}
+          data={employeeHistoryItems.filter(e => !e.entity.bodyParam)}
         />
       </div>
     );

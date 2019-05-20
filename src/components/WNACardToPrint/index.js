@@ -17,27 +17,7 @@ class PPECardToPrint extends Component {
       };
     };
 
-    const convertedData = data
-      .sort((a, b) => {
-        return a.entity.id === b.entity.id
-          ? a.date - b.date
-          : a.entity.id >= b.entity.id;
-      })
-      .map((curr, index, arr) => {
-        const item = getMappedItem(curr);
-        if (index === arr.length - 1) return item;
-
-        const nextItem = arr[index + 1];
-        if (curr.entity.id !== nextItem.entity.id) return item;
-
-        return {
-          ...item,
-          returned: {
-            ...getMappedItem(nextItem),
-          },
-        };
-      })
-      .sort((a, b) => a.date - b.date);
+    const convertedData = data.map(e => getMappedItem(e));
 
     return (
       <div className="to-print">
@@ -53,11 +33,6 @@ class PPECardToPrint extends Component {
                   <td>{e.date}</td>
                   <td>{e.count}</td>
                   <td>{e.wear}</td>
-                  <td> </td>
-                  <td>{e.returned && e.returned.date}</td>
-                  <td>{e.returned && e.returned.count}</td>
-                  <td>{e.returned && e.returned.wear}</td>
-                  <td> </td>
                   <td> </td>
                 </tr>
               ))}

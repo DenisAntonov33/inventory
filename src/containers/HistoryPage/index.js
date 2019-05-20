@@ -277,7 +277,10 @@ class EntityPage extends Component {
                   </Select>
                 );
               },
-              render: rowData => getBodyValuesItem(rowData.bodyValue).name,
+              render: rowData =>
+                rowData.bodyValue
+                  ? getBodyValuesItem(rowData.bodyValue).name
+                  : "-",
             },
             {
               title: <FormattedMessage {...commonMessages.count} />,
