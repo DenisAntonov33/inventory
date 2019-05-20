@@ -20,6 +20,7 @@ export default defineMessages({
   actions: { id: `${scope}.actions`, defaultMessage: "Actions" },
   actualCount: { id: `${scope}.actualCount`, defaultMessage: "Actual Count" },
   approve: { id: `${scope}.approve`, defaultMessage: "Approve" },
+  area: { id: `${scope}.area`, defaultMessage: "area" },
   certificateNumber: {
     id: `${scope}.certificateNumber`,
     defaultMessage: "certificateNumber",
@@ -39,6 +40,7 @@ export default defineMessages({
     id: `${scope}.nessesaryCount`,
     defaultMessage: "Nessesary Count",
   },
+  newPassword: { id: `${scope}.newPassword`, defaultMessage: "New Password" },
 
   PPE: { id: `${scope}.PPE`, defaultMessage: "PPE" },
   PPEAcceptedSign: {
@@ -68,7 +70,9 @@ export default defineMessages({
   },
   receiptSign: { id: `${scope}.receiptSign`, defaultMessage: "Receipt Sign" },
   sign: { id: `${scope}.sign`, defaultMessage: "Sign" },
+  save: { id: `${scope}.save`, defaultMessage: "Save" },
   title: { id: `${scope}.title`, defaultMessage: "Название" },
+  update: { id: `${scope}.update`, defaultMessage: "Обновить" },
   wear: { id: `${scope}.wear`, defaultMessage: "wear" },
   WNA: { id: `${scope}.WNA`, defaultMessage: "WNA" },
   WNAType: { id: `${scope}.WNAType`, defaultMessage: "WNA Type" },

@@ -6,11 +6,19 @@ import {
   READ_USER_REQUEST,
   LOGIN_REQUEST,
   SIGNUP_REQUEST,
+  UPDATE_USER_REQUEST,
   ReadUserFailure,
   ReadUserSuccess,
+  UpdateUserFailure,
+  UpdateUserSuccess,
 } from "./actions";
 
-import { signupRequest, loginRequest, meRequest } from "../../../utils/api";
+import {
+  signupRequest,
+  loginRequest,
+  meRequest,
+  updateUserRequest,
+} from "../../../utils/api";
 
 function* login({ payload: { name, password } }) {
   try {
@@ -29,6 +37,7 @@ function* signup({ payload: { name, password, password1 } }) {
   try {
     const { token, user } = yield signupRequest({ name, password, password1 });
     setToken(token);
+
     yield put(ReadUserSuccess(user));
     yield call(() => {
       history.replace("/");
@@ -47,10 +56,20 @@ function* getUser() {
   }
 }
 
+function* updateUser({ payload }) {
+  try {
+    const { user } = yield updateUserRequest(payload);
+    yield put(UpdateUserSuccess(user));
+  } catch (err) {
+    yield put(UpdateUserFailure(err));
+  }
+}
+
 function* userSagaWatcher() {
   yield takeLatest(READ_USER_REQUEST, getUser);
   yield takeLatest(LOGIN_REQUEST, login);
   yield takeLatest(SIGNUP_REQUEST, signup);
+  yield takeLatest(UPDATE_USER_REQUEST, updateUser);
 }
 
 export const saga = [fork(userSagaWatcher)];

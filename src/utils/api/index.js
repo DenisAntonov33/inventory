@@ -36,6 +36,9 @@ export const signupRequest = args =>
 export const meRequest = args =>
   responseHandler(ipcRenderer.sendSync("me", withToken(args)));
 
+export const updateUserRequest = args =>
+  responseHandler(ipcRenderer.sendSync("user_update", withToken(args)));
+
 export const entityQueries = collections.reduce((acc, collection) => {
   const queries = [
     "create",
