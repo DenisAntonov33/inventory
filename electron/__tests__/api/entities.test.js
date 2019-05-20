@@ -23,6 +23,7 @@ describe("Entities", () => {
       name: "entity1",
       replacementPeriod: 1,
       bodyParam: "param1_id",
+      certificate: "1234",
     };
     const entity1 = await api.entities._create(entityData1);
 
@@ -36,6 +37,7 @@ describe("Entities", () => {
     const entityData = {
       name: "entity-without-param",
       replacementPeriod: 1,
+      certificate: "1234",
     };
 
     const entity = await api.entities._create(entityData);
@@ -68,6 +70,7 @@ describe("Entities", () => {
       name: "entity1",
       replacementPeriod: 1,
       bodyParam: "param1_id",
+      certificate: "1234",
     };
     const entity1 = await api.entities._create(entityData1);
 
@@ -82,6 +85,7 @@ describe("Entities", () => {
       name: "entity1",
       replacementPeriod: 1,
       bodyParam: "param1_id",
+      certificate: "1234",
     };
     const entity1 = await api.entities._create(entityData1);
 
@@ -98,6 +102,7 @@ describe("Entities", () => {
     const entityData1 = {
       name: "expanded-entity-without-param",
       replacementPeriod: 1,
+      certificate: "1234",
     };
     const entity1 = await api.entities._create(entityData1);
 

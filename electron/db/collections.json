@@ -80,6 +80,9 @@
         "replacementPeriod": {
           "type": "number"
         },
+        "certificate": {
+          "type": "string"
+        },
         "bodyParam": {
           "ref": "body_param",
           "type": "string"
@@ -204,6 +207,9 @@
         },
         "entity": {
           "ref": "entity",
+          "type": "string"
+        },
+        "certificate": {
           "type": "string"
         },
         "bodyValue": {

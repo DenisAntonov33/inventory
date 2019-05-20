@@ -88,6 +88,7 @@ class History extends Factory {
         employee: _employee.id,
         positions: _positions,
         entity: _entity.id,
+        certificate: _entity.certificate,
         ...(_bodyValue ? { bodyValue: _bodyValue.id } : {}),
         count: args.count,
       });

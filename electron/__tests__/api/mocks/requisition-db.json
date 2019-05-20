@@ -60,7 +60,7 @@
     },
     {
       "name": "entity",
-      "schemaHash": "446a98d304af00cb9034d093f4e0e7b9",
+      "schemaHash": "054fdded849379809899870b4d77c713",
       "encrypted": false,
       "passwordHash": null,
       "docs": [
@@ -70,6 +70,7 @@
           "bodyParam": "param1_id",
           "name": "entity1",
           "replacementPeriod": 1,
+          "certificate": "123",
           "id": "entity1_id"
         },
         {
@@ -78,6 +79,7 @@
           "bodyParam": "param2_id",
           "name": "entity2",
           "replacementPeriod": 1,
+          "certificate": "124",
           "id": "entity2_id"
         },
         {
@@ -85,6 +87,7 @@
           "updatedAt": 0,
           "name": "entity3",
           "replacementPeriod": 1,
+          "certificate": "125",
           "id": "entity3_id"
         }
       ]
@@ -165,7 +168,7 @@
     },
     {
       "name": "history",
-      "schemaHash": "b286c90b8810abe73dde20f471c20c26",
+      "schemaHash": "7f0df223fe0b46da9b0fb37be74b6f90",
       "encrypted": false,
       "passwordHash": null,
       "docs": []
