@@ -21,7 +21,9 @@ class Store extends Factory {
       const { token, args } = _args;
       const user = await this._authentification(token);
 
-      const id = `${args.entity}_${args.bodyValue}_id`;
+      const id = `store_${args.entity}_${
+        args.bodyValue ? args.bodyValue : ""
+      }_id`;
       const isItemExist = !!user.data[this.collection.link].find(
         e => e.id === id
       );
@@ -58,19 +60,22 @@ class Store extends Factory {
       if (!storeEntity) throw new Error("invalid entity");
 
       const storeBodyParam = storeEntity.bodyParam;
-      if (!storeBodyParam) throw new Error("invalid body param");
+      const storeBodyValue = storeBodyParam
+        ? storeBodyParam.values.find(e => e.id === args.bodyValue)
+        : null;
 
-      const storeBodyValue = storeBodyParam.values.find(
-        e => e.id === args.bodyValue
-      );
-      if (!storeBodyValue) throw new Error("invalid body value");
+      if (storeBodyParam && !storeBodyValue)
+        throw new Error("invalid body value");
 
       const item = await collection.insert({
-        id: `${storeEntity.id}_${storeBodyValue.id}_id`,
+        id: `store_${storeEntity.id}_${
+          storeBodyValue ? storeBodyValue.id : ""
+        }_id`,
+
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),
         entity: storeEntity.id,
-        bodyValue: storeBodyValue.id,
+        ...(storeBodyValue ? { bodyValue: storeBodyValue.id } : {}),
         count: args.count,
       });
 
@@ -88,7 +93,10 @@ class Store extends Factory {
       const availableEntities = items.map(e => e.entity);
       const entitiesList = await this.entities._readMany(availableEntities);
 
-      const availableBodyValues = items.map(e => e.bodyValue);
+      const availableBodyValues = items.reduce(
+        (acc, e) => (e.bodyValue ? [...acc, e.bodyValue] : acc),
+        []
+      );
       const bodyValuesList = await this.bodyValues._readMany(
         availableBodyValues
       );
@@ -110,6 +118,12 @@ class Store extends Factory {
   async _expand(item) {
     try {
       const entity = await this.entities._readById(item.entity);
+      if (!entity.bodyParam)
+        return {
+          ...item.toJSON(),
+          entity: entity,
+        };
+
       const bodyValue = entity.bodyParam.values.find(
         e => e.id === item.bodyValue
       );

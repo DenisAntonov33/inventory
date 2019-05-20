@@ -47,20 +47,27 @@ class Requisition extends Factory {
           for (let employeeEntity of employeePosition.entities) {
             const entityBodyParam = employeeEntity.bodyParam;
 
-            const employeeBodyParam = employeeCurr.bodyParams.find(
-              e => e.bodyParam.id === entityBodyParam.id
-            );
+            let employeeBodyParam = null;
 
-            if (!employeeBodyParam) continue;
+            if (entityBodyParam)
+              employeeBodyParam = employeeCurr.bodyParams.find(
+                e => e.bodyParam.id === entityBodyParam.id
+              );
 
-            const employeeBodyValue = employeeBodyParam.bodyValue;
+            if (entityBodyParam && !employeeBodyParam) continue;
+
+            const employeeBodyValue = employeeBodyParam
+              ? employeeBodyParam.bodyValue
+              : null;
 
             const lastHistoryItems = historyList
               .filter(
                 e =>
                   e.employee === employeeCurr.id &&
                   e.entity === employeeEntity.id &&
-                  e.bodyValue === employeeBodyValue.id
+                  (entityBodyParam
+                    ? e.bodyValue === employeeBodyValue.id
+                    : true)
               )
               .sort((a, b) => b.date - a.date);
 
@@ -83,7 +90,7 @@ class Requisition extends Factory {
               employee: employeeCurr.id,
               positions: employeeCurr.positions.map(e => e.id),
               entity: employeeEntity.id,
-              bodyValue: employeeBodyValue.id,
+              ...(employeeBodyValue ? { bodyValue: employeeBodyValue.id } : {}),
               count,
             });
           }

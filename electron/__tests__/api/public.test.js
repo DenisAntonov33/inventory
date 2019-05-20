@@ -49,7 +49,7 @@ describe("Public", () => {
     } = await api.store.readMany({}, { token: token });
 
     expect(status).toBe(200);
-    expect(items.length).toBe(4);
+    expect(items.length).toBe(5);
 
     expect.assertions(2);
   });

@@ -79,6 +79,13 @@
           "name": "entity2",
           "replacementPeriod": 1,
           "id": "entity2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "entity3",
+          "replacementPeriod": 1,
+          "id": "entity3_id"
         }
       ]
     },
@@ -91,7 +98,7 @@
         {
           "createdAt": 0,
           "updatedAt": 0,
-          "entities": ["entity1_id", "entity2_id"],
+          "entities": ["entity1_id", "entity2_id", "entity3_id"],
           "name": "position1",
           "id": "position1_id"
         }
@@ -200,6 +207,13 @@
           "bodyValue": "param2_value2_id",
           "count": 10,
           "id": "entity2_param2_value2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity3_id",
+          "count": 10,
+          "id": "store_entity3_id"
         }
       ]
     },
@@ -228,7 +242,8 @@
               "entity1_param1_value1_id",
               "entity1_param1_value2_id",
               "entity2_param2_value1_id",
-              "entity2_param2_value2_id"
+              "entity2_param2_value2_id",
+              "store_entity3_id"
             ],
             "history": ["employee1_entity1_param1_value1_id"]
           },

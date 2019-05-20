@@ -40,12 +40,14 @@ class RequisitionStore extends Factory {
       const requisitionList = await this.requisition._create(args);
 
       const data = requisitionList.reduce((acc, curr) => {
-        const key = `${curr.entity}${curr.bodyValue}`;
+        const key = curr.bodyValue
+          ? `${curr.entity}${curr.bodyValue}`
+          : `${curr.entity}`;
 
         if (acc[key] === undefined)
           acc[key] = {
             entity: curr.entity,
-            bodyValue: curr.bodyValue,
+            ...(curr.bodyValue ? { bodyValue: curr.bodyValue } : {}),
             count: 0,
           };
 
@@ -58,7 +60,9 @@ class RequisitionStore extends Factory {
         const item = data[e];
 
         const storeItem = storeList.find(
-          e => e.entity.id === item.entity && e.bodyValue.id === item.bodyValue
+          e =>
+            e.entity.id === item.entity &&
+            (e.bodyValue ? e.bodyValue.id === item.bodyValue : true)
         );
 
         if (!storeItem) return item;

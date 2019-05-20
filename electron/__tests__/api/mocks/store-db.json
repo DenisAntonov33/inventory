@@ -79,6 +79,13 @@
           "name": "entity2",
           "replacementPeriod": 1,
           "id": "entity2_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "entity3",
+          "replacementPeriod": 1,
+          "id": "entity3_id"
         }
       ]
     },
@@ -91,7 +98,7 @@
         {
           "createdAt": 0,
           "updatedAt": 0,
-          "entities": ["entity1_id", "entity2_id"],
+          "entities": ["entity1_id", "entity2_id", "entity3_id"],
           "name": "position1",
           "id": "position1_id"
         }
@@ -168,47 +175,7 @@
       "schemaHash": "b56d2d5589ac70b8e82905ec57ca0349",
       "encrypted": false,
       "passwordHash": null,
-      "docs": [
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "entity": "entity1_id",
-          "bodyValue": "param1_value1_id",
-          "count": 5,
-          "id": "store_entity1_param1_value1_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "entity": "entity1_id",
-          "bodyValue": "param1_value2_id",
-          "count": 10,
-          "id": "store_entity1_param1_value2_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "entity": "entity2_id",
-          "bodyValue": "param2_value1_id",
-          "count": 15,
-          "id": "store_entity2_param2_value1_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "entity": "entity2_id",
-          "bodyValue": "param2_value2_id",
-          "count": 20,
-          "id": "store_entity2_param2_value2_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "entity": "entity3_id",
-          "count": 20,
-          "id": "store_entity3__id"
-        }
-      ]
+      "docs": []
     },
     {
       "name": "user",
@@ -232,11 +199,11 @@
             "positions": ["position1_id", "position2_id"],
             "employees": ["employee1_id", "employee2_id"],
             "store": [
-              "store_entity1_param1_value1_id",
-              "store_entity1_param1_value2_id",
-              "store_entity2_param2_value1_id",
-              "store_entity2_param2_value2_id",
-              "store_entity3__id"
+              "entity1_param1_value1_id",
+              "entity1_param1_value2_id",
+              "entity2_param2_value1_id",
+              "entity2_param2_value2_id",
+              "store_entity3_id"
             ],
             "history": ["employee1_entity1_param1_value1_id"]
           },

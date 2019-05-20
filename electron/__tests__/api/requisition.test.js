@@ -19,9 +19,10 @@ describe("Requisition", () => {
     }
   });
 
-  test("Create - shoud be 6 items", async () => {
+  test("Create - shoud be 9 items", async () => {
     const data = await api.requisition._create({});
-    expect(data.length).toBe(6);
+
+    expect(data.length).toBe(9);
     expect.assertions(1);
   });
 

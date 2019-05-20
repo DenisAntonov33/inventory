@@ -60,14 +60,17 @@ describe("Requisition Store", () => {
       e => e.entity === "entity2_id" && e.bodyValue === "param2_value2_id"
     );
 
-    expect(data.length).toBe(4);
+    const reqStoreItem5 = data.find(e => e.entity === "entity3_id");
+
+    expect(data.length).toBe(5);
 
     expect(reqStoreItem1.count).toBe(0);
-    expect(reqStoreItem2.count).toBe(2);
-    expect(reqStoreItem3.count).toBe(1);
+    expect(reqStoreItem2.count).toBe(1);
+    expect(reqStoreItem3.count).toBe(0);
     expect(reqStoreItem4.count).toBe(1);
+    expect(reqStoreItem5.count).toBe(2);
 
-    expect.assertions(5);
+    expect.assertions(6);
   });
 
   test("Create - with store updating", async () => {
@@ -82,19 +85,23 @@ describe("Requisition Store", () => {
       count: 1,
     });
 
-    await api.store._updateById("entity1_param1_value1_id", {
+    await api.store._updateById("store_entity1_param1_value1_id", {
       $set: { count: 10 },
     });
 
-    await api.store._updateById("entity1_param1_value2_id", {
+    await api.store._updateById("store_entity1_param1_value2_id", {
       $set: { count: 1 },
     });
 
-    await api.store._updateById("entity2_param2_value1_id", {
+    await api.store._updateById("store_entity2_param2_value1_id", {
       $set: { count: 10 },
     });
 
-    await api.store._updateById("entity2_param2_value2_id", {
+    await api.store._updateById("store_entity2_param2_value2_id", {
+      $set: { count: 0 },
+    });
+
+    await api.store._updateById("store_entity3_id", {
       $set: { count: 0 },
     });
 
@@ -116,13 +123,16 @@ describe("Requisition Store", () => {
       e => e.entity === "entity2_id" && e.bodyValue === "param2_value2_id"
     );
 
-    expect(data.length).toBe(4);
+    const reqStoreItem5 = data.find(e => e.entity === "entity3_id");
+
+    expect(data.length).toBe(5);
 
     expect(reqStoreItem1.count).toBe(0);
     expect(reqStoreItem2.count).toBe(1);
     expect(reqStoreItem3.count).toBe(0);
     expect(reqStoreItem4.count).toBe(1);
+    expect(reqStoreItem5.count).toBe(3);
 
-    expect.assertions(5);
+    expect.assertions(6);
   });
 });

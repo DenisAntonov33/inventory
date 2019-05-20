@@ -30,7 +30,6 @@ class History extends Factory {
       if (!args.positions || !args.positions.length)
         throw new Error("positions required");
       if (!args.entity) throw new Error(" entity required");
-      if (!args.bodyValue) throw new Error("bodyValue required");
 
       const employeeItem = await this.employees._readById(args.employee);
       const positionsList = employeeItem.positions;
@@ -39,7 +38,10 @@ class History extends Factory {
         []
       );
 
-      const bodyParamsList = entitiesList.map(e => e.bodyParam);
+      const bodyParamsList = entitiesList.reduce(
+        (acc, e) => (e.bodyParam ? [...acc, e.bodyParam] : acc),
+        []
+      );
       const bodyValuesList = bodyParamsList.reduce(
         (acc, curr) => [...acc, ...curr.values],
         []
@@ -61,8 +63,6 @@ class History extends Factory {
       if (!_entity) throw new Error("invalid entity");
 
       const _bodyValue = normalizedBodyValuesList[args.bodyValue];
-
-      if (!_bodyValue) throw new Error("invalid bodyValue");
 
       const storeCollection = db[this.store.collection.name];
       const storeItem = await storeCollection
@@ -88,7 +88,7 @@ class History extends Factory {
         employee: _employee.id,
         positions: _positions,
         entity: _entity.id,
-        bodyValue: _bodyValue.id,
+        ...(_bodyValue ? { bodyValue: _bodyValue.id } : {}),
         count: args.count,
       });
 

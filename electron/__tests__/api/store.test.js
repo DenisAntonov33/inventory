@@ -1,7 +1,8 @@
 const { Database } = require("../../db/Database");
 const { Api } = require("../../api");
+const mockedDatabase = require("./mocks/store-db.json");
 
-describe("Store", () => {
+describe("Requisition Store", () => {
   let api;
 
   beforeEach(async () => {
@@ -9,6 +10,7 @@ describe("Store", () => {
       const dbSuffix = new Date().getTime();
       const db = new Database();
       await db.createInstance(`test${dbSuffix}`);
+      await db.load(mockedDatabase);
 
       api = new Api(db);
     } catch (err) {
@@ -17,37 +19,15 @@ describe("Store", () => {
   });
 
   test("Create", async () => {
-    const bodyValueData1 = { name: "value1" };
-    const bodyValueData2 = { name: "value2" };
-
-    const bodyParamData1 = { name: "param1" };
-
-    let param1 = await api.bodyParams._create(bodyParamData1);
-
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData1 },
-    });
-
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData2 },
-    });
-
-    const entityData1 = { name: "entity1", replacementPeriod: 1 };
-
-    let entity1 = await api.entities._create(entityData1);
-    entity1 = await api.entities._updateById(entity1.id, {
-      $set: { bodyParam: param1.id },
-    });
-
     let storeItem = await api.store._create({
-      entity: entity1.id,
-      bodyValue: param1.values[0].id,
+      entity: "entity1_id",
+      bodyValue: "param1_value1_id",
       count: 5,
     });
 
     storeItem = await api.store._create({
-      entity: entity1.id,
-      bodyValue: param1.values[1].id,
+      entity: "entity1_id",
+      bodyValue: "param1_value2_id",
       count: 10,
     });
 
@@ -65,31 +45,9 @@ describe("Store", () => {
   });
 
   test("Expand item", async () => {
-    const bodyValueData1 = { name: "value1" };
-    const bodyValueData2 = { name: "value2" };
-
-    const bodyParamData1 = { name: "param1" };
-
-    let param1 = await api.bodyParams._create(bodyParamData1);
-
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData1 },
-    });
-
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData2 },
-    });
-
-    const entityData1 = { name: "entity1", replacementPeriod: 1 };
-
-    let entity1 = await api.entities._create(entityData1);
-    entity1 = await api.entities._updateById(entity1.id, {
-      $set: { bodyParam: param1.id },
-    });
-
     let storeItem = await api.store._create({
-      entity: entity1.id,
-      bodyValue: param1.values[0].id,
+      entity: "entity1_id",
+      bodyValue: "param1_value1_id",
       count: 5,
     });
 
@@ -101,38 +59,29 @@ describe("Store", () => {
     expect.assertions(4);
   });
 
-  test("Expan list", async () => {
-    const bodyValueData1 = { name: "value1" };
-    const bodyValueData2 = { name: "value2" };
-
-    const bodyParamData1 = { name: "param1" };
-
-    let param1 = await api.bodyParams._create(bodyParamData1);
-
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData1 },
+  test("Expand item without bodyValue", async () => {
+    let storeItem = await api.store._create({
+      entity: "entity3_id",
+      count: 5,
     });
 
-    param1 = await api.bodyParams._updateById(param1.id, {
-      $create: { values: bodyValueData2 },
-    });
+    expect(typeof storeItem.entity).toBe("object");
+    expect(storeItem.entity.bodyParam).toBeUndefined();
+    expect(storeItem.bodyValue).toBeUndefined();
 
-    const entityData1 = { name: "entity1", replacementPeriod: 1 };
+    expect.assertions(3);
+  });
 
-    let entity1 = await api.entities._create(entityData1);
-    entity1 = await api.entities._updateById(entity1.id, {
-      $set: { bodyParam: param1.id },
-    });
-
+  test("Expand list", async () => {
     await api.store._create({
-      entity: entity1.id,
-      bodyValue: param1.values[0].id,
+      entity: "entity1_id",
+      bodyValue: "param1_value1_id",
       count: 5,
     });
 
     await api.store._create({
-      entity: entity1.id,
-      bodyValue: param1.values[1].id,
+      entity: "entity1_id",
+      bodyValue: "param1_value2_id",
       count: 10,
     });
 
@@ -145,5 +94,21 @@ describe("Store", () => {
     expect(typeof storeItem.bodyValue).toBe("object");
 
     expect.assertions(4);
+  });
+
+  test("Expan list without bodyParam", async () => {
+    await api.store._create({
+      entity: "entity3_id",
+      count: 5,
+    });
+
+    const items = await api.store._readMany();
+    const storeItem = items[0];
+
+    expect(typeof storeItem.entity).toBe("object");
+    expect(storeItem.entity.bodyParam).toBeUndefined();
+    expect(storeItem.bodyValue).toBeUndefined();
+
+    expect.assertions(3);
   });
 });
