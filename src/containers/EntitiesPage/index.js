@@ -58,6 +58,10 @@ class EntityPage extends Component {
               field: "name",
             },
             {
+              title: <FormattedMessage {...commonMessages.certificateNumber} />,
+              field: "certificate",
+            },
+            {
               title: <FormattedMessage {...commonMessages.replacementPeriod} />,
               field: "replacementPeriod",
               type: "numeric",

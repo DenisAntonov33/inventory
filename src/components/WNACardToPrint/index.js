@@ -12,6 +12,7 @@ class PPECardToPrint extends Component {
         id: item.id,
         name: item.entity.name,
         count: item.count,
+        certificate: item.certificate,
         date: DateTime.fromMillis(item.date).toFormat("dd.LL.yyyy"),
         wear: "100%",
       };
@@ -29,7 +30,7 @@ class PPECardToPrint extends Component {
               convertedData.map(e => (
                 <tr className="table-row" key={e.id}>
                   <td>{e.name}</td>
-                  <td> </td>
+                  <td>{e.certificate}</td>
                   <td>{e.date}</td>
                   <td>{e.count}</td>
                   <td>{e.wear}</td>

@@ -99,6 +99,12 @@ class EntityPage extends Component {
               },
             },
             {
+              title: <FormattedMessage {...commonMessages.certificateNumber} />,
+              field: "certificate",
+              readonly: true,
+              render: rowData => rowData.entity.certificate,
+            },
+            {
               title: <FormattedMessage {...commonMessages.bodyValue} />,
               field: "bodyValue",
               readonly: true,
