@@ -12,7 +12,7 @@ class Factory {
     this.userCollectionName = UserCollection.name;
     this.res = res;
 
-    this.defaultMethods = [
+    this.methods = [
       "create",
       "readById",
       "readMany",
@@ -22,7 +22,7 @@ class Factory {
   }
 
   getMethods() {
-    return this.defaultMethods;
+    return this.methods;
   }
 
   async _authentification(token) {

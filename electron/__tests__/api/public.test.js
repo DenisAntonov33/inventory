@@ -186,4 +186,51 @@ describe("Public", () => {
 
     expect.assertions(1);
   });
+
+  test("Update user", async () => {
+    const newUserData = {
+      name: "user",
+      fullName: "user full name",
+      area: "new area",
+    };
+
+    const {
+      returnValue: {
+        data: { item },
+      },
+    } = await api.user.update(
+      {},
+      {
+        token: token,
+        args: { $set: newUserData },
+      }
+    );
+
+    expect(item.name).toBe(newUserData.name);
+    expect(item.fullName).toBe(newUserData.fullName);
+    expect(item.area).toBe(newUserData.area);
+
+    expect.assertions(3);
+  });
+
+  test("Update user - error", async () => {
+    const newUserData = {
+      name: "",
+    };
+
+    const {
+      returnValue: { status, message },
+    } = await api.user.update(
+      {},
+      {
+        token: token,
+        args: { $set: newUserData },
+      }
+    );
+
+    expect(status).toBe(500);
+    expect(message).toBe("name required");
+
+    expect.assertions(2);
+  });
 });

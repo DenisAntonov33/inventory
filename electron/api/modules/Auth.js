@@ -104,6 +104,9 @@ class Auth {
 
       const filteredUser = {
         name: jsonUser.name,
+        fullName: jsonUser.fullName,
+        area: jsonUser.area,
+        personalNumber: jsonUser.personalNumber,
       };
 
       event.returnValue = res.success({ user: filteredUser });

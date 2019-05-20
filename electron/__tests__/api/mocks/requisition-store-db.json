@@ -222,7 +222,7 @@
     },
     {
       "name": "user",
-      "schemaHash": "51e3af906685bed0b1ac6ee684878866",
+      "schemaHash": "64cde27812ec37175db03501ad63202d",
       "encrypted": false,
       "passwordHash": null,
       "docs": [

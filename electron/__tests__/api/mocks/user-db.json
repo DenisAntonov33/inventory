@@ -9,54 +9,14 @@
       "schemaHash": "bd36b5eb57ce93b2b4c4acd509c8f306",
       "encrypted": false,
       "passwordHash": null,
-      "docs": [
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param1_value1",
-          "id": "param1_value1_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param1_value2",
-          "id": "param1_value2_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param2_value1",
-          "id": "param2_value1_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param2_value2",
-          "id": "param2_value2_id"
-        }
-      ]
+      "docs": []
     },
     {
       "name": "body_param",
       "schemaHash": "d76310eab4c9b4db5f95c0a8aadd3572",
       "encrypted": false,
       "passwordHash": null,
-      "docs": [
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param1",
-          "values": ["param1_value1_id", "param1_value2_id"],
-          "id": "param1_id"
-        },
-        {
-          "createdAt": 0,
-          "updatedAt": 0,
-          "name": "param2",
-          "values": ["param2_value1_id", "param2_value2_id"],
-          "id": "param2_id"
-        }
-      ]
+      "docs": []
     },
     {
       "name": "entity",
@@ -104,20 +64,15 @@
           "password": "4ddfb6c26e4de987e988471e48d64bd669d77b9d",
           "createdAt": 1557768763110,
           "data": {
-            "bodyValues": [
-              "param1_value1_id",
-              "param1_value2_id",
-              "param2_value1_id",
-              "param2_value2_id"
-            ],
-            "bodyParams": ["param1_id", "param2_id"],
+            "bodyValues": [],
+            "bodyParams": [],
             "entities": [],
             "positions": [],
             "employees": [],
             "store": [],
             "history": []
           },
-          "id": "user1"
+          "id": "user1_id"
         }
       ]
     }

@@ -10,6 +10,7 @@ const { History } = require("./modules/History");
 const { Store } = require("./modules/Store");
 const { Requisition } = require("./modules/Requisition");
 const { RequisitionStore } = require("./modules/RequisitionStore");
+const { User } = require("./modules/User");
 
 const {
   BodyValueCollection,
@@ -24,9 +25,8 @@ const {
 
 class Api {
   constructor(db) {
-    if (!db) throw new Error("db required");
-
-    this.auth = new Auth({ collecton: UserCollection, db });
+    this.auth = new Auth({ collection: UserCollection, db });
+    this.user = new User({ collection: UserCollection, db });
 
     this.bodyValues = new BodyValues({
       collection: BodyValueCollection,
@@ -118,6 +118,7 @@ class Api {
     ipcMain.on("login", this.auth.login.bind(this.auth));
     ipcMain.on("signup", this.auth.signup.bind(this.auth));
     ipcMain.on("me", this.auth.me.bind(this.auth));
+    ipcMain.on("user_update", this.user.update.bind(this.user));
     ipcMain.on(
       "requisition_create",
       this.requisition.create.bind(this.requisition)
