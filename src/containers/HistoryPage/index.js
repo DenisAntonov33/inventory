@@ -244,6 +244,10 @@ class EntityPage extends Component {
             {
               title: <FormattedMessage {...commonMessages.certificateNumber} />,
               field: "certificate",
+              editComponent: () => {
+                if (!selectedEntity) return "-";
+                return selectedEntity.certificate;
+              },
             },
             {
               title: <FormattedMessage {...commonMessages.bodyValue} />,
