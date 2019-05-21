@@ -32,6 +32,7 @@ class EntityPage extends Component {
       readStore,
       readEntities,
       readBodyParams,
+      readUser,
       setRequisitionStoreItems,
     } = this.props;
 
@@ -40,6 +41,7 @@ class EntityPage extends Component {
     readStore();
     readEntities();
     readBodyParams();
+    readUser();
   };
 
   pushToStore = () => {

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { ReadUserRequest } from "../../store/modules/user/actions";
 import { actions, selectors } from "../../store/modules/entities";
 
 const BodyValuesAlias = ["bodyValues"];
@@ -91,6 +92,8 @@ const mapDispatchToProps = dispatch => ({
   createHistoryItem: args => dispatch(HistoryActions.create(args)),
   readHistory: args => dispatch(HistoryActions.readMany(args)),
   deleteHistoryItem: id => dispatch(HistoryActions.deleteById(id)),
+
+  readUser: () => dispatch(ReadUserRequest()),
 });
 
 const storeItemsHOC = WrappedComponent => {

@@ -14,7 +14,7 @@ class SRCardToPrint extends Component {
 
             {data.length &&
               data.map(e => (
-                <tr key={`${e.entity}${e.bodyValue}`}>
+                <tr key={`${e.entity.id}${e.bodyValue ? e.bodyValue.id : ""}`}>
                   <td>{user.personalNumber}</td>
                   <td>{user.fullName}</td>
                   <td>{e.entity.name}</td>
