@@ -4,12 +4,17 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
+import bg from "../../assets/login.jpg";
+
 const styles = theme => ({
   root: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+    background: `url(${bg}) no-repeat`,
+    backgroundSize: "contain",
+    backgroundPosition: "center center",
   },
   paper: {
     minWidth: 350,
@@ -18,6 +23,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     textAlign: "center",
     color: theme.palette.text.secondary,
+    backgroundColor: "rgba(255,255,255, .5)",
   },
 });
 
