@@ -7,10 +7,7 @@ electron:
 	yarn electron-start
 
 clean-db:
-	rm /Users/sergey/Library/Application\ Support/inventory/database/data-v0.0.1-dev.json
-
-clean-prod-db:
-	rm /Users/sergey/Library/Application\ Support/inventory/database/data-v0.0.1.json
+	rm -rf /Users/sergey/Library/Application\ Support/inventory/database
 
 dist:
 	yarn react-build && yarn electron-dist
@@ -20,3 +17,6 @@ test:
 
 secrets:
 	cp ./electron/secrets.example.json ./electron/secrets.json
+
+env:
+	cp ./.env.example ./.env

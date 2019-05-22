@@ -1,9 +1,10 @@
 const { app } = require("electron");
 const fs = require("fs");
 const { Database } = require("./Database");
+const { VERSION } = require("../config");
 
 const isDev = process.env.NODE_ENV === "development";
-const dbName = "data-v0.0.1";
+const dbName = `data-${VERSION}`;
 
 const userDataFolder = app.getPath("userData");
 const folderPath = `${userDataFolder}/database`;
