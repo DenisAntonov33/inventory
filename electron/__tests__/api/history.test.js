@@ -34,6 +34,21 @@ describe("History", () => {
     expect.assertions(1);
   });
 
+  test("Create with entity without param", async () => {
+    const historyData1 = {
+      date: 1,
+      positions: ["position1_id"],
+      employee: "employee1_id",
+      entity: "entity2_id",
+      count: 1,
+    };
+
+    let history1 = await api.history._create(historyData1);
+
+    expect(history1).toBeDefined();
+    expect.assertions(1);
+  });
+
   test("Create with count 0 - error", async () => {
     try {
       const historyData1 = {

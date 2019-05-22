@@ -65,12 +65,14 @@ class History extends Factory {
       const _bodyValue = normalizedBodyValuesList[args.bodyValue];
 
       const storeCollection = db[this.store.collection.name];
-      const storeItem = await storeCollection
-        .findOne({
-          entity: { $eq: _entity.id },
-          bodyValue: { $eq: _bodyValue.id },
-        })
+
+      const storeItems = await storeCollection
+        .find({ entity: { $eq: _entity.id } })
         .exec();
+
+      const storeItem = _bodyValue
+        ? storeItems.find(e => e.bodyValue === _bodyValue.id)
+        : storeItems[0];
 
       if (!storeItem) throw new Error("item is unavailable in store");
       if (!storeItem.count) throw new Error("store is empty");

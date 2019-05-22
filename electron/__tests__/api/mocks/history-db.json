@@ -47,6 +47,14 @@
           "replacementPeriod": 1,
           "certificate": "123456",
           "id": "entity1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "name": "entity2",
+          "replacementPeriod": 1,
+          "certificate": "123456",
+          "id": "entity2_id"
         }
       ]
     },
@@ -59,7 +67,7 @@
         {
           "createdAt": 0,
           "updatedAt": 0,
-          "entities": ["entity1_id"],
+          "entities": ["entity1_id", "entity2_id"],
           "name": "position1",
           "id": "position1_id"
         }
@@ -106,6 +114,13 @@
           "bodyValue": "param1_value1_id",
           "count": 10,
           "id": "store_entity1_param1_value1_id"
+        },
+        {
+          "createdAt": 0,
+          "updatedAt": 0,
+          "entity": "entity2_id",
+          "count": 10,
+          "id": "store_entity2__id"
         }
       ]
     },
