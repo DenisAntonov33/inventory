@@ -20,7 +20,7 @@ export default defineMessages({
   actions: { id: `${scope}.actions`, defaultMessage: "Actions" },
   actualCount: { id: `${scope}.actualCount`, defaultMessage: "Actual Count" },
   approve: { id: `${scope}.approve`, defaultMessage: "Approve" },
-  area: { id: `${scope}.area`, defaultMessage: "area" },
+  area: { id: `${scope}.area`, defaultMessage: "Area" },
   certificateNumber: {
     id: `${scope}.certificateNumber`,
     defaultMessage: "certificateNumber",
